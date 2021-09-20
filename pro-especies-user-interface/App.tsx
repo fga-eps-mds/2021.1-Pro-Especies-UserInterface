@@ -1,12 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Welcome } from './src/Components/Welcome';
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Hello Pro-Especies Peixes!</Text>
-      <StatusBar style="auto" />
+      <Welcome title="Olá Pró-Espécies Peixes" />
     </View>
   );
 }
