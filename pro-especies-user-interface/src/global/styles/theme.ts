@@ -12,5 +12,6 @@ export default {
         on_background: "#202E35",
         on_primary: "#202E35",
         on_secondary: "#202E35",
+        on_error: "#D4270B"
     }
 }
