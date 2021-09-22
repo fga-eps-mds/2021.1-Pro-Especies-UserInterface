@@ -8,6 +8,6 @@ export const WelcomeCard = styled.View`
 `
 export const WelcomeText = styled.Text`
     font-size: 16px;
-    font-weight: bold;
+    font-family: ${({ theme }) => theme.fonts.bold};
     color: ${({ theme }) => theme.colors.on_background};
 `

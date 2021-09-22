@@ -13,5 +13,11 @@ export default {
         on_primary: "#202E35",
         on_secondary: "#202E35",
         on_error: "#D4270B"
+    },
+
+    fonts: {
+        regular: "Poppins_400Regular",
+        medium: "Poppins_500Medium",
+        bold: "Poppins_700Bold"
     }
 }
