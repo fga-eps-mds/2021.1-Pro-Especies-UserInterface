@@ -1,10 +1,16 @@
 import React from "react";
-import { Box } from "./styles";
+import { ArrowLeft, Box, HeaderText } from "./styles";
 
-export function TopBar() {
+interface Props {
+    title: string;
+}
+
+export function TopBar({title}: Props) {
     return (
         <Box>
-
+            
+            <ArrowLeft name="arrow-back" />
+            <HeaderText >{title}</HeaderText>
         </Box>
     )
 }

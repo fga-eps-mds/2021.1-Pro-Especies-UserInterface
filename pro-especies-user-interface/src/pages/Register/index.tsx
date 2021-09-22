@@ -5,7 +5,7 @@ import { TopBar } from "../../components/TopBar";
 export function Register() {
     return (
         <Container>
-            <TopBar/>
+            <TopBar title="Cadastro" />
         </Container>
     )
 }
