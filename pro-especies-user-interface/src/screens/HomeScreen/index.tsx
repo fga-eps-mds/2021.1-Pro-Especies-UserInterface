@@ -11,13 +11,12 @@ import {
     HomeRegularText,
     HomeLogLink
 } from "./styles";
-// import logo from '../../assets/logo.svg';
 
 export function Home() {
     return (
         <HomeContainer>
             <HomeLogoContainer>
-                {/* <HomeAppImage source={logo}/> */}
+                <HomeAppImage source={require('../../assets/logo.png')}/>
                 <HomeAppTitle>
                     Pró-Espécies <HomeAppTitleBlue>Peixes</HomeAppTitleBlue>
                 </HomeAppTitle>

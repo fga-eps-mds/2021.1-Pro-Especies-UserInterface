@@ -8,10 +8,11 @@ export const HomeContainer = styled.View`
     padding: 70px;
 `
 export const HomeLogoContainer = styled.View`
-
+    align-items: center;
+    justify-content: center;
 `
 export const HomeAppImage = styled.Image`
-
+    marginBottom: 16px;
 `
 export const HomeAppTitle = styled.Text`
     font-family: Poppins;
