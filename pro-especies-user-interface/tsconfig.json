@@ -3,4 +3,5 @@
         "strict": true
     },
     "extends": "expo/tsconfig.base"
+    // "include": ["src/","src/global/styles/custom.d.ts"]
 }

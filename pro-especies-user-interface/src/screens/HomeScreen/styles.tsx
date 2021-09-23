@@ -37,8 +37,11 @@ export const HomeWelcomeText = styled.Text`
     margin: 54px 0px;
 `
 export const HomeWikiButton = styled.Button`
-    background-color: ${({ theme }) => theme.colors.on_secondary_dark};
+    width: 204px;
+    height: 50px;
+    background-color: ${({ theme }) => theme.colors.secondary_dark};
 `
+//TouchableOpacity
 export const HomeLinksContainer = styled.View`
     marginTop: 16px;
 `

@@ -12,6 +12,7 @@ import {
     HomeLogLink
 } from "./styles";
 
+
 export function Home() {
     return (
         <HomeContainer>
@@ -26,9 +27,9 @@ export function Home() {
                 Descubra os peixes da sua região e colabore com seus registros.
             </HomeWelcomeText>
 
-            {/* <HomeWikiButton>
+            <HomeWikiButton title='wikiButton' onPress={()=>{}}>
                 Visualizar Biblioteca de Peixes
-            </HomeWikiButton> */}
+            </HomeWikiButton>
 
             <HomeLinksContainer>
                 <HomeRegularText>
