@@ -27,16 +27,16 @@ export function Home() {
                 Descubra os peixes da sua região e colabore com seus registros.
             </HomeWelcomeText>
 
-            <HomeWikiButton title='wikiButton' onPress={()=>{}}>
+            <HomeWikiButton onPress={()=>{}}>
                 Visualizar Biblioteca de Peixes
             </HomeWikiButton>
 
             <HomeLinksContainer>
                 <HomeRegularText>
-                    Não possui uma conta ainda? <HomeLogLink>Registre-se</HomeLogLink>
+                    Não possui uma conta ainda? <HomeLogLink onPress={()=>{}}>Cadastre-se</HomeLogLink>
                 </HomeRegularText>
                 <HomeRegularText>
-                    Já possui uma conta? <HomeLogLink>Entre</HomeLogLink>
+                    Já possui uma conta? <HomeLogLink onPress={()=>{}}>Entre</HomeLogLink>
                 </HomeRegularText>
             </HomeLinksContainer>
         </HomeContainer>
