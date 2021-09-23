@@ -1,8 +1,6 @@
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
-import { StatusBar } from "expo-status-bar";
-
 
 
 export const Box = styled.View`
