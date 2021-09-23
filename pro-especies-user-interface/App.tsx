@@ -1,7 +1,7 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
 
-import { Register } from './src/pages/Register';
+import { Register } from './src/screens/Register';
 import {
   useFonts,
   Poppins_400Regular,
