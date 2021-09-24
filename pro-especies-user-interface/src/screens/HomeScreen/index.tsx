@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
     HomeContainer,
@@ -17,7 +16,7 @@ import {
 } from "./styles";
 
 
-export function Home() {
+export default function Home({navigation}: any) {
     return (
         <HomeContainer>
             <HomeLogoContainer>
@@ -31,7 +30,7 @@ export function Home() {
                 Descubra os peixes da sua região e colabore com seus registros.
             </HomeWelcomeText>
 
-            <HomeWikiButton onPress={() => { }}>
+            <HomeWikiButton onPress={() => navigation.navigate('Wiki')}>
                 <HomeWikiText>Visualizar Biblioteca de Peixes</HomeWikiText>
             </HomeWikiButton>
 
@@ -40,7 +39,7 @@ export function Home() {
                     <HomeRegularText>
                         Não possui uma conta ainda?
                     </HomeRegularText>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                         <HomeLogLink> Cadastre-se</HomeLogLink>
                     </TouchableOpacity>
                 </HomePhraseContainer>
@@ -49,7 +48,7 @@ export function Home() {
                     <HomeRegularText>
                         Já possui uma conta?
                     </HomeRegularText>
-                    <TouchableOpacity onPress={() => { }}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                         <HomeLogLink> Entre</HomeLogLink>
                     </TouchableOpacity>
                 </HomePhraseContainer>
