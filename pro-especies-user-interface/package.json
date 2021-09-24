@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.0",
+    "@types/react-native-text-input-mask": "^0.7.6",
     "axios": "^0.21.4",
     "expo": "~42.0.1",
     "expo-app-loading": "^1.1.2",
@@ -18,10 +19,12 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.4",
+    "react-native-dotenv": "^3.2.0",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-reanimated": "~2.2.0",
     "react-native-responsive-fontsize": "^0.5.1",
     "react-native-screens": "~3.4.0",
+    "react-native-text-input-mask": "^3.1.4",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
     "styled-components": "^5.3.1"

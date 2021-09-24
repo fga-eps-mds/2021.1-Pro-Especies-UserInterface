@@ -38,7 +38,8 @@ export const Input = styled.TextInput`
     width: ${RFValue(258)}px;
     flex-direction: row;
     justify-content: flex-start;    
-    font-family: ${({ theme }) => theme.fonts.regular}
+    font-family: ${({ theme }) => theme.fonts.regular};
+    font-size: ${RFValue(12)}px;
 `
 export const CityStateView = styled.View`
     align-items: center;

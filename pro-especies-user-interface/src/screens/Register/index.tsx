@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+// import { TextInputMask } from "react-native-masked-text";
 import { CityStateView, ComunityInputIcon, Container, HalfInputView, Input, InputContainer, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleText } from "./styles";
 import { TopBar } from "../../components/TopBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { api } from '../../services/userServices/api';
+import { CreateUser } from "../../services/userServices/createUser";
+import { Alert } from "react-native";
 
 export function Register() {
     const [admin, setAdmin] = useState(false);
@@ -14,16 +16,72 @@ export function Register() {
     const [userPassword, setUserPassword] = useState<string|undefined>();
     const [userConfirmPassword, setUserConfirmPassword] = useState<string|undefined>();
     const [adminToken, setAdminToken] = useState<string|undefined>();
+    let alertMessage = "";
 
-    const handleRegister = () => {
-        console.log(userName);
-        console.log(userEmail);
-        console.log(userPhone);
-        console.log(userState);
-        console.log(userCity);
-        console.log(userPassword);
-        console.log(userConfirmPassword);
-        console.log(adminToken);
+    const validateEmail = () => {
+        if(userEmail){
+            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            
+            if (userEmail.length > 254) {
+                alertMessage = "Email muito extenso!";
+                return false;
+            }
+    
+            const valid = emailRegex.test(userEmail);
+            if (!valid) {
+                alertMessage = "Formato de email inválido!"
+                return false;
+            }
+    
+            const parts = userEmail.split("@");
+            if (parts[0].length > 64) {
+                alertMessage = "Email muito extenso!";
+                return false;
+            }
+            return true;
+        }
+    }
+
+    const validatePassword = () => {
+        if(userPassword !== userConfirmPassword){
+            alertMessage = "Digite a mesma senha!";
+            return false;
+        }
+        return true;
+    }
+
+    const handleRegister = async () => {
+        if(userName && userEmail && userPhone && userState && userCity && userPassword && userConfirmPassword){
+            const emailValid = validateEmail();
+            const passwordValid = validatePassword();
+            if(emailValid && passwordValid){
+                try {
+                    await CreateUser(userName, userEmail, userPhone, userState, userCity, userPassword, admin, adminToken);
+                } catch (error) {
+                    console.log(error);
+                }
+            } else {
+                Alert.alert(
+                    "Cadastro",
+                    alertMessage,
+                    [
+                        {
+                            text: "Ok",
+                        }
+                    ]
+                )
+            }
+        } else {
+            Alert.alert(
+                "Cadastro",
+                "Preencha todos os campos de dados para realizar o cadastro",
+                [
+                    {
+                        text: "Ok",
+                    }
+                ]
+            )
+        }
     }
     return (
         <Container>
@@ -61,11 +119,11 @@ export function Register() {
                 </CityStateView>
                 <InputView>
                     <MaterialInputIcon name="lock-outline"/>
-                    <Input placeholder="Senha" value={userPassword} onChangeText={setUserPassword} />
+                    <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
                 <InputView>
                     <MaterialInputIcon name="lock-outline"/>
-                    <Input placeholder="Confirmar Senha" value={userConfirmPassword} onChangeText={setUserConfirmPassword} />
+                    <Input placeholder="Confirmar Senha" secureTextEntry={true} value={userConfirmPassword} onChangeText={setUserConfirmPassword} />
                 </InputView>
                 {
                     admin ? (
