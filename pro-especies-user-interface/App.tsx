@@ -28,7 +28,6 @@ export default function App() {
     
       <ThemeProvider theme={theme}>
         <WikiFish />
-        <Welcome title="Olá Pró-Espécies Peixes" />
       </ThemeProvider>
   
   );
