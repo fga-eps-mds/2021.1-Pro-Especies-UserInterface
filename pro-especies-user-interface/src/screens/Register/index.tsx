@@ -104,8 +104,9 @@ export function Register() {
                             withDDD: true,
                             dddMask: '(99) '
                         }}
-                    value={userPhone}
-                    onChangeText={setUserPhone}
+                        value={userPhone}
+                        onChangeText={setUserPhone}
+                        placeholder="Telefone"
                     />
                 </InputView>
                 <CityStateView>
