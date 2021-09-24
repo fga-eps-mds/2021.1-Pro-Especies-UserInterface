@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-// import { TextInputMask } from "react-native-masked-text";
+import { TextInputMask } from "react-native-masked-text";
 import { CityStateView, ComunityInputIcon, Container, HalfInputView, Input, InputContainer, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleText } from "./styles";
 import { TopBar } from "../../components/TopBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { CreateUser } from "../../services/userServices/createUser";
 import { Alert } from "react-native";
+import { AxiosError } from "axios";
 
 export function Register() {
     const [admin, setAdmin] = useState(false);
@@ -57,31 +58,23 @@ export function Register() {
             if(emailValid && passwordValid){
                 try {
                     await CreateUser(userName, userEmail, userPhone, userState, userCity, userPassword, admin, adminToken);
-                } catch (error) {
-                    console.log(error);
+                    alertMessage = "Conta criada com sucesso!";
+                } catch (error: any) {
+                    alertMessage = error.response.data.message;
                 }
-            } else {
-                Alert.alert(
-                    "Cadastro",
-                    alertMessage,
-                    [
-                        {
-                            text: "Ok",
-                        }
-                    ]
-                )
             }
         } else {
-            Alert.alert(
-                "Cadastro",
-                "Preencha todos os campos de dados para realizar o cadastro",
-                [
-                    {
-                        text: "Ok",
-                    }
-                ]
-            )
+            alertMessage = "Preencha todos os campos de dados para realizar o cadastro!";
         }
+        Alert.alert(
+            "Cadastro",
+            alertMessage,
+            [
+                {
+                    text: "Ok",
+                }
+            ]
+        )
     }
     return (
         <Container>
