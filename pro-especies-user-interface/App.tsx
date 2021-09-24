@@ -1,5 +1,7 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
+import { WikiFish } from "./src/screens/WikiFish";
+
 
 import {
   useFonts,
@@ -22,9 +24,13 @@ export default function App() {
   if (!fontLoaded)
     return <AppLoading />
   return (
-    <ThemeProvider theme={theme}>
-      <Welcome title="Olá Pró-Espécies Peixes" />
-    </ThemeProvider>
+    
+    
+      <ThemeProvider theme={theme}>
+        <WikiFish />
+        <Welcome title="Olá Pró-Espécies Peixes" />
+      </ThemeProvider>
+  
   );
 }
 
