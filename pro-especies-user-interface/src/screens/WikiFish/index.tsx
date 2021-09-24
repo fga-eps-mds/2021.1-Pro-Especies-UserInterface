@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import { ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
 import {
@@ -15,6 +16,29 @@ import {
 } from "./styles";
 
 export function WikiFish() {
+    const [ fishName , setFishName ] = useState("");
+    const [ fishPhoto , setFishPhoto ] = useState("");
+    const [ fishSpecies , setFishSpecies ] = useState("");
+    const [ fishFunFact , setFishFuNFact ] = useState("");
+    const [ fishLargeGroup , setFishLargeGroup ] = useState("");
+    const [ fishGroup , setFishGroup ] = useState("");
+    const [ fishFamily , setFishFamily ] = useState("");
+    const [ fishFeed , setFishFeed ] = useState("");
+    const [ fishMaxSize , setFishMaxSize ] = useState("");
+    const [ fishMaxWeight , setFishMaxWeight ] = useState("");
+    const [ fishHabitat , setFishHabitat ] = useState("");
+    const [ fishIsEndemic , setFishIsEndemic ] = useState(false);
+    const [ fishIsThreatened , setFishIsThreatened ] = useState(false);
+    const [ fishWasIntroduced , setFishWasIntroduced ] = useState(false);
+    const [ fishHasSpawningSeason , setFishHasSpawningSeason ] = useState(true);
+
+    useEffect(()=> {
+        setFishName("Nemo");
+        setFishSpecies("Acestrorhynchus falcatus");
+        setFishFuNFact('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus suscipit nisl in sollicitudin.');
+        setFishLargeGroup('Peixes com Escama');
+    } ,[])
+
     return (
         <FishContainer>
             <TopBar title="Informações" />
@@ -22,11 +46,10 @@ export function WikiFish() {
                 <FishProfile source={require('../../assets/Acestrorhynchus.png')} />
 
                 <DescriptionContainer>
-                    <FishTitle>Peixe Cachorro Dourado</FishTitle>
-                    <PropertyText>Acestrorhynchus falcatus</PropertyText>
+                    <FishTitle>{fishName}</FishTitle>
+                    <PropertyText>{fishSpecies}</PropertyText>
                     <FishDescription>
-                        “Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Aenean maximus suscipit nisl in sollicitudin. “
+                        {`"${fishFunFact}"`}
                     </FishDescription>
                 </DescriptionContainer>
 
@@ -34,59 +57,59 @@ export function WikiFish() {
                     <PropertyColumn>
                         <PropertyContainer>
                             <PropertyText>Grande Grupo</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishLargeGroup}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Família</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishFamily}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Tamanho Máx(cm)</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishMaxSize}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Habitat</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishHabitat}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Ameaçado?</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{(fishIsThreatened?"Sim":"Não")}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Foi indroduzido?</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{(fishWasIntroduced?"Sim":"Não")}</PropertyValueText>
                         </PropertyContainer>
                     </PropertyColumn>
 
                     <PropertyColumn>
                         <PropertyContainer>
                             <PropertyText>Grupo</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishGroup}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Alimentação</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishFeed}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Peso Máx(kg)</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{fishMaxWeight}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Endemíco?</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{(fishIsEndemic?"Sim":"Não")}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Faz piracema?</PropertyText>
-                            <PropertyValueText>Peixe</PropertyValueText>
+                            <PropertyValueText>{(fishHasSpawningSeason?"Sim":"Não")}</PropertyValueText>
                         </PropertyContainer>
                     </PropertyColumn>
                 </ColumnContainer>
