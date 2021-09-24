@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { TextInputMask } from "react-native-masked-text";
-import { CityStateView, ComunityInputIcon, Container, HalfInputView, Input, InputContainer, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleText } from "./styles";
+import { CityStateView, ComunityInputIcon, Container, HalfInputView, Input, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleText } from "./styles";
 import { TopBar } from "../../components/TopBar";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { CreateUser } from "../../services/userServices/createUser";
 import { Alert } from "react-native";
-import { AxiosError } from "axios";
+
 
 export function Register() {
     const [admin, setAdmin] = useState(false);
@@ -98,7 +97,16 @@ export function Register() {
                 </InputView>
                 <InputView>
                     <ComunityInputIcon name="phone-outline"/>
-                    <Input placeholder="Telefone" value={userPhone} onChangeText={setUserPhone} />
+                    <InputMask
+                        type={'cel-phone'}
+                        options={{
+                            maskType: 'BRL',
+                            withDDD: true,
+                            dddMask: '(99) '
+                        }}
+                    value={userPhone}
+                    onChangeText={setUserPhone}
+                    />
                 </InputView>
                 <CityStateView>
                     <HalfInputView>
