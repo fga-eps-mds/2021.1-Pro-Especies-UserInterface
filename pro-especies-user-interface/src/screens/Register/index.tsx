@@ -1,66 +1,77 @@
 import React, { useState } from "react";
-import { CityStateView, ComunityInputIcon, Container, HalfInputView, Input, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleText } from "./styles";
+import { CityStateView,InputScroll, ComunityInputIcon, Container, ErrorMessage, HalfInputView, Input, InputBox, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleHighlight, TitleText, TouchableTitle } from "./styles";
 import { TopBar } from "../../components/TopBar";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { CreateUser } from "../../services/userServices/createUser";
-import { Alert } from "react-native";
+import { Alert, Text } from "react-native";
 
 
 export function Register() {
     const [admin, setAdmin] = useState(false);
     const [userName, setUserName] = useState<string|undefined>();
     const [userEmail, setUserEmail] = useState<string|undefined>();
+    const [isEmailValid, setIsEmailValid] = useState(true);
+    const [isEmailValidMessage, setIsEmailValidMessage] = useState("");
     const [userPhone, setUserPhone] = useState<string|undefined>();
+    const [isPhoneValid, setIsPhoneValid] = useState(true);
+    const [isPhoneValidMessage, setIsPhoneValidMessage] = useState("");
     const [userState, setUserState] = useState<string|undefined>();
     const [userCity, setUserCity] = useState<string|undefined>();
     const [userPassword, setUserPassword] = useState<string|undefined>();
+    const [isPasswordValid, setIsPasswordValid] = useState(true);
+    const [isPasswordValidMessage, setIsPasswordValidMessage] = useState("");
     const [userConfirmPassword, setUserConfirmPassword] = useState<string|undefined>();
     const [adminToken, setAdminToken] = useState<string|undefined>();
-    let alertMessage = "";
 
-    const validateEmail = () => {
-        if(userEmail){
+    const validateEmail = (email: string) => {
+        if(email){
             const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
             
-            if (userEmail.length > 254) {
-                alertMessage = "Email muito extenso!";
-                return false;
-            }
-    
-            const valid = emailRegex.test(userEmail);
-            if (!valid) {
-                alertMessage = "Formato de email inválido!"
-                return false;
-            }
-    
-            const parts = userEmail.split("@");
-            if (parts[0].length > 64) {
-                alertMessage = "Email muito extenso!";
-                return false;
-            }
-            return true;
+            if (email.length > 254) {
+                console.log("1");
+                setIsEmailValidMessage("Email muito extenso!");
+                setIsEmailValid(false);
+            }else if (!emailRegex.test(email)) {
+                console.log("2");
+                setIsEmailValidMessage("Formato de email inválido!");
+                setIsEmailValid(false);
+            }else if (email.split("@")[0].length > 64) {
+                console.log("4");
+                setIsEmailValidMessage("Email muito extenso!");
+                setIsEmailValid(false);
+            } else setIsEmailValid(true);
         }
     }
 
-    const validatePassword = () => {
-        if(userPassword !== userConfirmPassword){
-            alertMessage = "Digite a mesma senha!";
-            return false;
+    const validatePassword = (password: string) => {
+        if(userPassword !== password){
+            setIsPasswordValidMessage("Digite a mesma senha!");
+            setIsPasswordValid(false);
+        } else {
+            setIsPasswordValid(true);
         }
-        return true;
+    }
+
+    const validatePhone = (phone: string) => {
+        if(phone.length < 15){
+            setIsPhoneValidMessage("Tamanho de telefone inválido!"),
+            setIsPhoneValid(false);
+        } else {
+            setIsPhoneValid(true);
+        }
     }
 
     const handleRegister = async () => {
+        let alertMessage = "";
         if(userName && userEmail && userPhone && userState && userCity && userPassword && userConfirmPassword){
-            const emailValid = validateEmail();
-            const passwordValid = validatePassword();
-            if(emailValid && passwordValid){
+            if(isEmailValid && isPasswordValid && isPhoneValid){
                 try {
                     await CreateUser(userName, userEmail, userPhone, userState, userCity, userPassword, admin, adminToken);
                     alertMessage = "Conta criada com sucesso!";
                 } catch (error: any) {
                     alertMessage = error.response.data.message;
                 }
+            } else {
+                alertMessage = "Preencha todos os dados corretamente!";
             }
         } else {
             alertMessage = "Preencha todos os campos de dados para realizar o cadastro!";
@@ -75,73 +86,113 @@ export function Register() {
             ]
         )
     }
+
+    const handleEmailInput = (email: string) => {
+        console.log(email);
+        setUserEmail(email);
+        validateEmail(email);
+    }
+
+    const handlePassword = (password: string) => {
+        setUserConfirmPassword(password);
+        validatePassword(password);
+    }
+
+    const handlePhone = (phone: string) => {
+        setUserPhone(phone);
+        validatePhone(phone);
+    }
+
     return (
         <Container>
             <TopBar title="Cadastro" />
             <TitleContainer>
-                <TouchableOpacity onPress={()=> {setAdmin(!admin)}}>
+                <TouchableTitle onPress={()=> {setAdmin(false)}}>
                     <TitleText admin={admin}>Usuário</TitleText>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=> {setAdmin(!admin)}}>
+                    {
+                        admin ? null : <TitleHighlight />
+                    }
+                </TouchableTitle>
+                <TouchableTitle onPress={()=> {setAdmin(true)}}>
                     <TitleText admin={!admin}>Pesquisador</TitleText>
-                </TouchableOpacity>
+                    {
+                        admin ? <TitleHighlight /> : null
+                    }
+                </TouchableTitle>
             </TitleContainer>
-            <InputContainer>
-                <InputView>
-                    <MaterialInputIcon name="person-outline"/>
-                    <Input placeholder="Nome" value={userName} onChangeText={setUserName} />
-                </InputView>
-                <InputView>
-                    <MaterialInputIcon name="mail-outline"/>
-                    <Input placeholder="Email" value={userEmail} onChangeText={setUserEmail} />
-                </InputView>
-                <InputView>
-                    <ComunityInputIcon name="phone-outline"/>
-                    <InputMask
-                        type={'cel-phone'}
-                        options={{
-                            maskType: 'BRL',
-                            withDDD: true,
-                            dddMask: '(99) '
-                        }}
-                        value={userPhone}
-                        onChangeText={setUserPhone}
-                        placeholder="Telefone"
-                    />
-                </InputView>
-                <CityStateView>
-                    <HalfInputView>
-                        <ComunityInputIcon name="compass-outline"/>
-                        <Input placeholder="Estado" value={userState} onChangeText={setUserState} />
-                    </HalfInputView>
-                    <HalfInputView>
-                        <ComunityInputIcon name="city"/>
-                        <Input placeholder="Cidade" value={userCity} onChangeText={setUserCity} />
-                    </HalfInputView>
-                </CityStateView>
-                <InputView>
-                    <MaterialInputIcon name="lock-outline"/>
-                    <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
-                </InputView>
-                <InputView>
-                    <MaterialInputIcon name="lock-outline"/>
-                    <Input placeholder="Confirmar Senha" secureTextEntry={true} value={userConfirmPassword} onChangeText={setUserConfirmPassword} />
-                </InputView>
-                {
-                    admin ? (
-                        <InputView>
-                            <ComunityInputIcon name="key-outline"/>
-                            <Input placeholder="Código de Pesquisador" value={adminToken} onChangeText={setAdminToken} />
-                        </InputView>
-                    ) : null
-                }
-                <RegisterButtonView>
-                    <RegisterButton onPress={handleRegister}>
-                        <RegisterButtonText>Cadastrar</RegisterButtonText>
-                    </RegisterButton>
-                </RegisterButtonView>
-            </InputContainer>
+            <InputScroll>
+                <InputContainer>
+                    <InputView>
+                        <MaterialInputIcon name="person-outline"/>
+                        <Input placeholder="Nome" value={userName} onChangeText={setUserName} />
+                    </InputView>
+                    <InputBox/>
+                    <InputView>
+                        <MaterialInputIcon name="mail-outline"/>
+                        <Input placeholder="Email" value={userEmail} onChangeText={handleEmailInput} />
+                    </InputView>
+                        {
+                            isEmailValid ? null : <ErrorMessage>{isEmailValidMessage}</ErrorMessage>
+                        }
+                    <InputBox/>
+                    <InputView>
+                        <ComunityInputIcon name="phone-outline"/>
+                        <InputMask
+                            type={'cel-phone'}
+                            options={{
+                                maskType: 'BRL',
+                                withDDD: true,
+                                dddMask: '(99) '
+                            }}
+                            value={userPhone}
+                            onChangeText={handlePhone}
+                            placeholder="Telefone"
+                        />
+                    </InputView>
+                    {
+                        isPhoneValid ? null : <ErrorMessage>{isPhoneValidMessage}</ErrorMessage>
+                    }
+                    <InputBox/>
+                    <CityStateView>
+                        <HalfInputView>
+                            <ComunityInputIcon name="compass-outline"/>
+                            <Input placeholder="Estado" value={userState} onChangeText={setUserState} />
+                        </HalfInputView>
+                        <HalfInputView>
+                            <ComunityInputIcon name="city"/>
+                            <Input placeholder="Cidade" value={userCity} onChangeText={setUserCity} />
+                        </HalfInputView>
+                    </CityStateView>
 
+                    <InputBox/>
+                    <InputView>
+                        <MaterialInputIcon name="lock-outline"/>
+                        <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
+                    </InputView>
+                    <InputBox/>
+                    <InputView>
+                        <MaterialInputIcon name="lock-outline"/>
+                        <Input placeholder="Confirmar Senha" secureTextEntry={true} value={userConfirmPassword} onChangeText={handlePassword} />
+                    </InputView>
+                        {
+                            isPasswordValid ? null : <ErrorMessage>{isPasswordValidMessage}</ErrorMessage>
+                        }
+                    <InputBox/>
+                    {
+                        admin ? (
+                            <InputView>
+                                <ComunityInputIcon name="key-outline"/>
+                                <Input placeholder="Código de Pesquisador" value={adminToken} onChangeText={setAdminToken} />
+                            </InputView>
+                        ) : null
+                    }
+                    <RegisterButtonView>
+                        <RegisterButton onPress={handleRegister}>
+                            <RegisterButtonText>Cadastrar</RegisterButtonText>
+                        </RegisterButton>
+                    </RegisterButtonView>
+                </InputContainer>
+            </InputScroll>
         </Container>
     )
 }
