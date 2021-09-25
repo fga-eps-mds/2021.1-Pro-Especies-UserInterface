@@ -1,8 +1,6 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
-import { WikiFish } from "./src/screens/WikiFish";
-
-
+import Navigation from "./src/navigation/navigation";
 import {
   useFonts,
   Poppins_400Regular,
@@ -22,12 +20,9 @@ export default function App() {
   if (!fontLoaded)
     return <AppLoading />
   return (
-    
-    
-      <ThemeProvider theme={theme}>
-        <WikiFish fish_id = "614e7b7e1503110022e9e60f" />
-      </ThemeProvider>
-  
+    <ThemeProvider theme={theme}>
+      <Navigation />
+    </ThemeProvider>
   );
 }
 
