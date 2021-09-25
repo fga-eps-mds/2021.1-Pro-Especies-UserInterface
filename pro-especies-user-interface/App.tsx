@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from 'styled-components';
 
 import { Register } from './src/screens/Register';
+import Navigation from "./src/navigation/navigation";
 import {
   useFonts,
   Poppins_400Regular,
@@ -24,7 +25,7 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Register/>
+      <Navigation />
     </ThemeProvider>
   );
 }
