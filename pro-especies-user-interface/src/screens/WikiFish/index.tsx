@@ -46,6 +46,7 @@ const getFishProperties = async() =>{
         setFishSpecies(fish.data.scientificName);
         setFishFuNFact(fish.data.funFact);
         setFishLargeGroup(fish.data.largeGroup);
+        setFishGroup(fish.data.group);
         setFishFamily(fish.data.family);
         setFishFeed(fish.data.feed);
         setFishHabitat(fish.data.habitat);

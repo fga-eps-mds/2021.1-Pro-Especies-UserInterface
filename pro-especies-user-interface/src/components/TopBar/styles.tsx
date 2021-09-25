@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 export const Box = styled.View`
     height: ${RFValue(72)}px;
     width: 100%;
-    background-color: ${({ theme }) => theme.colors.primary};
+    background-color: ${({ theme }) => theme.colors.primary_light};
     flex-direction: row;
     align-items: center;
     padding-top: ${RFValue(20)}px;

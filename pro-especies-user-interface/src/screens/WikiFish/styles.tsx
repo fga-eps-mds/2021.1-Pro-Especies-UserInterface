@@ -10,7 +10,7 @@ export const FishProfile = styled.Image`
     align-self: center;
     margin-top: ${RFValue(52,640)}px;
     border-radius: ${RFValue(88,640)}px;
-    height: &{RFValue(156)}px;
+    height: ${RFValue(156, 640)}px;
 `
 export const PropertyValueText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.regular};
