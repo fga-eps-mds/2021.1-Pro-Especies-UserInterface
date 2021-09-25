@@ -178,10 +178,13 @@ export function Register() {
                     <InputBox/>
                     {
                         admin ? (
-                            <InputView>
-                                <ComunityInputIcon name="key-outline"/>
-                                <Input placeholder="Código de Pesquisador" value={adminToken} onChangeText={setAdminToken} />
-                            </InputView>
+                            <>
+                                <InputView>
+                                    <ComunityInputIcon name="key-outline"/>
+                                    <Input placeholder="Código de Pesquisador" value={adminToken} onChangeText={setAdminToken} />
+                                </InputView>
+                                <InputBox/>
+                            </>
                         ) : null
                     }
                     <RegisterButtonView>
