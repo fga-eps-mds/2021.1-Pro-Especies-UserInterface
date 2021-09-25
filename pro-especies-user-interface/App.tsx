@@ -25,7 +25,7 @@ export default function App() {
     
     
       <ThemeProvider theme={theme}>
-        <WikiFish fish_id = "614e72f6fda59a0031909bbb" />
+        <WikiFish fish_id = "614e7b7e1503110022e9e60f" />
       </ThemeProvider>
   
   );

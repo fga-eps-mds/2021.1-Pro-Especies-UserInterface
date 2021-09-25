@@ -41,7 +41,7 @@ export const WikiFish: FC<IFish> = ({
 
 const getFishProperties = async() =>{
     try {
-        const fish = await wikiService.get(`/${fish_id}`);
+        const fish = await wikiService.get(`/fishWiki/${fish_id}`);
         setFishName(fish.data.commonName);
         setFishSpecies(fish.data.scientificName);
         setFishFuNFact(fish.data.funFact);
@@ -56,7 +56,7 @@ const getFishProperties = async() =>{
         setFishIsThreatened(fish.data.isThreatened);
         setFishHasSpawningSeason(fish.data.hasSpawingSeason);
     } catch (error) {
-        
+        console.log(error)
     }
 }; 
 
