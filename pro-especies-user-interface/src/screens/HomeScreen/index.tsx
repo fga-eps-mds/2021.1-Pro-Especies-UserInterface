@@ -22,7 +22,7 @@ export default function Home({navigation}: any) {
             <HomeLogoContainer>
                 <HomeAppImage source={require('../../assets/logo.png')} />
                 <HomeAppTitle>
-                    Pró-Espécies <HomeAppTitleBlue>Peixes</HomeAppTitleBlue>
+                    Eu<HomeAppTitleBlue>Pescador</HomeAppTitleBlue>
                 </HomeAppTitle>
             </HomeLogoContainer>
 

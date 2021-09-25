@@ -51,13 +51,13 @@ export const HomeWikiButton = styled.TouchableOpacity`
 `
 export const HomeWikiText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold};
-    line-height: ${RFValue(18,640)}px
+    line-height: ${RFValue(18,640)}px;
     font-size: ${RFValue(10.5,640)}px;
     color: ${({ theme }) => theme.colors.background};
     margin: ${RFValue(16,640)}px 0px;
 `
 export const HomeLinksContainer = styled.View`
-    margin-top: ${RFValue(16,640)}px
+    margin-top: ${RFValue(16,640)}px;
 `
 export const HomePhraseContainer = styled.View`
     flex-direction: row;
@@ -66,12 +66,12 @@ export const HomePhraseContainer = styled.View`
 export const HomeRegularText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.regular};
     font-size: ${RFValue(10.5,640)}px;
-    line-height: ${RFValue(18,640)}px
+    line-height: ${RFValue(18,640)}px;
     color: ${({ theme }) => theme.colors.on_background};
 `
 export const HomeLogLink = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(10.5, 640)}px;
-    line-height: ${RFValue(18,640)}px
+    line-height: ${RFValue(18,640)}px;
     color: ${ ({ theme }) => theme.colors.on_background }; 
     `
