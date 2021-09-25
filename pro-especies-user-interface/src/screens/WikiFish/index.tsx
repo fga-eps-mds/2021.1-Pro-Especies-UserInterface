@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC} from "react";
 
 import { ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
@@ -14,8 +14,15 @@ import {
     ColumnContainer,
     DescriptionContainer,
 } from "./styles";
+import wikiService from '../../services/wikiService';
 
-export function WikiFish() {
+type IFish = {
+    fish_id:string;
+}
+
+export const WikiFish: FC<IFish> = ({
+    fish_id,
+}) => {
     const [ fishName , setFishName ] = useState("");
     const [ fishPhoto , setFishPhoto ] = useState("");
     const [ fishSpecies , setFishSpecies ] = useState("");
@@ -24,19 +31,37 @@ export function WikiFish() {
     const [ fishGroup , setFishGroup ] = useState("");
     const [ fishFamily , setFishFamily ] = useState("");
     const [ fishFeed , setFishFeed ] = useState("");
-    const [ fishMaxSize , setFishMaxSize ] = useState("");
-    const [ fishMaxWeight , setFishMaxWeight ] = useState("");
+    const [ fishMaxSize , setFishMaxSize ] = useState(0);
+    const [ fishMaxWeight , setFishMaxWeight ] = useState(0);
     const [ fishHabitat , setFishHabitat ] = useState("");
-    const [ fishIsEndemic , setFishIsEndemic ] = useState(false);
+    const [ fishIsEndemic , setFishIsEndemic ] = useState("");
     const [ fishIsThreatened , setFishIsThreatened ] = useState(false);
     const [ fishWasIntroduced , setFishWasIntroduced ] = useState(false);
-    const [ fishHasSpawningSeason , setFishHasSpawningSeason ] = useState(true);
+    const [ fishHasSpawningSeason , setFishHasSpawningSeason ] = useState(false);
+
+const getFishProperties = async() =>{
+    try {
+        const fish = await wikiService.get(`/${fish_id}`);
+        setFishName(fish.data.commonName);
+        setFishSpecies(fish.data.scientificName);
+        setFishFuNFact(fish.data.funFact);
+        setFishLargeGroup(fish.data.largeGroup);
+        setFishFamily(fish.data.family);
+        setFishFeed(fish.data.feed);
+        setFishHabitat(fish.data.habitat);
+        setFishMaxSize(fish.data.sizeMax);
+        setFishMaxWeight(fish.data.maxWeight);
+        setFishWasIntroduced(fish.data.wasIntroduced);
+        setFishIsEndemic(fish.data.isEndemic);
+        setFishIsThreatened(fish.data.isThreatened);
+        setFishHasSpawningSeason(fish.data.hasSpawingSeason);
+    } catch (error) {
+        
+    }
+}; 
 
     useEffect(()=> {
-        setFishName("Nemo");
-        setFishSpecies("Acestrorhynchus falcatus");
-        setFishFuNFact('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus suscipit nisl in sollicitudin.');
-        setFishLargeGroup('Peixes com Escama');
+        getFishProperties();
     } ,[])
 
     return (
@@ -104,7 +129,7 @@ export function WikiFish() {
 
                         <PropertyContainer>
                             <PropertyText>Endemíco?</PropertyText>
-                            <PropertyValueText>{(fishIsEndemic?"Sim":"Não")}</PropertyValueText>
+                            <PropertyValueText>{fishIsEndemic}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>

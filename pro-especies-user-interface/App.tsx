@@ -10,8 +10,6 @@ import {
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
 
-import { Welcome } from "./src/components/Welcome";
-
 import theme from "./src/global/styles/theme";
 import AppLoading from "expo-app-loading";
 
@@ -27,7 +25,7 @@ export default function App() {
     
     
       <ThemeProvider theme={theme}>
-        <WikiFish />
+        <WikiFish fish_id = "614e72f6fda59a0031909bbb" />
       </ThemeProvider>
   
   );
