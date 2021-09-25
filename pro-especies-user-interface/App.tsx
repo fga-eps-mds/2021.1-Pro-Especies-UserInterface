@@ -8,7 +8,6 @@ import {
   Poppins_700Bold
 } from "@expo-google-fonts/poppins";
 
-
 import theme from "./src/global/styles/theme";
 import AppLoading from "expo-app-loading";
 
