@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrowLeft, Box, HeaderText } from "./styles";
+import { Box, HeaderIcon, HeaderText, IconContainer, IconText } from "./styles";
 
 interface Props {
     title: string;
@@ -8,8 +8,11 @@ interface Props {
 export function TopBar({title}: Props) {
     return (
         <Box>
-            <ArrowLeft name="arrow-back" />
             <HeaderText >{title}</HeaderText>
+            <IconContainer>
+                <HeaderIcon name="login" />
+                <IconText>Entrar</IconText>
+            </IconContainer>
         </Box>
     )
 }

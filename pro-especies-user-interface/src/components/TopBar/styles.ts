@@ -4,24 +4,32 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 
 export const Box = styled.View`
-    height: ${RFValue(72)}px;
+    height: ${RFValue(82)}px;
     width: 100%;
     background-color: ${({ theme }) => theme.colors.primary_light};
     flex-direction: row;
     align-items: center;
-    padding-top: ${RFValue(20)}px;
-    
-    
+    justify-content: flex-end;
+    padding-top: ${RFValue(30)}px;
 `
-export const ArrowLeft = styled(MaterialIcons)`
+export const IconContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    margin-right: ${RFValue(16)}px;
+`
+
+export const HeaderIcon = styled(MaterialIcons)`
     font-size: ${RFValue(30)}px;
-    margin-left: ${RFValue(12)}px;
-    
+    margin-right: ${RFValue(8)}px;
 `
+export const IconText = styled.Text`
+    font-size: ${RFValue(12)}px;
+    font-family: ${({ theme }) => theme.fonts.bold};
+`
+
 export const HeaderText = styled.Text`
-    flex: 1;
     text-align: center;
     font-family: ${({ theme }) => theme.fonts.medium};
     font-size: ${RFValue(18)}px;
-    margin-right: ${RFValue(42)}px;
+    margin-right: ${RFValue(45)}px;
 `
