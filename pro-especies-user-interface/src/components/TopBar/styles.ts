@@ -28,8 +28,7 @@ export const IconText = styled.Text`
 `
 
 export const HeaderText = styled.Text`
-    text-align: center;
+    margin-right: ${RFValue(64)}px;
     font-family: ${({ theme }) => theme.fonts.medium};
     font-size: ${RFValue(18)}px;
-    margin-right: ${RFValue(45)}px;
 `
