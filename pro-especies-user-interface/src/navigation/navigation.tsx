@@ -28,7 +28,7 @@ export default function Navigation() {
                 <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} options={{title: "Cadastro", headerShown: true}}/>
-                <Stack.Screen name="Wiki" component={Wiki} />
+                <Stack.Screen name="Wiki" component={Wiki} options={{title: "Biblioteca", headerShown: true}}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
