@@ -1,51 +1,34 @@
 import React, { useState } from "react";
-import { CityStateView,
-    InputScroll,
-    ComunityInputIcon,
+import {
     Container,
     ErrorMessage,
-    HalfInputView,
     Input,
     InputBox,
     InputContainer,
-    InputMask,
     InputView,
-    MaterialInputIcon,
     LoginButton,
     LoginButtonText,
     LoginButtonView,
-    TitleContainer,
-    TitleHighlight,
-    TitleText,
-    TouchableTitle,
     HomeLogoContainer,
     HomeAppImage,
     HomeAppTitle,
     HomeAppTitleBlue,
+    HomePhraseContainer,
+    HomeRegularText,
+    HomeLogLink
+
 } from "./styles";
 import { CreateUser } from "../../services/userServices/createUser";
-import { Alert } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
 
 
 
-export function Login() {
-    const [userEmailPhone, setUserEmailPhone] = useState<string|undefined>();
+export function Login({navigation}: any) {
+    const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
-    const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("");
-    const [userPhone, setUserPhone] = useState<string|undefined>();
-    const [userPassword, setUserPassword] = useState<string|undefined>();
-    const [isPasswordValid, setIsPasswordValid] = useState(true);
-    const [isPasswordValidMessage, setIsPasswordValidMessage] = useState("");
-    const [userConfirmPassword, setUserConfirmPassword] = useState<string|undefined>();
-
-    const validatePassword = (password: string) => {
-        if(userPassword !== password){
-            setIsPasswordValidMessage("Digite a mesma senha!");
-            setIsPasswordValid(false);
-        } else {
-            setIsPasswordValid(true);
-        }
-    }
+    const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Erro");
+    const [userPhone, setUserPhone] = useState<string | undefined>();
+    const [userPassword, setUserPassword] = useState<string | undefined>();
 
     // const handleLogin = async () => {
     //     let alertMessage = "";
@@ -74,11 +57,6 @@ export function Login() {
     //     )
     // }
 
-    const handlePassword = (password: string) => {
-        setUserConfirmPassword(password);
-        validatePassword(password);
-    }
-
     const handlePhone = (phone: string) => {
         setUserPhone(phone);
     }
@@ -91,29 +69,35 @@ export function Login() {
                     Eu<HomeAppTitleBlue>Pescador</HomeAppTitleBlue>
                 </HomeAppTitle>
             </HomeLogoContainer>
-            <InputScroll>
-                <InputContainer>
-                    <InputView>
-                        <Input placeholder="E-mail / Telefone" value={ '' } onChangeText={()=>{}} />
-                    </InputView>
-                        {/* {
-                            LoginSuccesful ? null : <ErrorMessage>{LoginErrorMessage}</ErrorMessage>
-                        } */}
-                    <InputBox/>
-                    
-                    <InputView>
-                        <MaterialInputIcon name="lock-outline"/>
-                        <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
-                    </InputView>
-                    <InputBox/>
-                    <InputBox/>
-                    <LoginButtonView>
-                        <LoginButton>
-                            <LoginButtonText>Entrar</LoginButtonText>
-                        </LoginButton>
-                    </LoginButtonView>
-                </InputContainer>
-            </InputScroll>
+            <InputBox />
+            <InputBox />
+            <InputContainer>
+                <InputView>
+                    <Input placeholder="E-mail / Telefone" value={''} onChangeText={() => { }} />
+                </InputView>
+                    {
+                        isEmailPhoneValid ? <InputBox /> : <ErrorMessage>{isEmailPhoneValidMessage}</ErrorMessage>
+                    }
+
+                <InputView>
+                    <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
+                </InputView>
+                <InputBox />
+                <LoginButtonView>
+                    <LoginButton>
+                        <LoginButtonText>Entrar</LoginButtonText>
+                    </LoginButton>
+                </LoginButtonView>
+                <InputBox />
+                <HomePhraseContainer>
+                    <HomeRegularText>
+                        Não possui uma conta ainda?
+                    </HomeRegularText>
+                    <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                        <HomeLogLink> Cadastre-se</HomeLogLink>
+                    </TouchableOpacity>
+                </HomePhraseContainer>
+            </InputContainer>
         </Container>
     )
 }
