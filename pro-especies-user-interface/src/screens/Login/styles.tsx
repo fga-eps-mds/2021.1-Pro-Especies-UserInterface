@@ -64,14 +64,9 @@ export const ErrorMessage = styled.Text`
     color: ${({ theme }) => theme.colors.on_error};
     font-size: ${RFValue(12, 640)}px;
     font-family: ${({ theme }) => theme.fonts.regular};
-    margin: ${RFValue(5, 640)}px 0;
+    margin: ${RFValue(2, 640)}px 0 ${RFValue(8, 640)}px ${RFValue(7, 640)}px;
 `
 
-export const ComunityInputIcon = styled(MaterialCommunityIcons)`
-    font-size: ${RFValue(20, 640)}px;
-    color: #C4C4C4;
-    margin: 0 ${RFValue(11, 640)}px; 
-`
 export const LoginButtonView = styled.View`
     align-items: center;
 `

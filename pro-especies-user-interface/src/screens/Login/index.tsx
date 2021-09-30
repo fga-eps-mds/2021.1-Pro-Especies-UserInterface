@@ -18,47 +18,57 @@ import {
     HomeLogLink
 
 } from "./styles";
-import { CreateUser } from "../../services/userServices/createUser";
+import { UserLogin } from "../../services/userServices/login";
 import { Alert, TouchableOpacity } from "react-native";
 
 
 
-export function Login({navigation}: any) {
+export function Login({ navigation }: any) {
     const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
     const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Erro");
-    const [userPhone, setUserPhone] = useState<string | undefined>();
     const [userPassword, setUserPassword] = useState<string | undefined>();
 
-    // const handleLogin = async () => {
-    //     let alertMessage = "";
-    //     if(userName && userEmail && userPhone && userState && userCity && userPassword && userConfirmPassword){
-    //         if(isEmailValid && isPasswordValid && isPhoneValid){
-    //             try {
-    //                 await CreateUser(userName, userEmail, userPhone, userState, userCity, userPassword, admin, adminToken);
-    //                 alertMessage = "Conta criada com sucesso!";
-    //             } catch (error: any) {
-    //                 alertMessage = error.response.data.message;
-    //             }
-    //         } else {
-    //             alertMessage = "Preencha todos os dados corretamente!";
-    //         }
-    //     } else {
-    //         alertMessage = "Preencha todos os campos de dados para realizar o cadastro!";
-    //     }
-    //     Alert.alert(
-    //         "Cadastro",
-    //         alertMessage,
-    //         [
-    //             {
-    //                 text: "Ok",
-    //             }
-    //         ]
-    //     )
-    // }
+    function isNumeric(val: any) {
+        return /^-?\d+$/.test(val);
+    }
 
-    const handlePhone = (phone: string) => {
-        setUserPhone(phone);
+    const handleErrorMessage = () => {
+        setIsEmailPhoneValid(false);
+        if (isNumeric(userEmailPhone))
+            setIsEmailPhoneValidMessage("Telefone não encontrado");
+        else
+            setIsEmailPhoneValidMessage("E-mail não encontrado");
+    }
+
+    const handleLogin = async () => {
+        let alertMessage = "";
+        if (userEmailPhone && userPassword) {
+            try {
+                setIsEmailPhoneValid(true);
+                const response = await UserLogin(userEmailPhone, userPassword);
+                navigation.navigate('Wiki');
+                alertMessage = "Conta acessada com sucesso!";
+            } catch (error: any) {
+                if(error.response.status === 404)                                     
+                    handleErrorMessage();
+                else
+                    alertMessage = error.response.data.message;
+            }
+        } else {
+            alertMessage = "Preencha todos os campos de dados para realizar o login!";
+        }
+        if(alertMessage){
+            Alert.alert(
+                "Login",
+                alertMessage,
+                [
+                    {
+                        text: "Ok",
+                    }
+                ]
+            )
+        }
     }
 
     return (
@@ -73,18 +83,18 @@ export function Login({navigation}: any) {
             <InputBox />
             <InputContainer>
                 <InputView>
-                    <Input placeholder="E-mail / Telefone" value={''} onChangeText={() => { }} />
+                    <Input placeholder="E-mail / Telefone" value={userEmailPhone} onChangeText={setUserEmailPhone} />
                 </InputView>
-                    {
-                        isEmailPhoneValid ? <InputBox /> : <ErrorMessage>{isEmailPhoneValidMessage}</ErrorMessage>
-                    }
+                {
+                    isEmailPhoneValid ? <InputBox /> : <ErrorMessage>{isEmailPhoneValidMessage}</ErrorMessage>
+                }
 
                 <InputView>
                     <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
                 <InputBox />
                 <LoginButtonView>
-                    <LoginButton>
+                    <LoginButton onPress={handleLogin}>
                         <LoginButtonText>Entrar</LoginButtonText>
                     </LoginButton>
                 </LoginButtonView>

@@ -89,6 +89,7 @@ export const ErrorMessage = styled.Text`
     color: ${({ theme }) => theme.colors.on_error};
     font-size: ${RFValue(12, 640)}px;
     font-family: ${({ theme }) => theme.fonts.regular};
+    margin: ${RFValue(2, 640)}px 0 ${RFValue(8, 640)}px 0;
 `
 
 export const MaterialInputIcon = styled(MaterialIcons)`
