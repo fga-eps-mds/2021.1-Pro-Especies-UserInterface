@@ -4,7 +4,7 @@ import { CreateUser } from "../../services/userServices/createUser";
 import { Alert } from "react-native";
 
 
-export function Register() {
+export default function Register() {
     const [admin, setAdmin] = useState(false);
     const [userName, setUserName] = useState<string|undefined>();
     const [userEmail, setUserEmail] = useState<string|undefined>();

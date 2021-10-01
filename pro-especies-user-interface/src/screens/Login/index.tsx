@@ -23,7 +23,7 @@ import { Alert, TouchableOpacity } from "react-native";
 
 
 
-export function Login({ navigation }: any) {
+export default function Login({ navigation }: any) {
     const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
     const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Usuário não encontrado");
