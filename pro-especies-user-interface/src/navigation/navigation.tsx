@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
 import { Register } from '../screens/Register';
-import Wiki from '../screens/Wiki';
+import { Wiki } from '../screens/Wiki';
 import theme from "../global/styles/theme";
 
 const Stack = createNativeStackNavigator();
