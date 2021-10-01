@@ -1,7 +1,5 @@
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { TextInputMask } from "react-native-masked-text";
 
 
 export const Container = styled.View`
@@ -14,6 +12,7 @@ export const Container = styled.View`
 export const HomeLogoContainer = styled.View`
     align-items: center;
     justify-content: center;
+    margin-bottom: ${RFValue(64, 640)}px;
 `
 export const HomeAppImage = styled.Image`
     width: ${RFValue(184,640)}px;
@@ -69,6 +68,7 @@ export const ErrorMessage = styled.Text`
 
 export const LoginButtonView = styled.View`
     align-items: center;
+    margin: ${RFValue(32, 640)}px 0;
 `
 export const LoginButton = styled.TouchableOpacity`
     width: ${RFValue(156, 640)}px;

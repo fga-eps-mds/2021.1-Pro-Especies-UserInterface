@@ -26,20 +26,8 @@ import { Alert, TouchableOpacity } from "react-native";
 export function Login({ navigation }: any) {
     const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
-    const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Erro");
+    const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Usuário não encontrado");
     const [userPassword, setUserPassword] = useState<string | undefined>();
-
-    function isNumeric(val: any) {
-        return /^-?\d+$/.test(val);
-    }
-
-    const handleErrorMessage = () => {
-        setIsEmailPhoneValid(false);
-        if (isNumeric(userEmailPhone))
-            setIsEmailPhoneValidMessage("Telefone não encontrado");
-        else
-            setIsEmailPhoneValidMessage("E-mail não encontrado");
-    }
 
     const handleLogin = async () => {
         let alertMessage = "";
@@ -51,7 +39,7 @@ export function Login({ navigation }: any) {
                 alertMessage = "Conta acessada com sucesso!";
             } catch (error: any) {
                 if(error.response.status === 404)                                     
-                    handleErrorMessage();
+                    setIsEmailPhoneValid(false);
                 else
                     alertMessage = error.response.data.message;
             }
@@ -79,8 +67,6 @@ export function Login({ navigation }: any) {
                     Eu<HomeAppTitleBlue>Pescador</HomeAppTitleBlue>
                 </HomeAppTitle>
             </HomeLogoContainer>
-            <InputBox />
-            <InputBox />
             <InputContainer>
                 <InputView>
                     <Input placeholder="E-mail / Telefone" value={userEmailPhone} onChangeText={setUserEmailPhone} />
@@ -92,13 +78,11 @@ export function Login({ navigation }: any) {
                 <InputView>
                     <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
-                <InputBox />
                 <LoginButtonView>
                     <LoginButton onPress={handleLogin}>
                         <LoginButtonText>Entrar</LoginButtonText>
                     </LoginButton>
                 </LoginButtonView>
-                <InputBox />
                 <HomePhraseContainer>
                     <HomeRegularText>
                         Não possui uma conta ainda?
