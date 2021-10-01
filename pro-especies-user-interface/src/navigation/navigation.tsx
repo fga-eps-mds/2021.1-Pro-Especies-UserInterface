@@ -6,6 +6,7 @@ import Login from '../screens/Login';
 import { Register } from '../screens/Register';
 import Wiki from '../screens/Wiki';
 import theme from "../global/styles/theme";
+import { NewFishLog } from "../screens/NewFishLog";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,10 +26,11 @@ export default function Navigation() {
                     },
                 }}
             >
-                <Stack.Screen name="Home" component={Home} />
+                {/* <Stack.Screen name="Home" component={Home} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} options={{title: "Cadastro", headerShown: true}}/>
-                <Stack.Screen name="Wiki" component={Wiki} />
+                <Stack.Screen name="Wiki" component={Wiki} /> */}
+                <Stack.Screen name="NewFishLog" component={NewFishLog}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
