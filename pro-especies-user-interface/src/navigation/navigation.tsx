@@ -14,7 +14,6 @@ const AuthenticateStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
 
 const AuthRoutes = () => {
-
     return (
         <AuthenticateStack.Navigator
             initialRouteName="Home"
@@ -38,8 +37,7 @@ const AuthRoutes = () => {
 }
 const AppRoutes = () => {
     return (
-
-        <AuthenticateStack.Navigator
+        <Stack.Navigator
             initialRouteName="Home"
             screenOptions={{
                 headerShown: false,
@@ -52,11 +50,11 @@ const AppRoutes = () => {
                 },
             }}
         >
-            <AuthenticateStack.Screen name="Home" component={Home} />
-            <AuthenticateStack.Screen name="Login" component={Login} />
-            <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
-        </AuthenticateStack.Navigator>
-
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
+            <AuthenticateStack.Screen name="Wiki" component={Wiki} />
+        </Stack.Navigator>
     )
 }
 
