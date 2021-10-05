@@ -18,7 +18,6 @@ import {
     HomeLogLink
 
 } from "./styles";
-import { UserLogin } from "../../services/userServices/login";
 import { Alert, TouchableOpacity } from "react-native";
 import { useAuth } from "../../contexts/authContext";
 
