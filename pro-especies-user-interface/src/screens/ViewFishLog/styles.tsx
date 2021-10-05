@@ -11,6 +11,7 @@ export const FishProfile = styled.Image`
     margin-top: ${RFValue(52,640)}px;
     border-radius: ${RFValue(88,640)}px;
     height: ${RFValue(156, 640)}px;
+    width: ${RFValue(156, 640)}px;
 `
 export const PropertyValueText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.regular};
@@ -42,4 +43,24 @@ export const PropertyRow = styled.View`
 export const DescriptionContainer = styled.View`
     align-items: center;
     margin: ${RFValue(10,640)}px ${RFValue(22,640)}px;
+`
+
+export const RegisterButtonView = styled.View`
+    align-items: center;
+    margin: ${RFValue(19,640)}px 0;
+`
+export const RegisterButton = styled.TouchableOpacity`
+    width: ${RFValue(156, 640)}px;
+    height: ${RFValue(40, 640)}px;
+    border-radius: ${RFValue(5, 640)}px;
+    background-color: ${({ theme }) => theme.colors.secondary_dark};
+    align-items: center;
+    justify-content: center;
+    margin: ${RFValue(8,640)}px 0;
+`
+
+export const RegisterButtonText = styled.Text`
+    color: white;
+    font-family: ${({ theme }) => theme.fonts.bold};
+    font-size: ${RFValue(12, 640)}px;
 `

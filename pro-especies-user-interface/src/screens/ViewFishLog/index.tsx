@@ -11,6 +11,9 @@ import {
     PropertyContainer,
     PropertyRow,
     DescriptionContainer,
+    RegisterButtonView,
+    RegisterButton,
+    RegisterButtonText,
 } from "./styles";
 import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
 
@@ -18,7 +21,7 @@ type IFishLog = {
     log_id: string;
 }
 
-export const WikiFish: FC<IFishLog> = ({
+export const FishLog: FC<IFishLog> = ({
     log_id,
 }) => {
     const [fishName, setFishName] = useState("");
@@ -26,6 +29,7 @@ export const WikiFish: FC<IFishLog> = ({
     const [fishLargeGroup, setFishLargeGroup] = useState("");
     const [fishWeight, setFishWeight] = useState(0);
     const [fishLength, setFishLength] = useState(0);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const getFishLogProperties = async () => {
         try {
@@ -65,6 +69,28 @@ export const WikiFish: FC<IFishLog> = ({
                         <PropertyValueText>fishWeight</PropertyValueText>
                     </PropertyContainer>
                 </PropertyRow>
+
+                <RegisterButtonView>
+                    {
+                        isAdmin ? (
+                            <>
+                                <RegisterButton onPress={() => { }}>
+                                    <RegisterButtonText>Revisar</RegisterButtonText>
+                                </RegisterButton><RegisterButton onPress={() => { }}>
+                                    <RegisterButtonText>Exportar</RegisterButtonText>
+                                </RegisterButton>
+                            </>
+                        ) : (
+                            <RegisterButton onPress={() => { }}>
+                                <RegisterButtonText>Editar</RegisterButtonText>
+                            </RegisterButton>
+                        )
+                    }
+
+                    <RegisterButton onPress={() => { }}>
+                        <RegisterButtonText>Excluir</RegisterButtonText>
+                    </RegisterButton>
+                </RegisterButtonView>
             </ScrollView>
         </FishContainer>
     )
