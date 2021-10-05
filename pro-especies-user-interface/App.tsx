@@ -1,7 +1,6 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
 
-import { Register } from './src/screens/Register';
 import Navigation from "./src/navigation/navigation";
 import {
   useFonts,

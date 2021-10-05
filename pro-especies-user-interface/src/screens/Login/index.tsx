@@ -20,21 +20,23 @@ import {
 } from "./styles";
 import { UserLogin } from "../../services/userServices/login";
 import { Alert, TouchableOpacity } from "react-native";
+import { useAuth } from "../../contexts/authContext";
 
 
 
-export function Login({ navigation }: any) {
+export default function Login({ navigation }: any) {
     const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
     const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Usuário não encontrado");
     const [userPassword, setUserPassword] = useState<string | undefined>();
+    const {signIn, authenticated} = useAuth();
 
     const handleLogin = async () => {
         let alertMessage = "";
         if (userEmailPhone && userPassword) {
             try {
                 setIsEmailPhoneValid(true);
-                const response = await UserLogin(userEmailPhone, userPassword);
+                const res = await signIn(userEmailPhone, userPassword);
                 navigation.navigate('Wiki');
                 alertMessage = "Conta acessada com sucesso!";
             } catch (error: any) {
