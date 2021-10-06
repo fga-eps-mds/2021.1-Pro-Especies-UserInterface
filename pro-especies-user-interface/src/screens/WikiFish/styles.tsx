@@ -29,12 +29,12 @@ export const PropertyText = styled(PropertyValueText)`
 `
 
 
-export const FishDescription = styled(PropertyValueText)`
-    text-align: center;
+export const FishDescription = styled.View`
+    align-self: center;
 `
 
 export const PropertyContainer = styled.View`
-    margin-bottom: ${RFValue(16,640)}px;
+    margin-bottom: ${RFValue(8,640)}px;
 `
 
 export const PropertyColumn = styled.View`

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
 
 import { ScrollView } from "react-native";
-import { TopBar } from "../../components/TopBar";
 import {
     FishContainer,
     PropertyRow,
@@ -10,13 +9,16 @@ import {
     RegisterButton,
     RegisterButtonText
 } from "./styles";
-import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
 
-import {Property} from '../../components/Property';
+import { TopBar } from "../../components/TopBar";
+import { Property } from '../../components/Property';
 import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
 import { ProfileImage } from "../../components/ProfileImage";
 import { MapViewImage } from "../../components/MapViewImage";
+
+import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type IFishLog = {
     log_id: string;
@@ -44,8 +46,14 @@ export const FishLog: FC<IFishLog> = ({
         }
     };
 
+    const getUser = async () => {
+        const _userId = AsyncStorage.getItem("@eupescador/userId");
+        console.log(_userId);
+    }
+
     useEffect(() => {
         // getFishLogProperties();
+        getUser();
     }, [])
 
     return (
