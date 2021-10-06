@@ -4,25 +4,26 @@ import { ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
 import {
     FishContainer,
-    FishProfile,
-    FishTitle,
-    PropertyText,
-    PropertyValueText,
-    PropertyContainer,
     PropertyRow,
     DescriptionContainer,
     RegisterButtonView,
     RegisterButton,
-    RegisterButtonText,
+    RegisterButtonText
 } from "./styles";
 import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
+
+import {Property} from '../../components/Property';
+import { Title } from "../../components/Title";
+import { HalfToneText } from "../../components/HalfToneText";
+import { ProfileImage } from "../../components/ProfileImage";
+import { MapViewImage } from "../../components/MapViewImage";
 
 type IFishLog = {
     log_id: string;
 }
 
 export const FishLog: FC<IFishLog> = ({
-    log_id,
+    log_id
 }) => {
     const [fishName, setFishName] = useState("");
     const [fishPhoto, setFishPhoto] = useState("");
@@ -44,50 +45,46 @@ export const FishLog: FC<IFishLog> = ({
     };
 
     useEffect(() => {
-        getFishLogProperties();
+        // getFishLogProperties();
     }, [])
 
     return (
         <FishContainer>
             <TopBar title="Registro" />
             <ScrollView>
-                <FishProfile source={require('../../assets/Acestrorhynchus.png')} />
+                <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
 
                 <DescriptionContainer>
-                    <FishTitle>fishName</FishTitle>
-                    <PropertyText>fishLargeGroup</PropertyText>
+                    <Title text="fishName" />
+                    <HalfToneText text="fishLargeGroup" />
                 </DescriptionContainer>
 
                 <PropertyRow>
-                    <PropertyContainer>
-                        <PropertyText>Tamanho(cm)</PropertyText>
-                        <PropertyValueText>fishLength</PropertyValueText>
-                    </PropertyContainer>
-
-                    <PropertyContainer>
-                        <PropertyText>Peso(kg)</PropertyText>
-                        <PropertyValueText>fishWeight</PropertyValueText>
-                    </PropertyContainer>
+                    <Property property="Tamanho(cm)" value="fishLength" />
+                    
+                    <Property property="Peso(kg)" value="fishWeight" />
                 </PropertyRow>
+
+                <MapViewImage source={require('../../assets/map.png')} />
 
                 <RegisterButtonView>
                     {
                         isAdmin ? (
                             <>
-                                <RegisterButton onPress={() => { }}>
+                                <RegisterButton onPress={() => {}}>
                                     <RegisterButtonText>Revisar</RegisterButtonText>
-                                </RegisterButton><RegisterButton onPress={() => { }}>
+                                </RegisterButton><RegisterButton onPress={() => {}}>
                                     <RegisterButtonText>Exportar</RegisterButtonText>
                                 </RegisterButton>
                             </>
                         ) : (
-                            <RegisterButton onPress={() => { }}>
+                            <RegisterButton onPress={() => {}}>
                                 <RegisterButtonText>Editar</RegisterButtonText>
                             </RegisterButton>
                         )
                     }
 
-                    <RegisterButton onPress={() => { }}>
+                    <RegisterButton onPress={() => {}}>
                         <RegisterButtonText>Excluir</RegisterButtonText>
                     </RegisterButton>
                 </RegisterButtonView>

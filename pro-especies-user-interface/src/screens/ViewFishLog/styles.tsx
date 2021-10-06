@@ -30,14 +30,13 @@ export const PropertyText = styled(PropertyValueText)`
 `
 
 export const PropertyContainer = styled.View`
-    margin-bottom: ${RFValue(16,640)}px;
+
 `
 
 export const PropertyRow = styled.View`
     flex-direction: row;
     justify-content: space-evenly;
     margin-top: ${RFValue(10,640)}px;
-    margin-bottom: ${RFValue(16,640)}px;
 `
 
 export const DescriptionContainer = styled.View`
@@ -47,7 +46,6 @@ export const DescriptionContainer = styled.View`
 
 export const RegisterButtonView = styled.View`
     align-items: center;
-    margin: ${RFValue(19,640)}px 0;
 `
 export const RegisterButton = styled.TouchableOpacity`
     width: ${RFValue(156, 640)}px;
@@ -56,11 +54,18 @@ export const RegisterButton = styled.TouchableOpacity`
     background-color: ${({ theme }) => theme.colors.secondary_dark};
     align-items: center;
     justify-content: center;
-    margin: ${RFValue(8,640)}px 0;
+    margin-bottom: ${RFValue(8,640)}px;
 `
 
 export const RegisterButtonText = styled.Text`
     color: white;
     font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(12, 640)}px;
+`
+
+export const MapViewImage = styled.Image`
+    align-self: center;
+    width: ${RFValue(145, 640)}px;
+    height: ${RFValue(145, 640)}px;
+    margin: ${RFValue(20,640)}px 0;
 `
