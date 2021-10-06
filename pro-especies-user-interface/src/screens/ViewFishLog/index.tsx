@@ -6,8 +6,6 @@ import {
     PropertyRow,
     DescriptionContainer,
     RegisterButtonView,
-    RegisterButton,
-    RegisterButtonText
 } from "./styles";
 
 import { TopBar } from "../../components/TopBar";
@@ -16,6 +14,7 @@ import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
 import { ProfileImage } from "../../components/ProfileImage";
 import { MapViewImage } from "../../components/MapViewImage";
+import { GreenButton } from "../../components/GreenButton";
 
 import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -33,10 +32,22 @@ export const FishLog: FC<IFishLog> = ({
     const [fishWeight, setFishWeight] = useState(0);
     const [fishLength, setFishLength] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [userToken, setUserToken] = useState("");
 
+    
+    const getUser = async () => {
+        const _userId = await AsyncStorage.getItem("@eupescador/userId");
+        const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
+        const token = await AsyncStorage.getItem("@eupescador/token");
+        if(token){
+            setUserToken(token);
+        }
+        console.log(_userId,userAdmin,token);
+    }
+    
     const getFishLogProperties = async () => {
         try {
-            const log = await GetOneFishLog(log_id);
+            const log = await GetOneFishLog(log_id, userToken);
             setFishName(log.species);
             setFishLargeGroup(log.fishType);
             setFishWeight(log.weight);
@@ -45,11 +56,6 @@ export const FishLog: FC<IFishLog> = ({
             console.log(error)
         }
     };
-
-    const getUser = async () => {
-        const _userId = AsyncStorage.getItem("@eupescador/userId");
-        console.log(_userId);
-    }
 
     useEffect(() => {
         // getFishLogProperties();
@@ -79,22 +85,15 @@ export const FishLog: FC<IFishLog> = ({
                     {
                         isAdmin ? (
                             <>
-                                <RegisterButton onPress={() => {}}>
-                                    <RegisterButtonText>Revisar</RegisterButtonText>
-                                </RegisterButton><RegisterButton onPress={() => {}}>
-                                    <RegisterButtonText>Exportar</RegisterButtonText>
-                                </RegisterButton>
+                                <GreenButton text="Revisar" buttonFunction={()=>{}} />
+                                <GreenButton text="Exportar" buttonFunction={()=>{}} />
                             </>
                         ) : (
-                            <RegisterButton onPress={() => {}}>
-                                <RegisterButtonText>Editar</RegisterButtonText>
-                            </RegisterButton>
+                            <GreenButton text="Editar" buttonFunction={()=>{}} />
                         )
                     }
 
-                    <RegisterButton onPress={() => {}}>
-                        <RegisterButtonText>Excluir</RegisterButtonText>
-                    </RegisterButton>
+                    <GreenButton text="Excluir" buttonFunction={()=>{}} />
                 </RegisterButtonView>
             </ScrollView>
         </FishContainer>

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { CityStateView,InputScroll, ComunityInputIcon, Container, ErrorMessage, HalfInputView, Input, InputBox, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleHighlight, TitleText, TouchableTitle } from "./styles";
+import { CityStateView,InputScroll, ComunityInputIcon, Container, ErrorMessage, HalfInputView, Input, InputBox, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButtonView, TitleContainer, TitleHighlight, TitleText, TouchableTitle } from "./styles";
 import { CreateUser } from "../../services/userServices/createUser";
 import { Alert } from "react-native";
+import { GreenButton } from "../../components/GreenButton";
 
 
 export function Register() {
@@ -182,9 +183,7 @@ export function Register() {
                         ) : null
                     }
                     <RegisterButtonView>
-                        <RegisterButton onPress={handleRegister}>
-                            <RegisterButtonText>Cadastrar</RegisterButtonText>
-                        </RegisterButton>
+                    <GreenButton text="Cadastrar" buttonFunction={handleRegister} />
                     </RegisterButtonView>
                 </InputContainer>
             </InputScroll>

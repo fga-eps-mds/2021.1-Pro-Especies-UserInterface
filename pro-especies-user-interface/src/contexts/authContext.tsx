@@ -23,8 +23,9 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   function getValues() {
     const token = AsyncStorage.getItem("@eupescador/token");
     const _userId = AsyncStorage.getItem("@eupescador/userId");
+    const userAdmin = AsyncStorage.getItem("@eupescador/userAdmin");
 
-    return { token, _userId };
+    return { token, _userId, userAdmin };
   }
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
       
       await AsyncStorage.setItem("@eupescador/token", result.token);
       await AsyncStorage.setItem("@eupescador/userId", result.user.id);
+      await AsyncStorage.setItem("@eupescador/userAdmin", result.user.admin);
 
       userService.defaults.headers.Authorization = `Bearer ${result.token}`;
       setAuthenticated(true);
