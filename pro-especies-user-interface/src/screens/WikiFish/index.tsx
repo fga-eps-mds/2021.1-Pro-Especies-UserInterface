@@ -14,7 +14,7 @@ import {
     ColumnContainer,
     DescriptionContainer,
 } from "./styles";
-import wikiService from '../../services/wikiService';
+import wikiService from '../../services/wikiServices/wikiService';
 
 type IFish = {
     fish_id:string;
