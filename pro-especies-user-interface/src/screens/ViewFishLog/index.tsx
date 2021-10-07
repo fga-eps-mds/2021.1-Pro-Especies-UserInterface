@@ -26,12 +26,12 @@ type IFishLog = {
 export const FishLog: FC<IFishLog> = ({
     log_id
 }) => {
-    const [fishName, setFishName] = useState("Não declarado");
-    const [fishPhoto, setFishPhoto] = useState("Não declarado");
-    const [fishLargeGroup, setFishLargeGroup] = useState("Não declarado");
-    const [fishWeight, setFishWeight] = useState(0);
-    const [fishLength, setFishLength] = useState(0);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [fishName, setFishName] = useState();
+    const [fishPhoto, setFishPhoto] = useState("");
+    const [fishLargeGroup, setFishLargeGroup] = useState();
+    const [fishWeight, setFishWeight] = useState();
+    const [fishLength, setFishLength] = useState();
+    const [isAdmin, setIsAdmin] = useState<Boolean>();
     const [userToken, setUserToken] = useState("");
 
     
@@ -66,7 +66,7 @@ export const FishLog: FC<IFishLog> = ({
     };
 
     useEffect(() => {
-        // getFishLogProperties();
+        getFishLogProperties();
         getUser();
     }, [])
 
@@ -77,12 +77,18 @@ export const FishLog: FC<IFishLog> = ({
                 <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
 
                 <DescriptionContainer>
-                    <Title text="fishName" />
-                    <HalfToneText text="fishLargeGroup" />
+                    <Title text={
+                        fishName ? fishName : "Não informado"
+                    } />
+                    <HalfToneText text={
+                        fishLargeGroup ? fishLargeGroup : "Não informado"
+                    } />
                 </DescriptionContainer>
 
                 <PropertyRow>
-                    <Property property="Tamanho(cm)" value="fishLength" />
+                    <Property property="Tamanho(cm)" value={
+                        fishLength ? JSON.stringify(fishLength) : "Não informado"
+                    } />
                     
                     <Property property="Peso(kg)" value="fishWeight" />
                 </PropertyRow>
