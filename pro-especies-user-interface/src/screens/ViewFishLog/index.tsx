@@ -42,6 +42,10 @@ export const FishLog: FC<IFishLog> = ({
         if(token){
             setUserToken(token);
         }
+        if(userAdmin==="true")
+            setIsAdmin(true);
+        else
+            setIsAdmin(false);
         console.log(_userId,userAdmin,token);
     }
     

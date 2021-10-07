@@ -24,7 +24,7 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Navigation/>
+      <FishLog log_id=""/>
     </ThemeProvider>
   );
 }
