@@ -27,7 +27,7 @@ export const FishLog: FC<IFishLog> = ({
     log_id
 }) => {
     const [fishName, setFishName] = useState();
-    const [fishPhoto, setFishPhoto] = useState("");
+    const [fishPhoto, setFishPhoto] = useState<String>();
     const [fishLargeGroup, setFishLargeGroup] = useState();
     const [fishGroup, setFishGroup] = useState();
     const [fishSpecies, setFishSpecies] = useState();
@@ -38,22 +38,23 @@ export const FishLog: FC<IFishLog> = ({
 
 
     const getUser = async () => {
-        const _userId = await AsyncStorage.getItem("@eupescador/userId");
         const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         const token = await AsyncStorage.getItem("@eupescador/token");
-        if (token) {
-            setUserToken(token);
-        }
+        if (token)
+            getFishLogProperties(token);
         if (userAdmin === "true")
             setIsAdmin(true);
         else
             setIsAdmin(false);
-        console.log(_userId, userAdmin, token);
+
     }
 
-    const getFishLogProperties = async () => {
+    const getFishLogProperties = async (token: string) => {
         try {
-            const log = await GetOneFishLog(log_id, userToken);
+            const log = await GetOneFishLog(log_id, token);
+            const base64Img = `data:image/png;base64,${log.photo}`;
+            if(log.photo)
+                setFishPhoto(base64Img);
             setFishName(log.name);
             setFishSpecies(log.species);
             setFishLargeGroup(log.largeGroup);
@@ -66,7 +67,6 @@ export const FishLog: FC<IFishLog> = ({
     };
 
     useEffect(() => {
-        getFishLogProperties();
         getUser();
     }, [])
 
@@ -74,14 +74,14 @@ export const FishLog: FC<IFishLog> = ({
         <FishContainer>
             <TopBar title="Registro" />
             <ScrollView>
-                <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
+                <ProfileImage source={fishPhoto ? {uri: fishPhoto} : require('../../assets/fishIcon.png')} />
 
                 <DescriptionContainer>
                     <Title text={
-                        fishName ? fishName : "Não informado"
+                        fishName ? fishName : "Nome não informado"
                     } />
                     <HalfToneText text={
-                        fishSpecies ? fishSpecies : "Não informado"
+                        fishSpecies ? fishSpecies : "Espécie não informado"
                     } />
                 </DescriptionContainer>
 
