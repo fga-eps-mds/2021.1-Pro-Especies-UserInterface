@@ -10,7 +10,7 @@ interface IAuthProvider {
 interface IAuthContext {
   userId: string;
   authenticated: boolean | undefined;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<any>;
   signOut: () => Promise<void>;
 }
 
@@ -43,14 +43,19 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
     try {
       const result = await UserLogin(email, password);
       
-      await AsyncStorage.setItem("@eupescador/token", result.token);
-      await AsyncStorage.setItem("@eupescador/userId", result.user.id);
+      await AsyncStorage.setItem("@eupescador/token", result.data.token);
+      await AsyncStorage.setItem("@eupescador/userId", result.data.id);
 
-      userService.defaults.headers.Authorization = `Bearer ${result.token}`;
+      userService.defaults.headers.Authorization = `Bearer ${result.data.token}`;
       setAuthenticated(true);
-      setUserId(result.user.id);
+      setUserId(result.data.id);
+
+      const userId = await AsyncStorage.getItem("@eupescador/userId");
+      console.log(userId);
+
+      return result;
     } catch (error) {
-      console.log(error);
+       return error;
     }
   }
 

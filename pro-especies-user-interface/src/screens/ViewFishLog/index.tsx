@@ -47,7 +47,7 @@ export const FishLog: FC<IFishLog> = ({
     };
 
     const getUser = async () => {
-        const _userId = AsyncStorage.getItem("@eupescador/userId");
+        const _userId = await AsyncStorage.getItem("@eupescador/userId");
         console.log(_userId);
     }
 
