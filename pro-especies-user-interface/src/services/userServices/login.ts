@@ -6,7 +6,7 @@ async function UserLogin(emailPhone: string, password: string) {
     password: password,
   });
 
-  return res.data;
+  return res;
 }
 
 export { UserLogin };
