@@ -29,37 +29,37 @@ export const FishLog: FC<IFishLog> = ({
     const [fishName, setFishName] = useState();
     const [fishPhoto, setFishPhoto] = useState("");
     const [fishLargeGroup, setFishLargeGroup] = useState();
+    const [fishGroup, setFishGroup] = useState();
+    const [fishSpecies, setFishSpecies] = useState();
     const [fishWeight, setFishWeight] = useState();
     const [fishLength, setFishLength] = useState();
     const [isAdmin, setIsAdmin] = useState<Boolean>();
     const [userToken, setUserToken] = useState("");
 
-    
+
     const getUser = async () => {
         const _userId = await AsyncStorage.getItem("@eupescador/userId");
         const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         const token = await AsyncStorage.getItem("@eupescador/token");
-        if(token){
+        if (token) {
             setUserToken(token);
         }
-        if(userAdmin==="true")
+        if (userAdmin === "true")
             setIsAdmin(true);
         else
             setIsAdmin(false);
-        console.log(_userId,userAdmin,token);
+        console.log(_userId, userAdmin, token);
     }
-    
+
     const getFishLogProperties = async () => {
         try {
             const log = await GetOneFishLog(log_id, userToken);
-            if(log.species) 
-                setFishName(log.species);
-            if(log.largeGroup)
-                setFishLargeGroup(log.largeGroup);
-            if(log.weight)
-                setFishWeight(log.weight);
-            if(log.length)
-                setFishLength(log.length);
+            setFishName(log.name);
+            setFishSpecies(log.species);
+            setFishLargeGroup(log.largeGroup);
+            setFishGroup(log.group);
+            setFishWeight(log.weight);
+            setFishLength(log.length);
         } catch (error) {
             console.log(error)
         }
@@ -81,16 +81,28 @@ export const FishLog: FC<IFishLog> = ({
                         fishName ? fishName : "Não informado"
                     } />
                     <HalfToneText text={
-                        fishLargeGroup ? fishLargeGroup : "Não informado"
+                        fishSpecies ? fishSpecies : "Não informado"
                     } />
                 </DescriptionContainer>
+
+                <PropertyRow>
+                    <Property property="Grande Grupo" value={
+                        fishLargeGroup ? JSON.stringify(fishLargeGroup) : "Não informado"
+                    } />
+
+                    <Property property="Grupo" value={
+                        fishGroup ? JSON.stringify(fishGroup) : "Não informado"
+                    }/>
+                </PropertyRow>
 
                 <PropertyRow>
                     <Property property="Tamanho(cm)" value={
                         fishLength ? JSON.stringify(fishLength) : "Não informado"
                     } />
-                    
-                    <Property property="Peso(kg)" value="fishWeight" />
+
+                    <Property property="Peso(kg)" value={
+                        fishWeight ? JSON.stringify(fishWeight) : "Não informado"
+                    }/>
                 </PropertyRow>
 
                 <MapViewImage source={require('../../assets/map.png')} />
@@ -99,15 +111,15 @@ export const FishLog: FC<IFishLog> = ({
                     {
                         isAdmin ? (
                             <>
-                                <GreenButton text="Revisar" buttonFunction={()=>{}} />
-                                <GreenButton text="Exportar" buttonFunction={()=>{}} />
+                                <GreenButton text="Revisar" buttonFunction={() => { }} />
+                                <GreenButton text="Exportar" buttonFunction={() => { }} />
                             </>
                         ) : (
-                            <GreenButton text="Editar" buttonFunction={()=>{}} />
+                            <GreenButton text="Editar" buttonFunction={() => { }} />
                         )
                     }
 
-                    <GreenButton text="Excluir" buttonFunction={()=>{}} />
+                    <GreenButton text="Excluir" buttonFunction={() => { }} />
                 </RegisterButtonView>
             </ScrollView>
         </FishContainer>

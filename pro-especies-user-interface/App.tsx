@@ -1,7 +1,6 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
 
-import { FishLog } from "./src/screens/ViewFishLog";
 import Navigation from "./src/navigation/navigation";
 import {
   useFonts,
