@@ -34,10 +34,9 @@ export const FishLog: FC<IFishLog> = ({
     const [fishWeight, setFishWeight] = useState();
     const [fishLength, setFishLength] = useState();
     const [isAdmin, setIsAdmin] = useState<Boolean>();
-    const [userToken, setUserToken] = useState("");
 
 
-    const getUser = async () => {
+    const getData = async () => {
         const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         const token = await AsyncStorage.getItem("@eupescador/token");
         if (token)
@@ -67,7 +66,7 @@ export const FishLog: FC<IFishLog> = ({
     };
 
     useEffect(() => {
-        getUser();
+        getData();
     }, [])
 
     return (
