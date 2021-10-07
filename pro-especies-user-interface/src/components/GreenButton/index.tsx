@@ -2,14 +2,14 @@ import React from "react";
 import { Button, ButtonText } from "./styles";
 
 interface Props {
-    name: string;
-    function: VoidFunction;
+    text: string;
+    buttonFunction: VoidFunction;
 }
 
-export function TopBar({ name, function }: Props) {
+export function GreenButton({ text, buttonFunction }: Props) {
     return (
-        <Button onPress={function}>
-            <ButtonText>Excluir</ButtonText>
+        <Button onPress={buttonFunction}>
+            <ButtonText>{text}</ButtonText>
         </Button>
     )
 }

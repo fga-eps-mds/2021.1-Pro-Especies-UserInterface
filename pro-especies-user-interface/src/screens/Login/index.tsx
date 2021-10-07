@@ -20,6 +20,7 @@ import {
 } from "./styles";
 import { Alert, TouchableOpacity } from "react-native";
 import { useAuth } from "../../contexts/authContext";
+import { GreenButton } from "../../components/GreenButton";
 
 
 
@@ -80,9 +81,7 @@ export default function Login({ navigation }: any) {
                     <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
                 <LoginButtonView>
-                    <LoginButton onPress={handleLogin}>
-                        <LoginButtonText>Entrar</LoginButtonText>
-                    </LoginButton>
+                    <GreenButton text="Entrar" buttonFunction={handleLogin} />
                 </LoginButtonView>
                 <HomePhraseContainer>
                     <HomeRegularText>
