@@ -1,6 +1,7 @@
 import React from "react";
 import { ThemeProvider } from 'styled-components';
 
+import { FishLog } from "./src/screens/ViewFishLog";
 import Navigation from "./src/navigation/navigation";
 import {
   useFonts,
@@ -23,7 +24,7 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Navigation />
+      <FishLog log_id="615f2d80ba06f80022070f50" />
     </ThemeProvider>
   );
 }

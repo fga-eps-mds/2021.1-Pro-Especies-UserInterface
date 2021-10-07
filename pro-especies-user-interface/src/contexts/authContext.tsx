@@ -44,13 +44,13 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
     try {
       const result = await UserLogin(email, password);
       
-      await AsyncStorage.setItem("@eupescador/token", result.token);
-      await AsyncStorage.setItem("@eupescador/userId", result.user.id);
-      await AsyncStorage.setItem("@eupescador/userAdmin", result.user.admin);
+      await AsyncStorage.setItem("@eupescador/token", result.data.token);
+      await AsyncStorage.setItem("@eupescador/userId", result.data.id);
+      await AsyncStorage.setItem("@eupescador/userAdmin", JSON.stringify(result.data.admin));
 
-      userService.defaults.headers.Authorization = `Bearer ${result.token}`;
+      userService.defaults.headers.Authorization = `Bearer ${result.data.token}`;
       setAuthenticated(true);
-      setUserId(result.user.id);
+      setUserId(result.data.id);
     } catch (error) {
       console.log(error);
     }
