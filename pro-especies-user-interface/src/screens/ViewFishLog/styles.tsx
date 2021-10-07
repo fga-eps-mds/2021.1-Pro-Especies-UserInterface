@@ -13,25 +13,6 @@ export const FishProfile = styled.Image`
     height: ${RFValue(156, 640)}px;
     width: ${RFValue(156, 640)}px;
 `
-export const PropertyValueText = styled.Text`
-    font-family: ${({ theme }) => theme.fonts.regular};
-    font-size: ${RFValue(12,640)}px;
-    line-height: ${RFValue(18,640)}px;
-    color: ${({ theme }) => theme.colors.on_primary};
-    margin-top: ${RFValue(4,640)}px;
-`
-
-export const FishTitle = styled(PropertyValueText)`
-    font-size: ${RFValue(16,640)}px;
-`
-
-export const PropertyText = styled(PropertyValueText)`
-    opacity: 0.4;
-`
-
-export const PropertyContainer = styled.View`
-
-`
 
 export const PropertyRow = styled.View`
     flex-direction: row;

@@ -1,5 +1,23 @@
 import React, { useState } from "react";
-import { CityStateView,InputScroll, ComunityInputIcon, Container, ErrorMessage, HalfInputView, Input, InputBox, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButtonView, TitleContainer, TitleHighlight, TitleText, TouchableTitle } from "./styles";
+import { 
+    CityStateView,
+    InputScroll,
+    ComunityInputIcon,
+    Container,
+    ErrorMessage,
+    HalfInputView,
+    Input,
+    InputBox,
+    InputContainer,
+    InputMask,
+    InputView,
+    MaterialInputIcon,
+    RegisterButtonView,
+    TitleContainer,
+    TitleHighlight,
+    TitleText,
+    TouchableTitle 
+} from "./styles";
 import { CreateUser } from "../../services/userServices/createUser";
 import { Alert } from "react-native";
 import { GreenButton } from "../../components/GreenButton";

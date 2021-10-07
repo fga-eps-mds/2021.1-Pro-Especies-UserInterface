@@ -70,20 +70,6 @@ export const LoginButtonView = styled.View`
     align-items: center;
     margin: ${RFValue(32, 640)}px 0;
 `
-export const LoginButton = styled.TouchableOpacity`
-    width: ${RFValue(156, 640)}px;
-    height: ${RFValue(39, 640)}px;
-    border-radius: ${RFValue(5, 640)}px;
-    background-color: ${({ theme }) => theme.colors.secondary_dark};
-    align-items: center;
-    justify-content: center;
-`
-
-export const LoginButtonText = styled.Text`
-    color: white;
-    font-family: ${({ theme }) => theme.fonts.bold};
-    font-size: ${RFValue(12, 640)}px;
-`
 
 export const HomePhraseContainer = styled.View`
     flex-direction: row;

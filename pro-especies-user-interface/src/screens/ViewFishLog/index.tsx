@@ -26,9 +26,9 @@ type IFishLog = {
 export const FishLog: FC<IFishLog> = ({
     log_id
 }) => {
-    const [fishName, setFishName] = useState("");
-    const [fishPhoto, setFishPhoto] = useState("");
-    const [fishLargeGroup, setFishLargeGroup] = useState("");
+    const [fishName, setFishName] = useState("Não declarado");
+    const [fishPhoto, setFishPhoto] = useState("Não declarado");
+    const [fishLargeGroup, setFishLargeGroup] = useState("Não declarado");
     const [fishWeight, setFishWeight] = useState(0);
     const [fishLength, setFishLength] = useState(0);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -52,10 +52,14 @@ export const FishLog: FC<IFishLog> = ({
     const getFishLogProperties = async () => {
         try {
             const log = await GetOneFishLog(log_id, userToken);
-            setFishName(log.species);
-            setFishLargeGroup(log.fishType);
-            setFishWeight(log.weight);
-            setFishLength(log.length);
+            if(log.species) 
+                setFishName(log.species);
+            if(log.largeGroup)
+                setFishLargeGroup(log.largeGroup);
+            if(log.weight)
+                setFishWeight(log.weight);
+            if(log.length)
+                setFishLength(log.length);
         } catch (error) {
             console.log(error)
         }

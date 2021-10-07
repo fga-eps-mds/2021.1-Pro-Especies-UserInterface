@@ -6,8 +6,6 @@ import {
     InputBox,
     InputContainer,
     InputView,
-    LoginButton,
-    LoginButtonText,
     LoginButtonView,
     HomeLogoContainer,
     HomeAppImage,
