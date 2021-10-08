@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 import { Searchbar } from 'react-native-paper';
 import { RFValue } from "react-native-responsive-fontsize";
+import { MaterialIcons } from '@expo/vector-icons';
 
 export const PageContainer = styled.View`
     align-items: center;
@@ -17,7 +18,7 @@ export const SearchBarContainer = styled(Searchbar)`
 `
 
 export const RowContainer = styled.View`
-    width: 100%;
+    width: ${RFValue(375,640)}px;
     flex-direction: row;
     justify-content: space-around;
     margin-bottom: ${RFValue(16,640)}px;
@@ -26,7 +27,11 @@ export const RowContainer = styled.View`
 
 export const TextFilter = styled.Text<{filter: boolean}>`
     font-family: ${({ theme }) => (p => p.filter ? theme.fonts.regular : theme.fonts.bold)};
-    font-size: ${RFValue(12, 640)}px;
+    font-size: ${RFValue(16, 640)}px;
+`
+
+export const IconFilter = styled(MaterialIcons)`
+    font-size:${RFValue(24,640)}px;
 `
 
 export const TouchableFilter = styled.TouchableOpacity`
@@ -35,7 +40,7 @@ export const TouchableFilter = styled.TouchableOpacity`
 
 export const TitleContainer = styled.View`
     width: 100%;
-    left: ${RFValue(25, 640)}px;
+    padding-left: ${RFValue(40, 640)}px;
     margin-top: ${RFValue(32, 640)}px;
     margin-bottom: ${RFValue(11, 640)}px;
     flex-direction: row;

@@ -1,8 +1,9 @@
 import React, { useState , useEffect} from "react";
+import { FlatList } from "react-native";
 import { FishCard, IFish } from "../../components/FishCard";
 import { TopBar } from "../../components/TopBar";
 import { getWikiFishes } from "../../services/wikiServices/getWikiFishes";
-import { PageContainer , SearchBarContainer, RowContainer, TouchableFilter, TextFilter,TitleContainer, TouchableTitle , TitleText , TitleHighlight, ListImages  } from "./styles";
+import { PageContainer , IconFilter, SearchBarContainer, RowContainer, TouchableFilter, TextFilter,TitleContainer, TouchableTitle , TitleText , TitleHighlight, ListImages  } from "./styles";
 
 
 export const  Wiki = () => {
@@ -50,13 +51,21 @@ export const  Wiki = () => {
             <TouchableFilter onPress={() => {setFilter(false)}}>
                 <TextFilter filter={filter}>Filtro</TextFilter>
             </TouchableFilter>
+            <IconFilter name="filter-list" />
             </RowContainer>
-            <ListImages>
-            {fishes.map(fish => (
-                <FishCard fish={fish} key={fish._id}/>
-            ))}
-            </ListImages>
-            
+            <FlatList
+            data = {fishes}
+            // numColumns={2}
+            // initialNumToRender={2}
+            renderItem={(fish)=>(
+                <ListImages>
+                {fishes.map(fish => (
+                    <FishCard fish={fish} key={fish._id}/>
+                ))}
+                </ListImages>
+            )}
+            keyExtractor={fish => fish._id}
+            />
         </PageContainer>
     )
 }
