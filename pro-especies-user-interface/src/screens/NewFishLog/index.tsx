@@ -5,8 +5,8 @@ import {
     NewFishLogContainer,
     ImageContainer,
     FishLogImage,
-    MaterialIcon,
-    MaterialIconBars,
+    TopIcon,
+    IconBars,
     TextClick,
     InputContainer,
     InputView,
@@ -17,8 +17,11 @@ import {
     SendButtonView,
     SendButton,
     SendButtonText,
+    CameraButtonContainer,
+    CameraButton,
+    CameraView,
 } from "./styles";
-// import DropDownPicker from 'react-native-dropdown-picker'
+import { Camera } from "expo-camera";
 
 export function NewFishLog() {
     // const [ fishPhoto , setFishPhoto ] = useState("");
@@ -29,6 +32,43 @@ export function NewFishLog() {
     // const [ fishWeight , setFishMaxWeight ] = useState(0);
     // const [ fishLenght , setFishLenght ] = useState(0);
     // const [fishLogcoordenates , setFishLogCoordenates ] = useState(0);
+function CameraFish() {
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <CameraView/>;
+  }
+  if (hasPermission === false) {
+    return <TextClick>Sem permissão para acessar a camera</TextClick>;
+  }
+  return (
+    <CameraView>
+      <Camera type={type}>
+        <CameraButtonContainer>
+          <CameraButton
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}>
+            <IconBars name="flip-camera-ios"/> 
+          </CameraButton>
+        </CameraButtonContainer>
+      </Camera>
+    </CameraView>
+  );
+}
 
     return (
         <NewFishLogContainer>
@@ -37,19 +77,23 @@ export function NewFishLog() {
                 <ImageContainer>
                     <FishLogImage source={require('../../assets/selectPicture.png')} />
                 </ImageContainer>
-                    <ImageContainer>
-                    <MaterialIcon name="photo"/> <TextClick>Selecionar Foto</TextClick>
-                    <MaterialIcon name="camera" /> <TextClick>Tirar Foto</TextClick>
+                <ImageContainer>
+                    <TopIcon name="photo"/> 
+                    <TextClick>Selecionar Foto</TextClick>
                 </ImageContainer>
+                <ImageContainer>
+                    <TopIcon name="camera" /> 
+                    <TextClick>Tirar Foto</TextClick>
+                    </ImageContainer>
                 <InputContainer>
                     <InputView>
                         <Input placeholder="Grande Grupo" />
-                        <MaterialIconBars name="keyboard-arrow-down" />
+                        <IconBars name="keyboard-arrow-down" />
                         <InputBox />
                     </InputView>
                     <InputView>
                         <Input placeholder="Grupo" />
-                        <MaterialIconBars name="keyboard-arrow-down" />
+                        <IconBars name="keyboard-arrow-down" />
                         <InputBox />
                     </InputView>
                     <InputView>
@@ -62,7 +106,7 @@ export function NewFishLog() {
                     </InputView>
                     <InputView>
                         <Input placeholder="Localização" />
-                        <MaterialIconBars name="map" />
+                        <IconBars name="map" />
                         <InputBox />
                     </InputView>
                     <CentralizerBoxView>

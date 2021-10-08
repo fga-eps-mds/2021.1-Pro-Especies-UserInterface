@@ -3,11 +3,9 @@ import { RFValue } from "react-native-responsive-fontsize";
 import { MaterialIcons } from '@expo/vector-icons';
 
 export const NewFishLogContainer = styled.View`
-    flex: 1;
     background-color: ${({ theme }) => theme.colors.background};
 `
 export const ImageContainer = styled.View`
-    align-self: center;
     align-items: center;
 `
 export const FishLogImage = styled.Image`
@@ -16,17 +14,15 @@ export const FishLogImage = styled.Image`
     border-radius: ${RFValue(88,640)}px;
     height: ${RFValue(123, 640)}px;
 `
-export const MaterialIcon = styled(MaterialIcons)`
+export const TopIcon = styled(MaterialIcons)`
     font-size: ${RFValue(12, 640)}px;
     color: ${({ theme }) => theme.colors.on_primary};
     margin-top: ${RFValue(4,640)}px;
-
 `
-export const MaterialIconBars = styled(MaterialIcons)`
+export const IconBars = styled(MaterialIcons)`
     font-size: ${RFValue(24, 640)}px;
     color: ${({ theme }) => theme.colors.on_primary};
     margin-top: ${RFValue(4,640)}px;
-
 `
 export const TextClick = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold};
@@ -34,8 +30,7 @@ export const TextClick = styled.Text`
     line-height: ${RFValue(18,640)}px;
     color: ${({ theme }) => theme.colors.on_primary};
     margin-top: ${RFValue(4,640)}px;
-    text-align: center;
-    
+    text-align: center;  
 `
 export const InputContainer = styled.View`
     align-self: center;
@@ -96,3 +91,18 @@ export const SendButtonText = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(12, 640)}px;
 `
+export const CameraView = styled.Text`
+    flex: 1;
+`
+export const CameraButtonContainer = styled.View`
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    margin: 20,
+`
+export const CameraButton = styled.TouchableOpacity`
+    flex: 0.1,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+`
+
