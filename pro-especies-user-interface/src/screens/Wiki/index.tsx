@@ -2,40 +2,22 @@ import React, { useState , useEffect} from "react";
 import { FishCard, IFish } from "../../components/FishCard";
 import { TopBar } from "../../components/TopBar";
 import { getWikiFishes } from "../../services/wikiServices/getWikiFishes";
-import { PageContainer , SearchBarContainer, RowContainer, TouchableFilter, TextFilter,TitleContainer, TouchableTitle , TitleText , TitleHighlight  } from "./styles";
+import { PageContainer , SearchBarContainer, RowContainer, TouchableFilter, TextFilter,TitleContainer, TouchableTitle , TitleText , TitleHighlight, ListImages  } from "./styles";
 
 
 export const  Wiki = () => {
-    const fish : IFish = {
-        _id: 'string',
-        largeGroup: 'string',
-        group: 'string',
-        commonName: 'ASDASDA',
-        scientificName: 'string',
-        family: 'string',
-        food: 'string',
-        habitat: 'string',
-        maxSize: 1,
-        maxWeight: 2,
-        isEndemic: 'string',
-        isThreatened: 'string',
-        hasSpawningSeason: 'string',
-        wasIntroduced: 'string',
-        funFact: 'string',
-        photo: 'string',
-    };
+    
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = (query: React.SetStateAction<string>) => setSearchQuery(query);
 
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);
 
-    const fishData = [];
     const [fishes, setFishes] = useState<IFish[]>([]);
     
     const updateFishes = async () => {
         const data = await getWikiFishes();
-        console.log(data);
+        setFishes(data);
     }
     useEffect(() => {
         updateFishes();
@@ -69,7 +51,12 @@ export const  Wiki = () => {
                 <TextFilter filter={filter}>Filtro</TextFilter>
             </TouchableFilter>
             </RowContainer>
-            <FishCard fish={fish} />
+            <ListImages>
+            {fishes.map(fish => (
+                <FishCard fish={fish} key={fish._id}/>
+            ))}
+            </ListImages>
+            
         </PageContainer>
     )
 }

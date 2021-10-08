@@ -9,16 +9,17 @@ export const PageContainer = styled.View`
 `
 
 export const SearchBarContainer = styled(Searchbar)`
-    width: 242px;
-    height: 25px;    
-    border: 1px solid #202E35;
-    border-radius: 8px;
+    width: ${RFValue(242,640)}px;;
+    height: ${RFValue(25,640)}px;;    
+    border-radius: ${RFValue(8,640)}px;;
+    border: 1px solid ${({ theme }) => theme.colors.on_background};
+    background-color: ${({ theme }) => theme.colors.background};
 `
 
 export const RowContainer = styled.View`
+    width: 100%;
     flex-direction: row;
     justify-content: space-around;
-    margin-top: ${RFValue(10,640)}px;
     margin-bottom: ${RFValue(16,640)}px;
     background-color: ${({ theme }) => theme.colors.background};
 `
@@ -33,9 +34,10 @@ export const TouchableFilter = styled.TouchableOpacity`
 `
 
 export const TitleContainer = styled.View`
-    margin-left: ${RFValue(20, 640)}px;
+    width: 100%;
+    left: ${RFValue(25, 640)}px;
     margin-top: ${RFValue(32, 640)}px;
-    margin-bottom: ${RFValue(20, 640)}px;
+    margin-bottom: ${RFValue(11, 640)}px;
     flex-direction: row;
 `
 
@@ -53,4 +55,10 @@ export const TitleText = styled.Text<{wiki: boolean}>`
     font-family: ${({ theme }) => (p => p.wiki ? theme.fonts.regular : theme.fonts.bold)};
     font-size: ${RFValue(12, 640)}px;
     margin-right: ${RFValue(16, 640)}px;
+`
+
+export const ListImages = styled.View`
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
 `

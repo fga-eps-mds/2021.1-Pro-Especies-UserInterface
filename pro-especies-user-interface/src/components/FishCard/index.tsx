@@ -1,6 +1,6 @@
 import React, { useState , FC} from "react";
 import { Text } from "react-native";
-import { FishCardContaner } from "./styles";
+import { FishCardContaner, FishImage, CommonNameText } from "./styles";
 
 export interface IFish{
     _id: string;
@@ -30,7 +30,9 @@ export const FishCard:FC<IFishCardProps> = (
 ) => {
     return (
         <FishCardContaner>
-            <Text>{fish.commonName}</Text>
+            <FishImage source={{uri: 'https://reactjs.org/logo-og.png'}}></FishImage>
+            <CommonNameText>{fish.commonName}</CommonNameText>
+            <Text>{fish.scientificName}</Text>
         </FishCardContaner>
     )
 }
