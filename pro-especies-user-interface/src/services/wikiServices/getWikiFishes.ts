@@ -1,8 +1,16 @@
 import wikiService from "./wikiService";
 
-const getWikiFishes = async () => {
-        const res = await wikiService.get("/fishWiki/");
-        return res.data;
+async function GetWikiFishes(name: string) {
+  let url = "/fishWiki/";
+
+  if (name) {
+        url += `?commonName=${name}`;      
+  } 
+
+  const res = await wikiService.get(url);
+  console.log(url);
+
+  return res.data;
 }
 
-export {getWikiFishes};
+export { GetWikiFishes };
