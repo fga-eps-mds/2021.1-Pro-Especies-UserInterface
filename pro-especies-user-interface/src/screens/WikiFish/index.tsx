@@ -36,9 +36,9 @@ export const WikiFish: FC<IFish> = ({
     const [fishMaxWeight, setFishMaxWeight] = useState(0);
     const [fishHabitat, setFishHabitat] = useState("");
     const [fishIsEndemic, setFishIsEndemic] = useState("");
-    const [fishIsThreatened, setFishIsThreatened] = useState(false);
-    const [fishWasIntroduced, setFishWasIntroduced] = useState(false);
-    const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState(false);
+    const [fishIsThreatened, setFishIsThreatened] = useState("");
+    const [fishWasIntroduced, setFishWasIntroduced] = useState("");
+    const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState("");
 
     const getFishProperties = async () => {
         try {
@@ -99,11 +99,11 @@ export const WikiFish: FC<IFish> = ({
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <Property property="Ameaçado?" value={(fishIsThreatened ? "Sim" : "Não")} />
+                            <Property property="Ameaçado?" value={fishIsThreatened} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <Property property="Foi indroduzido?" value={(fishWasIntroduced ? "Sim" : "Não")} />
+                            <Property property="Foi indroduzido?" value={fishWasIntroduced} />
                         </PropertyContainer>
                     </PropertyColumn>
 
@@ -125,7 +125,7 @@ export const WikiFish: FC<IFish> = ({
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <Property property="Faz piracema?" value={(fishHasSpawningSeason ? "Sim" : "Não")} />
+                            <Property property="Faz piracema?" value={fishHasSpawningSeason} />
                         </PropertyContainer>
                     </PropertyColumn>
                 </ColumnContainer>
