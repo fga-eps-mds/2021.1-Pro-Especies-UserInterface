@@ -67,3 +67,32 @@ export const ListImages = styled.View`
     width: 100%;
     justify-content: space-evenly;
 `
+
+export const NoResultContainer = styled.View`
+    align-items: center
+    width: 100%;
+    justify-content: center;
+`
+
+export const BoldText = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.bold};
+    font-size: ${RFValue(16, 640)}px;
+    text-align: center;
+    margin-bottom: ${RFValue(16, 640)}px;
+    padding: 0 ${RFValue(60, 640)}px;
+`
+
+export const RegularText = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.regular};
+    font-size: ${RFValue(12, 640)}px;
+    text-align: center;
+    margin-bottom: ${RFValue(16, 640)}px;
+    padding: 0 ${RFValue(40, 640)}px;
+`
+
+export const SearchImage = styled.Image`
+    height: ${RFValue(80, 640)}px;
+    width: ${RFValue(80, 640)}px;
+    margin-bottom: ${RFValue(16, 640)}px;
+    margin-top: ${RFValue(55, 640)}px;
+`

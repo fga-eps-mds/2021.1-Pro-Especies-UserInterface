@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FlatList, Text } from "react-native";
+import { FlatList } from "react-native";
 import { FishCard, IFish } from "../../components/FishCard";
 import { TopBar } from "../../components/TopBar";
 import { GetWikiFishes } from "../../services/wikiServices/getWikiFishes";
@@ -14,7 +14,11 @@ import {
     TouchableTitle,
     TitleText,
     TitleHighlight,
-    ListImages
+    ListImages,
+    NoResultContainer,
+    BoldText,
+    RegularText,
+    SearchImage
 } from "./styles";
 
 
@@ -67,26 +71,42 @@ export const Wiki = () => {
                 <IconFilter name="filter-list" />
             </RowContainer>
             {
-                fishes ? (
+                fishes.filter((fish) => {
+                    if (!searchQuery ||
+                        fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+                        fish.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+                    ) {
+                        return fish;
+                    }
+                }).length ? (
                     <FlatList
                         data={fishes}
                         // numColumns={2}
                         // initialNumToRender={2}
                         renderItem={(fish) => (
                             <ListImages>
-                                {fishes.filter((fish)=>{
-                                    if(!searchQuery || fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim())){
-                                        return fish;
-                                    }
-                                }).map(fish => (
-                                    <FishCard fish={fish} key={fish._id} />
-                                ))}
+                                {
+                                    fishes.filter((fish) => {
+                                        if (!searchQuery ||
+                                            fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+                                            fish.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+                                        ) {
+                                            return fish;
+                                        }
+                                    }).map(fish => (
+                                        <FishCard fish={fish} key={fish._id} />
+                                    ))
+                                }
                             </ListImages>
                         )}
                         keyExtractor={fish => fish._id}
                     />
                 ) : (
-                    <Text>Não encontramos nada com o termo digitado</Text>
+                    <NoResultContainer>
+                        <SearchImage source={require('../../assets/search.png')} />
+                        <BoldText>Não encontramos nada com o termo digitado</BoldText>
+                        <RegularText>Por favor, verifique sua pesquisa e tente novamente para obter resultados.</RegularText>
+                    </NoResultContainer>
                 )
             }
         </PageContainer>
