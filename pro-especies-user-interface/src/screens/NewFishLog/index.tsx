@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FC } from "react";
-import { ScrollView } from "react-native";
+import { Alert, ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
 import {
   NewFishLogContainer,
@@ -19,21 +19,22 @@ import {
   SendButtonText,
 } from "./styles";
 import * as ImagePicker from 'expo-image-picker'
+import { createFishLog } from "../../services/fishLogService/createFishLog";
 
 export function NewFishLog({ navigation }: any) {
-  // const [ fishPhoto , setFishPhoto ] = useState("");
-  // const [ fishName , setFishName ] = useState("");
-  // const [ fishLargeGroup , setFishLargeGroup ] = useState("");
-  // const [ fishGroup , setFishGroup ] = useState("");
-  // const [ fishSpecies , setFishSpecies ] = useState("");
-  // const [ fishWeight , setFishMaxWeight ] = useState(0);
-  // const [ fishLenght , setFishLenght ] = useState(0);
-  // const [fishLogcoordenates , setFishLogCoordenates ] = useState(0);
+  const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
+  const [fishName, setFishName] = useState<string | null>(null);
+  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>(null);
+  const [fishGroup, setFishGroup] = useState<string | null>(null);
+  const [fishSpecies, setFishSpecies] = useState<string | null>(null);
+  const [fishWeight, setFishMaxWeight] = useState<number | null>(null);
+  const [fishLenght, setFishLenght] = useState<number | null>(null);
+  const [fishLogcoordenates, setFishLogCoordenates] = useState<number | null>(null);
   async function requestPermission() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      <TextClick>É preciso permissão para colocar uma foto</TextClick>;
+      Alert.alert("Error", "É preciso permissão para colocar uma foto");
       return;
     }
   }
@@ -42,29 +43,43 @@ export function NewFishLog({ navigation }: any) {
     requestPermission();
 
     const pickerResult = await ImagePicker.launchCameraAsync({
-        base64: true,
-        allowsEditing: true,
-        quality: 0.5,
+      base64: true,
+      allowsEditing: true,
+      quality: 0.5,
     });
     if (pickerResult.cancelled === true) {
-        return;
+      return;
     }
-}
+    setFishPhoto(pickerResult.base64);
+  }
 
-async function pickImage() {
-  requestPermission();
+  async function pickImage() {
+    requestPermission();
 
-  let pickerResult = await ImagePicker.launchImageLibraryAsync({
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 0.5,
       aspect: [1, 1],
       base64: true,
-  });
+    });
 
-  if (pickerResult.cancelled === true) {
+    if (pickerResult.cancelled === true) {
       return;
+    }
+    setFishPhoto(pickerResult.base64);
   }
-}
+
+  async function sendFishLogData() {
+    createFishLog(fishPhoto,
+      fishName,
+      fishLargeGroup,
+      fishGroup,
+      fishSpecies,
+      fishWeight,
+      fishLenght,
+      fishLogcoordenates);
+  }
+
   return (
     <NewFishLogContainer>
       <TopBar title="Novo Registro" />
@@ -82,39 +97,39 @@ async function pickImage() {
         </ImageContainer>
         <InputContainer>
           <InputView>
-            <Input placeholder="Grande Grupo" />
+            <Input placeholder="Grande Grupo" onChangeText={setFishLargeGroup} />
             <IconBars name="keyboard-arrow-down" />
             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Grupo" />
+            <Input placeholder="Grupo" onChangeText={setFishGroup} />
             <IconBars name="keyboard-arrow-down" />
             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Espécie" />
+            <Input placeholder="Espécie" onChangeText={setFishSpecies} />
             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Nome" />
+            <Input placeholder="Nome" onChangeText={setFishName} />
             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Localização" keyboardType="numeric"/>
+            <Input placeholder="Localização" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))} />
             <IconBars name="map" />
             <InputBox />
           </InputView>
           <CentralizerBoxView>
             <HalfInputView>
-              <Input placeholder="Peso" keyboardType="numeric" />
+              <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
             </HalfInputView>
             <HalfInputView>
-              <Input placeholder="Comprimento (cm)" keyboardType="numeric"/>
+              <Input placeholder="Comprimento (cm)" keyboardType="numeric" onChangeText={(value) => setFishLenght(parseInt(value))} />
             </HalfInputView>
           </CentralizerBoxView>
         </InputContainer>
         <SendButtonView>
-          <SendButton>
+          <SendButton onPress={sendFishLogData}>
             <SendButtonText>Enviar</SendButtonText>
           </SendButton>
         </SendButtonView>
