@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC} from "react";
+import React, { useState, useEffect, FC } from "react";
 
 import { ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
@@ -14,56 +14,56 @@ import {
     ColumnContainer,
     DescriptionContainer,
 } from "./styles";
-import wikiService from '../../services/wikiServices/wikiService';
+import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
 
 type IFish = {
-    fish_id:string;
+    fish_id: string;
 }
 
 export const WikiFish: FC<IFish> = ({
     fish_id,
 }) => {
-    const [ fishName , setFishName ] = useState("");
-    const [ fishPhoto , setFishPhoto ] = useState("");
-    const [ fishSpecies , setFishSpecies ] = useState("");
-    const [ fishFunFact , setFishFuNFact ] = useState("");
-    const [ fishLargeGroup , setFishLargeGroup ] = useState("");
-    const [ fishGroup , setFishGroup ] = useState("");
-    const [ fishFamily , setFishFamily ] = useState("");
-    const [ fishFeed , setFishFeed ] = useState("");
-    const [ fishMaxSize , setFishMaxSize ] = useState(0);
-    const [ fishMaxWeight , setFishMaxWeight ] = useState(0);
-    const [ fishHabitat , setFishHabitat ] = useState("");
-    const [ fishIsEndemic , setFishIsEndemic ] = useState("");
-    const [ fishIsThreatened , setFishIsThreatened ] = useState(false);
-    const [ fishWasIntroduced , setFishWasIntroduced ] = useState(false);
-    const [ fishHasSpawningSeason , setFishHasSpawningSeason ] = useState(false);
+    const [fishName, setFishName] = useState("");
+    const [fishPhoto, setFishPhoto] = useState("");
+    const [fishSpecies, setFishSpecies] = useState("");
+    const [fishFunFact, setFishFuNFact] = useState("");
+    const [fishLargeGroup, setFishLargeGroup] = useState("");
+    const [fishGroup, setFishGroup] = useState("");
+    const [fishFamily, setFishFamily] = useState("");
+    const [fishFeed, setFishFeed] = useState("");
+    const [fishMaxSize, setFishMaxSize] = useState(0);
+    const [fishMaxWeight, setFishMaxWeight] = useState(0);
+    const [fishHabitat, setFishHabitat] = useState("");
+    const [fishIsEndemic, setFishIsEndemic] = useState("");
+    const [fishIsThreatened, setFishIsThreatened] = useState(false);
+    const [fishWasIntroduced, setFishWasIntroduced] = useState(false);
+    const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState(false);
 
-const getFishProperties = async() =>{
-    try {
-        const fish = await wikiService.get(`/fishWiki/${fish_id}`);
-        setFishName(fish.data.commonName);
-        setFishSpecies(fish.data.scientificName);
-        setFishFuNFact(fish.data.funFact);
-        setFishLargeGroup(fish.data.largeGroup);
-        setFishGroup(fish.data.group);
-        setFishFamily(fish.data.family);
-        setFishFeed(fish.data.feed);
-        setFishHabitat(fish.data.habitat);
-        setFishMaxSize(fish.data.sizeMax);
-        setFishMaxWeight(fish.data.maxWeight);
-        setFishWasIntroduced(fish.data.wasIntroduced);
-        setFishIsEndemic(fish.data.isEndemic);
-        setFishIsThreatened(fish.data.isThreatened);
-        setFishHasSpawningSeason(fish.data.hasSpawingSeason);
-    } catch (error) {
-        console.log(error)
-    }
-}; 
+    const getFishProperties = async () => {
+        try {
+            const fish = await GetOneWikiFish(fish_id);
+            setFishName(fish.commonName);
+            setFishSpecies(fish.scientificName);
+            setFishFuNFact(fish.funFact);
+            setFishLargeGroup(fish.largeGroup);
+            setFishGroup(fish.group);
+            setFishFamily(fish.family);
+            setFishFeed(fish.feed);
+            setFishHabitat(fish.habitat);
+            setFishMaxSize(fish.sizeMax);
+            setFishMaxWeight(fish.maxWeight);
+            setFishWasIntroduced(fish.wasIntroduced);
+            setFishIsEndemic(fish.isEndemic);
+            setFishIsThreatened(fish.isThreatened);
+            setFishHasSpawningSeason(fish.hasSpawingSeason);
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
-    useEffect(()=> {
+    useEffect(() => {
         getFishProperties();
-    } ,[])
+    }, [])
 
     return (
         <FishContainer>
@@ -103,12 +103,12 @@ const getFishProperties = async() =>{
 
                         <PropertyContainer>
                             <PropertyText>Ameaçado?</PropertyText>
-                            <PropertyValueText>{(fishIsThreatened?"Sim":"Não")}</PropertyValueText>
+                            <PropertyValueText>{(fishIsThreatened ? "Sim" : "Não")}</PropertyValueText>
                         </PropertyContainer>
 
                         <PropertyContainer>
                             <PropertyText>Foi indroduzido?</PropertyText>
-                            <PropertyValueText>{(fishWasIntroduced?"Sim":"Não")}</PropertyValueText>
+                            <PropertyValueText>{(fishWasIntroduced ? "Sim" : "Não")}</PropertyValueText>
                         </PropertyContainer>
                     </PropertyColumn>
 
@@ -135,7 +135,7 @@ const getFishProperties = async() =>{
 
                         <PropertyContainer>
                             <PropertyText>Faz piracema?</PropertyText>
-                            <PropertyValueText>{(fishHasSpawningSeason?"Sim":"Não")}</PropertyValueText>
+                            <PropertyValueText>{(fishHasSpawningSeason ? "Sim" : "Não")}</PropertyValueText>
                         </PropertyContainer>
                     </PropertyColumn>
                 </ColumnContainer>

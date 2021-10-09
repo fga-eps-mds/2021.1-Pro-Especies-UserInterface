@@ -32,8 +32,7 @@ export const Wiki = () => {
 
     const updateFishes = async () => {
         try {
-            const data = await GetWikiFishes(searchQuery.toLowerCase().trim());
-            console.log(data);
+            const data = await GetWikiFishes();
             setFishes(data);
         } catch (error: any) {
             console.log(error);
@@ -63,7 +62,7 @@ export const Wiki = () => {
             <RowContainer>
                 <SearchBarContainer
                     placeholder="Pesquisar"
-                    onChangeText={onChangeSearch}
+                    onChangeText={setSearchQuery}
                     value={searchQuery}
                     iconColor="#202E35"
                 />
@@ -80,7 +79,11 @@ export const Wiki = () => {
                         // initialNumToRender={2}
                         renderItem={(fish) => (
                             <ListImages>
-                                {fishes.map(fish => (
+                                {fishes.filter((fish)=>{
+                                    if(!searchQuery || fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim())){
+                                        return fish;
+                                    }
+                                }).map(fish => (
                                     <FishCard fish={fish} key={fish._id} />
                                 ))}
                             </ListImages>
