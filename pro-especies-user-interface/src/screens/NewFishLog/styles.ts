@@ -5,8 +5,9 @@ import { MaterialIcons } from '@expo/vector-icons';
 export const NewFishLogContainer = styled.View`
     background-color: ${({ theme }) => theme.colors.background};
 `
-export const ImageContainer = styled.View`
+export const ImageContainer = styled.TouchableOpacity`
     align-items: center;
+    
 `
 export const FishLogImage = styled.Image`
     align-self: center;
@@ -84,25 +85,14 @@ export const SendButton = styled.TouchableOpacity`
     background-color: ${({ theme }) => theme.colors.secondary_dark};
     align-items: center;
     justify-content: center;
-`
+    `
 
 export const SendButtonText = styled.Text`
     color:${({ theme }) => theme.colors.on_secondary_dark};
     font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(12, 640)}px;
 `
-export const CameraView = styled.Text`
-    flex: 1;
-`
-export const CameraButtonContainer = styled.View`
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    margin: 20,
-`
-export const CameraButton = styled.TouchableOpacity`
-    flex: 0.1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-`
+
+
+
 
