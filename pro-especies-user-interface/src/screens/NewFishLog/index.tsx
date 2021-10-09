@@ -100,16 +100,16 @@ async function pickImage() {
             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Localização" />
+            <Input placeholder="Localização" keyboardType="numeric"/>
             <IconBars name="map" />
             <InputBox />
           </InputView>
           <CentralizerBoxView>
             <HalfInputView>
-              <Input placeholder="Peso" />
+              <Input placeholder="Peso" keyboardType="numeric" />
             </HalfInputView>
             <HalfInputView>
-              <Input placeholder="Comprimento (cm)" />
+              <Input placeholder="Comprimento (cm)" keyboardType="numeric"/>
             </HalfInputView>
           </CentralizerBoxView>
         </InputContainer>

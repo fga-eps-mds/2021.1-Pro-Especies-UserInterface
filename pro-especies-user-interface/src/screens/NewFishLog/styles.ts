@@ -6,9 +6,11 @@ export const NewFishLogContainer = styled.View`
     background-color: ${({ theme }) => theme.colors.background};
 `
 export const ImageContainer = styled.TouchableOpacity`
+    align-self: center;
     align-items: center;
-    
+    flex-direction: row;
 `
+
 export const FishLogImage = styled.Image`
     align-self: center;
     margin-top: ${RFValue(52,640)}px;
@@ -19,6 +21,7 @@ export const TopIcon = styled(MaterialIcons)`
     font-size: ${RFValue(12, 640)}px;
     color: ${({ theme }) => theme.colors.on_primary};
     margin-top: ${RFValue(4,640)}px;
+    
 `
 export const IconBars = styled(MaterialIcons)`
     font-size: ${RFValue(24, 640)}px;
@@ -37,6 +40,7 @@ export const InputContainer = styled.View`
     align-self: center;
     text-align: left;
     align-items: center;
+    margin-top:${RFValue(33,640)}px;
 `
 export const InputView = styled.View`
     align-self: center;
@@ -77,6 +81,7 @@ export const HalfInputView = styled.View`
 export const SendButtonView = styled.View`
     align-items: center;
     margin-top: ${RFValue(20, 640)}px;
+    padding-bottom:${RFValue(20, 640)}px;
 `
 export const SendButton = styled.TouchableOpacity`
     width: ${RFValue(156, 640)}px;
