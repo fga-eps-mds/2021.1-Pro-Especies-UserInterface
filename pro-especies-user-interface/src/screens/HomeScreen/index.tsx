@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import {
     HomeContainer,
@@ -14,9 +14,16 @@ import {
     HomeRegularText,
     HomeLogLink
 } from "./styles";
+import { useAuth } from "../../contexts/authContext";
 
 
 export default function Home({navigation}: any) {
+    const { authenticated } = useAuth();
+    useEffect(()=>{
+        if (authenticated)
+            navigation.navigate("Wiki");
+            
+    },[authenticated]);
     return (
         <HomeContainer>
             <HomeLogoContainer>

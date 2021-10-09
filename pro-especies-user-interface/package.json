@@ -9,6 +9,7 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.0",
     "@expo/vector-icons": "^12.0.5",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "axios": "^0.21.4",
@@ -32,6 +33,7 @@
     "react-native-screens": "~3.4.0",
     "react-native-unimodules": "~0.14.5",
     "react-native-web": "~0.13.12",
+    "react-router-dom": "^5.3.0",
     "styled-components": "^5.3.1"
   },
   "devDependencies": {
@@ -41,6 +43,7 @@
     "@types/react-native": "~0.63.2",
     "@types/react-native-dotenv": "^0.2.0",
     "@types/react-native-text-input-mask": "^0.7.6",
+    "@types/react-router-dom": "^5.3.0",
     "@types/styled-components": "^5.1.14",
     "@types/styled-components-react-native": "^5.1.1",
     "metro-react-native-babel-preset": "^0.66.2",

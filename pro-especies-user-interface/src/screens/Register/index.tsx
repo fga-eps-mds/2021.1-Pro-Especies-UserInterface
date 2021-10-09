@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CityStateView,InputScroll, ComunityInputIcon, Container, ErrorMessage, HalfInputView, Input, InputBox, InputContainer, InputMask, InputView, MaterialInputIcon, RegisterButton, RegisterButtonText, RegisterButtonView, TitleContainer, TitleHighlight, TitleText, TouchableTitle } from "./styles";
 import { CreateUser } from "../../services/userServices/createUser";
-import { Alert, Text } from "react-native";
+import { Alert } from "react-native";
 
 
 export function Register() {
@@ -26,15 +26,12 @@ export function Register() {
             const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
             
             if (email.length > 254) {
-                console.log("1");
                 setIsEmailValidMessage("Email muito extenso!");
                 setIsEmailValid(false);
             }else if (!emailRegex.test(email)) {
-                console.log("2");
                 setIsEmailValidMessage("Formato de email inválido!");
                 setIsEmailValid(false);
             }else if (email.split("@")[0].length > 64) {
-                console.log("4");
                 setIsEmailValidMessage("Email muito extenso!");
                 setIsEmailValid(false);
             } else setIsEmailValid(true);
@@ -67,6 +64,7 @@ export function Register() {
                     await CreateUser(userName, userEmail, userPhone, userState, userCity, userPassword, admin, adminToken);
                     alertMessage = "Conta criada com sucesso!";
                 } catch (error: any) {
+                    console.log(error);
                     alertMessage = error.response.data.message;
                 }
             } else {
@@ -87,7 +85,6 @@ export function Register() {
     }
 
     const handleEmailInput = (email: string) => {
-        console.log(email);
         setUserEmail(email);
         validateEmail(email);
     }
@@ -130,9 +127,8 @@ export function Register() {
                         <Input placeholder="Email" value={userEmail} onChangeText={handleEmailInput} />
                     </InputView>
                         {
-                            isEmailValid ? null : <ErrorMessage>{isEmailValidMessage}</ErrorMessage>
+                            isEmailValid ? <InputBox /> : <ErrorMessage>{isEmailValidMessage}</ErrorMessage>
                         }
-                    <InputBox/>
                     <InputView>
                         <ComunityInputIcon name="phone-outline"/>
                         <InputMask
@@ -148,9 +144,8 @@ export function Register() {
                         />
                     </InputView>
                     {
-                        isPhoneValid ? null : <ErrorMessage>{isPhoneValidMessage}</ErrorMessage>
+                        isPhoneValid ? <InputBox /> : <ErrorMessage>{isPhoneValidMessage}</ErrorMessage>
                     }
-                    <InputBox/>
                     <CityStateView>
                         <HalfInputView>
                             <ComunityInputIcon name="compass-outline"/>
@@ -173,9 +168,8 @@ export function Register() {
                         <Input placeholder="Confirmar Senha" secureTextEntry={true} value={userConfirmPassword} onChangeText={handlePassword} />
                     </InputView>
                         {
-                            isPasswordValid ? null : <ErrorMessage>{isPasswordValidMessage}</ErrorMessage>
+                            isPasswordValid ? <InputBox /> : <ErrorMessage>{isPasswordValidMessage}</ErrorMessage>
                         }
-                    <InputBox/>
                     {
                         admin ? (
                             <>
