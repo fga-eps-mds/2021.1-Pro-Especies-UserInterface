@@ -74,4 +74,4 @@ export const HomeLogLink = styled.Text`
     font-size: ${RFValue(10.5, 640)}px;
     line-height: ${RFValue(18,640)}px;
     color: ${ ({ theme }) => theme.colors.on_background }; 
-    `
+`
