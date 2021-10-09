@@ -24,11 +24,6 @@ export const Wiki = () => {
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);
     const [fishes, setFishes] = useState<IFish[]>([]);
-    
-    const onChangeSearch = (name: string) => {
-        setSearchQuery(name);
-        updateFishes();
-    }
 
     const updateFishes = async () => {
         try {
