@@ -15,7 +15,7 @@ import { Property } from "../../components/Property";
 import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
 import { RegularText } from "../../components/RegularText";
-import wikiService from '../../services/wikiService';
+import wikiService from '../../services/wikiServices/wikiService';
 
 type IFish = {
     fish_id: string;

@@ -5,7 +5,7 @@ import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
 import {Register} from '../screens/Register';
 import {FishLog} from '../screens/ViewFishLog'
-import Wiki from '../screens/Wiki';
+import {Wiki} from '../screens/Wiki';
 import theme from "../global/styles/theme";
 import { useAuth, AuthProvider } from "../contexts/authContext";
 
