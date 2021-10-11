@@ -20,8 +20,10 @@ import { useAuth } from "../../contexts/authContext";
 export default function Home({navigation}: any) {
     const { authenticated } = useAuth();
     useEffect(()=>{
-        if (authenticated)
+        if (authenticated){
+            console.log(authenticated);
             navigation.navigate("Wiki");
+        }
             
     },[authenticated]);
     return (
