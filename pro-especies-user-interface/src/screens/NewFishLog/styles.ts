@@ -23,11 +23,6 @@ export const TopIcon = styled(MaterialIcons)`
     margin-top: ${RFValue(4,640)}px;
     
 `
-export const IconBars = styled(MaterialIcons)`
-    font-size: ${RFValue(24, 640)}px;
-    color: ${({ theme }) => theme.colors.on_primary};
-    margin-top: ${RFValue(4,640)}px;
-`
 export const TextClick = styled.Text`
     font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(12,640)}px;

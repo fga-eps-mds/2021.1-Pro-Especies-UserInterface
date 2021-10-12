@@ -6,7 +6,6 @@ import {
   ImageContainer,
   FishLogImage,
   TopIcon,
-  IconBars,
   TextClick,
   InputContainer,
   InputView,
@@ -85,7 +84,12 @@ export function NewFishLog({ navigation }: any) {
       <TopBar title="Novo Registro" />
       <ScrollView>
         <ImageContainer>
+          {
+            fishPhoto != null ?
+        <FishLogImage source={{uri: `data:image/png:base64,${fishPhoto}}` />
+        :
           <FishLogImage source={require('../../assets/selectPicture.png')} />
+        }
         </ImageContainer>
         <ImageContainer onPress={pickImage}>
           <TopIcon name="photo" />
@@ -98,12 +102,10 @@ export function NewFishLog({ navigation }: any) {
         <InputContainer>
           <InputView>
             <Input placeholder="Grande Grupo" onChangeText={setFishLargeGroup} />
-            <IconBars name="keyboard-arrow-down" />
-            <InputBox />
+             <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Grupo" onChangeText={setFishGroup} />
-            <IconBars name="keyboard-arrow-down" />
+            <Input placeholder="Grupo" onChangeText={setFishGroup} />           
             <InputBox />
           </InputView>
           <InputView>
@@ -114,12 +116,13 @@ export function NewFishLog({ navigation }: any) {
             <Input placeholder="Nome" onChangeText={setFishName} />
             <InputBox />
           </InputView>
-          <InputView>
-            <Input placeholder="Localização" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))} />
-            <IconBars name="map" />
-            <InputBox />
-          </InputView>
           <CentralizerBoxView>
+            <HalfInputView>
+              <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))} />
+            </HalfInputView>
+            <HalfInputView>
+              <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))}/>
+            </HalfInputView>
             <HalfInputView>
               <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
             </HalfInputView>
