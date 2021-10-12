@@ -19,11 +19,11 @@ export const SearchBarContainer = styled(Searchbar)`
 `
 
 export const FishBodyContainer = styled.View`
-    padding: 0px 16px;
+    margin: 0px 16px;
 `
 
 export const RowContainer = styled.View`
-    width: ${RFValue(375, 640)}px;
+    width: ${RFValue(328, 640)}px;
     flex-direction: row;
     justify-content: space-around;
     margin-bottom: ${RFValue(16, 640)}px;
@@ -68,13 +68,8 @@ export const TitleText = styled.Text<{ wiki: boolean }>`
     margin-right: ${RFValue(16, 640)}px;
 `
 
-export const ListImages = styled.View`
-    flex-direction: row;
-    width: 100%;
-    justify-content: space-evenly;
-`
-
 export const NoResultContainer = styled.View`
+    align-self: center;
     align-items: center
     width: 100%;
     justify-content: center;
@@ -85,7 +80,7 @@ export const BoldText = styled.Text`
     font-size: ${RFValue(16, 640)}px;
     text-align: center;
     margin-bottom: ${RFValue(16, 640)}px;
-    padding: 0 ${RFValue(60, 640)}px;
+    padding: 0 ${RFValue(34, 640)}px;
 `
 
 export const RegularText = styled.Text`
@@ -93,7 +88,7 @@ export const RegularText = styled.Text`
     font-size: ${RFValue(12, 640)}px;
     text-align: center;
     margin-bottom: ${RFValue(16, 640)}px;
-    padding: 0 ${RFValue(40, 640)}px;
+    padding: 0 ${RFValue(24, 640)}px;
 `
 
 export const SearchImage = styled.Image`
@@ -101,6 +96,8 @@ export const SearchImage = styled.Image`
     width: ${RFValue(80, 640)}px;
     margin-bottom: ${RFValue(16, 640)}px;
     margin-top: ${RFValue(55, 640)}px;
+`
+
 export const FishCardList = styled(
     FlatList as new () => FlatList<IFish>
 ).attrs({
@@ -110,7 +107,7 @@ export const FishCardList = styled(
         alignItems: "stretch",
         paddingBottom: RFValue(156),
     }
-})`
+})``
 
 export const Spacer = styled.View`
     width: 16px;

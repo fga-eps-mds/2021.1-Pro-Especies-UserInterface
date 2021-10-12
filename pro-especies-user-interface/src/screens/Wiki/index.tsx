@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
 import { FishCard, IFish } from "../../components/FishCard";
 import { TopBar } from "../../components/TopBar";
 import { GetWikiFishes } from "../../services/wikiServices/getWikiFishes";
@@ -14,11 +13,12 @@ import {
     TouchableTitle,
     TitleText,
     TitleHighlight,
-    ListImages,
     NoResultContainer,
     BoldText,
     RegularText,
-    SearchImage
+    SearchImage,
+    FishCardList,
+    FishBodyContainer
 } from "./styles";
 
 
@@ -44,71 +44,64 @@ export const Wiki = () => {
     return (
         <PageContainer>
             <TopBar title='Biblioteca' />
-            <TitleContainer>
-                <TouchableTitle onPress={() => { setWiki(false) }}>
-                    <TitleText wiki={wiki}>Biblioteca de Peixes</TitleText>
-                    {
-                        wiki ? null : <TitleHighlight />
-                    }
-                </TouchableTitle>
-                <TouchableTitle onPress={() => { setWiki(true) }}>
-                    <TitleText wiki={!wiki}>Registros</TitleText>
-                    {
-                        wiki ? <TitleHighlight /> : null
-                    }
-                </TouchableTitle>
-            </TitleContainer>
-            <RowContainer>
-                <SearchBarContainer
-                    placeholder="Pesquisar"
-                    onChangeText={setSearchQuery}
-                    value={searchQuery}
-                    iconColor="#202E35"
-                />
-                <TouchableFilter onPress={() => { setFilter(false) }}>
-                    <TextFilter filter={filter}>Filtro</TextFilter>
-                </TouchableFilter>
-                <IconFilter name="filter-list" />
-            </RowContainer>
-            {
-                fishes.filter((fish) => {
-                    if (!searchQuery ||
-                        fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
-                        fish.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
-                    ) {
-                        return fish;
-                    }
-                }).length ? (
-                    <FlatList
-                        data={fishes}
-                        // numColumns={2}
-                        // initialNumToRender={2}
-                        renderItem={(fish) => (
-                            <ListImages>
-                                {
-                                    fishes.filter((fish) => {
-                                        if (!searchQuery ||
-                                            fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
-                                            fish.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
-                                        ) {
-                                            return fish;
-                                        }
-                                    }).map(fish => (
-                                        <FishCard fish={fish} key={fish._id} />
-                                    ))
-                                }
-                            </ListImages>
-                        )}
-                        keyExtractor={fish => fish._id}
+            <FishBodyContainer>
+                <TitleContainer>
+                    <TouchableTitle onPress={() => { setWiki(false) }}>
+                        <TitleText wiki={wiki}>Biblioteca de Peixes</TitleText>
+                        {
+                            wiki ? null : <TitleHighlight />
+                        }
+                    </TouchableTitle>
+                    <TouchableTitle onPress={() => { setWiki(true) }}>
+                        <TitleText wiki={!wiki}>Registros</TitleText>
+                        {
+                            wiki ? <TitleHighlight /> : null
+                        }
+                    </TouchableTitle>
+                </TitleContainer>
+                <RowContainer>
+                    <SearchBarContainer
+                        placeholder="Pesquisar"
+                        placeholderTextColor="rgba(32, 46, 53, 0.3)"
+                        onChangeText={setSearchQuery}
+                        value={searchQuery}
+                        iconColor="#202E35"
                     />
-                ) : (
-                    <NoResultContainer>
-                        <SearchImage source={require('../../assets/search.png')} />
-                        <BoldText>Não encontramos nada com o termo digitado</BoldText>
-                        <RegularText>Por favor, verifique sua pesquisa e tente novamente para obter resultados.</RegularText>
-                    </NoResultContainer>
-                )
-            }
+                    <TouchableFilter onPress={() => { setFilter(false) }}>
+                        <TextFilter filter={filter}>Filtro</TextFilter>
+                    </TouchableFilter>
+                    <IconFilter name="filter-list" />
+                </RowContainer>
+                {
+                    fishes.filter((fish) => {
+                        if (!searchQuery ||
+                            fish.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+                            fish.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+                        ) {
+                            return fish;
+                        }
+                    }).length ? (
+                        <FishCardList
+                            data={fishes.filter((item) => {
+                                if (!searchQuery ||
+                                    item.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
+                                    item.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
+                                ) {
+                                    return item;
+                                }
+                            })}
+                            renderItem={({ item }) => <FishCard fish={item} />}
+                            keyExtractor={item => item._id}
+                        />
+                    ) : (
+                        <NoResultContainer>
+                            <SearchImage source={require('../../assets/search.png')} />
+                            <BoldText>Não encontramos nada com o termo digitado</BoldText>
+                            <RegularText>Por favor, verifique sua pesquisa e tente novamente para obter resultados.</RegularText>
+                        </NoResultContainer>
+                    )
+                }
+            </FishBodyContainer>
         </PageContainer>
     )
 }
