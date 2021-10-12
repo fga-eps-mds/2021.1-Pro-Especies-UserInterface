@@ -1,8 +1,9 @@
 import wikiService from "./wikiService";
 
-const getWikiFishes = async () => {
-        const res = await wikiService.get("/fishWiki/");
-        return res.data;
+async function GetWikiFishes() {
+  const res = await wikiService.get("/fishWiki/");
+
+  return res.data;
 }
 
-export {getWikiFishes};
+export { GetWikiFishes };

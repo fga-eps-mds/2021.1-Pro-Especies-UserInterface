@@ -9,13 +9,13 @@ import {
     ColumnContainer,
     DescriptionContainer,
 } from "./styles";
+import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
 import { TopBar } from "../../components/TopBar";
 import { ProfileImage } from "../../components/ProfileImage";
 import { Property } from "../../components/Property";
 import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
 import { RegularText } from "../../components/RegularText";
-import wikiService from '../../services/wikiServices/wikiService';
 
 type IFish = {
     fish_id: string;
@@ -42,21 +42,21 @@ export const WikiFish: FC<IFish> = ({
 
     const getFishProperties = async () => {
         try {
-            const fish = await wikiService.get(`/fishWiki/id/${fish_id}`);
-            setFishName(fish.data.commonName);
-            setFishSpecies(fish.data.scientificName);
-            setFishFuNFact(fish.data.funFact);
-            setFishLargeGroup(fish.data.largeGroup);
-            setFishGroup(fish.data.group);
-            setFishFamily(fish.data.family);
-            setFishFeed(fish.data.feed);
-            setFishHabitat(fish.data.habitat);
-            setFishMaxSize(fish.data.sizeMax);
-            setFishMaxWeight(fish.data.maxWeight);
-            setFishWasIntroduced(fish.data.wasIntroduced);
-            setFishIsEndemic(fish.data.isEndemic);
-            setFishIsThreatened(fish.data.isThreatened);
-            setFishHasSpawningSeason(fish.data.hasSpawingSeason);
+            const fish = await GetOneWikiFish(fish_id);
+            setFishName(fish.commonName);
+            setFishSpecies(fish.scientificName);
+            setFishFuNFact(fish.funFact);
+            setFishLargeGroup(fish.largeGroup);
+            setFishGroup(fish.group);
+            setFishFamily(fish.family);
+            setFishFeed(fish.feed);
+            setFishHabitat(fish.habitat);
+            setFishMaxSize(fish.sizeMax);
+            setFishMaxWeight(fish.maxWeight);
+            setFishWasIntroduced(fish.wasIntroduced);
+            setFishIsEndemic(fish.isEndemic);
+            setFishIsThreatened(fish.isThreatened);
+            setFishHasSpawningSeason(fish.hasSpawingSeason);
         } catch (error) {
             console.log(error)
         }
