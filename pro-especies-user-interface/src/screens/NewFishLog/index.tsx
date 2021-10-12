@@ -86,7 +86,7 @@ export function NewFishLog({ navigation }: any) {
         <ImageContainer>
           {
             fishPhoto != null ?
-        <FishLogImage source={{uri: `data:image/png:base64,${fishPhoto}}` />
+        <FishLogImage source={{uri: `data:image/png:base64,${ fishPhoto }}` />
         :
           <FishLogImage source={require('../../assets/selectPicture.png')} />
         }
