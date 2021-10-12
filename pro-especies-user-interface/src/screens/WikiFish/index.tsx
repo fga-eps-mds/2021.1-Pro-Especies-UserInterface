@@ -1,20 +1,21 @@
 import React, { useState, useEffect, FC } from "react";
 
 import { ScrollView } from "react-native";
-import { TopBar } from "../../components/TopBar";
 import {
     FishContainer,
-    FishProfile,
-    FishTitle,
     FishDescription,
-    PropertyText,
-    PropertyValueText,
     PropertyContainer,
     PropertyColumn,
     ColumnContainer,
     DescriptionContainer,
 } from "./styles";
 import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
+import { TopBar } from "../../components/TopBar";
+import { ProfileImage } from "../../components/ProfileImage";
+import { Property } from "../../components/Property";
+import { Title } from "../../components/Title";
+import { HalfToneText } from "../../components/HalfToneText";
+import { RegularText } from "../../components/RegularText";
 
 type IFish = {
     fish_id: string;
@@ -35,9 +36,9 @@ export const WikiFish: FC<IFish> = ({
     const [fishMaxWeight, setFishMaxWeight] = useState(0);
     const [fishHabitat, setFishHabitat] = useState("");
     const [fishIsEndemic, setFishIsEndemic] = useState("");
-    const [fishIsThreatened, setFishIsThreatened] = useState(false);
-    const [fishWasIntroduced, setFishWasIntroduced] = useState(false);
-    const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState(false);
+    const [fishIsThreatened, setFishIsThreatened] = useState("");
+    const [fishWasIntroduced, setFishWasIntroduced] = useState("");
+    const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState("");
 
     const getFishProperties = async () => {
         try {
@@ -69,73 +70,62 @@ export const WikiFish: FC<IFish> = ({
         <FishContainer>
             <TopBar title="Informações" />
             <ScrollView>
-                <FishProfile source={require('../../assets/Acestrorhynchus.png')} />
+                <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
 
                 <DescriptionContainer>
-                    <FishTitle>{fishName}</FishTitle>
-                    <PropertyText>{fishSpecies}</PropertyText>
+                    <Title text={fishName} />
+                    <HalfToneText text={fishSpecies} />
                     <FishDescription>
-                        {`"${fishFunFact}"`}
+                        <RegularText text={`"${fishFunFact}"`} />
                     </FishDescription>
                 </DescriptionContainer>
 
                 <ColumnContainer>
                     <PropertyColumn>
                         <PropertyContainer>
-                            <PropertyText>Grande Grupo</PropertyText>
-                            <PropertyValueText>{fishLargeGroup}</PropertyValueText>
+                            <Property property="Grande Grupo" value={fishLargeGroup} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Família</PropertyText>
-                            <PropertyValueText>{fishFamily}</PropertyValueText>
+                            <Property property="Família" value={fishFamily} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Tamanho Máx(cm)</PropertyText>
-                            <PropertyValueText>{fishMaxSize}</PropertyValueText>
+                            <Property property="Tamanho Máx(cm)" value={JSON.stringify(fishMaxSize)} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Habitat</PropertyText>
-                            <PropertyValueText>{fishHabitat}</PropertyValueText>
+                            <Property property="Habitat" value={fishHabitat} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Ameaçado?</PropertyText>
-                            <PropertyValueText>{(fishIsThreatened ? "Sim" : "Não")}</PropertyValueText>
+                            <Property property="Ameaçado?" value={fishIsThreatened} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Foi indroduzido?</PropertyText>
-                            <PropertyValueText>{(fishWasIntroduced ? "Sim" : "Não")}</PropertyValueText>
+                            <Property property="Foi indroduzido?" value={fishWasIntroduced} />
                         </PropertyContainer>
                     </PropertyColumn>
 
                     <PropertyColumn>
                         <PropertyContainer>
-                            <PropertyText>Grupo</PropertyText>
-                            <PropertyValueText>{fishGroup}</PropertyValueText>
+                            <Property property="Grupo" value={fishGroup} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Alimentação</PropertyText>
-                            <PropertyValueText>{fishFeed}</PropertyValueText>
+                            <Property property="Alimentação" value={fishFeed} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Peso Máx(kg)</PropertyText>
-                            <PropertyValueText>{fishMaxWeight}</PropertyValueText>
+                            <Property property="Peso Máx(kg)" value={JSON.stringify(fishMaxWeight)} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Endemíco?</PropertyText>
-                            <PropertyValueText>{fishIsEndemic}</PropertyValueText>
+                            <Property property="Endemíco?" value={fishIsEndemic} />
                         </PropertyContainer>
 
                         <PropertyContainer>
-                            <PropertyText>Faz piracema?</PropertyText>
-                            <PropertyValueText>{(fishHasSpawningSeason ? "Sim" : "Não")}</PropertyValueText>
+                            <Property property="Faz piracema?" value={fishHasSpawningSeason} />
                         </PropertyContainer>
                     </PropertyColumn>
                 </ColumnContainer>

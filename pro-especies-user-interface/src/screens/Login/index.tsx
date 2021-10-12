@@ -6,8 +6,6 @@ import {
     InputBox,
     InputContainer,
     InputView,
-    LoginButton,
-    LoginButtonText,
     LoginButtonView,
     HomeLogoContainer,
     HomeAppImage,
@@ -18,9 +16,9 @@ import {
     HomeLogLink
 
 } from "./styles";
-import { UserLogin } from "../../services/userServices/login";
 import { Alert, TouchableOpacity } from "react-native";
 import { useAuth } from "../../contexts/authContext";
+import { GreenButton } from "../../components/GreenButton";
 
 
 
@@ -29,7 +27,7 @@ export default function Login({ navigation }: any) {
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
     const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Usuário não encontrado");
     const [userPassword, setUserPassword] = useState<string | undefined>();
-    const {signIn, authenticated} = useAuth();
+    const { signIn, authenticated } = useAuth();
 
     const handleLogin = async () => {
         let alertMessage = "";
@@ -81,9 +79,7 @@ export default function Login({ navigation }: any) {
                     <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
                 <LoginButtonView>
-                    <LoginButton onPress={handleLogin}>
-                        <LoginButtonText>Entrar</LoginButtonText>
-                    </LoginButton>
+                    <GreenButton text="Entrar" buttonFunction={handleLogin} />
                 </LoginButtonView>
                 <HomePhraseContainer>
                     <HomeRegularText>

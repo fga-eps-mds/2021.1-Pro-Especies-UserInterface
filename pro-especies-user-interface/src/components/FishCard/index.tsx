@@ -29,7 +29,7 @@ export const FishCard:FC<IFishCardProps> = (
 ) => {
     return (
         <FishCardContaner>
-            <FishImage source={{uri: 'https://reactjs.org/logo-og.png'}}></FishImage>
+            <FishImage source={{uri: `data:image/png;base64,${fish.photo}`}}></FishImage>
             <CommonNameText>{fish.commonName}</CommonNameText>
             <ScientificName>{fish.scientificName}</ScientificName>
         </FishCardContaner>
