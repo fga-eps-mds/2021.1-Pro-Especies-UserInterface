@@ -6,8 +6,6 @@ import {
     InputBox,
     InputContainer,
     InputView,
-    LoginButton,
-    LoginButtonText,
     LoginButtonView,
     HomeLogoContainer,
     HomeAppImage,
@@ -18,9 +16,9 @@ import {
     HomeLogLink
 
 } from "./styles";
-import { UserLogin } from "../../services/userServices/login";
 import { Alert, TouchableOpacity } from "react-native";
 import { useAuth } from "../../contexts/authContext";
+import { GreenButton } from "../../components/GreenButton";
 
 
 
@@ -29,26 +27,26 @@ export default function Login({ navigation }: any) {
     const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
     const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState("Usuário não encontrado");
     const [userPassword, setUserPassword] = useState<string | undefined>();
-    const {signIn, authenticated} = useAuth();
+    const { signIn, authenticated } = useAuth();
 
     const handleLogin = async () => {
         let alertMessage = "";
         if (userEmailPhone && userPassword) {
-            try {
-                setIsEmailPhoneValid(true);
-                const res = await signIn(userEmailPhone, userPassword);
+            setIsEmailPhoneValid(true);
+            const res = await signIn(userEmailPhone, userPassword);
+
+            if (res.status === 200){
                 navigation.navigate('Wiki');
                 alertMessage = "Conta acessada com sucesso!";
-            } catch (error: any) {
-                if(error.response.status === 404)                                     
-                    setIsEmailPhoneValid(false);
-                else
-                    alertMessage = error.response.data.message;
             }
+            else if (res.response.status === 404)
+                setIsEmailPhoneValid(false);
+            else
+                alertMessage = res.response.data.message;
         } else {
             alertMessage = "Preencha todos os campos de dados para realizar o login!";
         }
-        if(alertMessage){
+        if (alertMessage) {
             Alert.alert(
                 "Login",
                 alertMessage,
@@ -81,9 +79,7 @@ export default function Login({ navigation }: any) {
                     <Input placeholder="Senha" secureTextEntry={true} value={userPassword} onChangeText={setUserPassword} />
                 </InputView>
                 <LoginButtonView>
-                    <LoginButton onPress={handleLogin}>
-                        <LoginButtonText>Entrar</LoginButtonText>
-                    </LoginButton>
+                    <GreenButton text="Entrar" buttonFunction={handleLogin} />
                 </LoginButtonView>
                 <HomePhraseContainer>
                     <HomeRegularText>
