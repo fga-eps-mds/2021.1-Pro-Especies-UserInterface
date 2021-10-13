@@ -11,6 +11,7 @@ import {
 
 import theme from "./src/global/styles/theme";
 import AppLoading from "expo-app-loading";
+import { FishLogs } from "./src/screens/FishLogs";
 
 
 export default function App() {
@@ -23,7 +24,8 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Navigation />
+      {/* <Navigation /> */}
+      <FishLogs />
     </ThemeProvider>
   );
 }

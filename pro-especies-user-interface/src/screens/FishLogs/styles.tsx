@@ -20,8 +20,32 @@ export const FilterContainer = styled.View`
     justify-content: space-between;
 `
 
+export const OptionsView = styled.View`
+    flex-direction: row;
+    width:100%;
+    align-items: center;
+    justify-content: space-between;
+`
+
+export const TouchableTitle = styled.TouchableOpacity`
+    text-align: center;
+    margin-left: ${RFValue(16, 640)}px;
+    flex-direction: row;
+
+`
+
+export const TitleText = styled.Text`
+    font-family: ${({ theme }) => theme.fonts.bold};
+    font-size: ${RFValue(12, 640)}px;
+    margin-right: ${RFValue(8, 640)}px;
+`
+
+
 export const ButtonView = styled.View`
     align-items: center;
+    justify-content: flex-start;
+    margin-right: ${RFValue(7,640)}px;
+
 `
 export const ExportButton = styled.TouchableOpacity`
     flex-direction: row;

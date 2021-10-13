@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { ButtonView, ExportButton, ExportButtonText, LeftContainer, FilterContainer, DownloadIcon, FilterIcon, AddLogButton, AddIcon, AddLogView, AddButtonView } from "./styles";
+import { ButtonView, ExportButton, ExportButtonText, LeftContainer, FilterContainer, DownloadIcon, FilterIcon, AddLogButton, AddIcon, AddLogView, AddButtonView, TouchableTitle, TitleText, OptionsView } from "./styles";
 import {} from "../../services/fishLogServices/getAllLogs";
 import { Container } from "../Login/styles";
 import { TopBar } from "../../components/TopBar";
 import { ScrollView } from "react-native-gesture-handler";
 import { TwoTouchablesContainer  } from "../../components/TwoTouchablesContainer";
-import { OneTouchableTitle  } from "../../components/OneTouchableTitle";
 import { View } from "react-native";
 
 // TouchableTitle, TitleText, TitleHighlight
@@ -24,20 +23,20 @@ export function FishLogs(){
       <LeftContainer >
         <TwoTouchablesContainer title0="Biblioteca de Peixes" title1="Registros" ></TwoTouchablesContainer>
       </LeftContainer>
-      <View style={{backgroundColor: 'aqua', flex: 0.12, width:'100%', flexDirection:'row'}}>
+      <OptionsView >
+        <TouchableTitle onPress={()=> {}}>
+            <TitleText >Filtros</TitleText>  
+            <FilterIcon name="filter-list"/> 
+        </TouchableTitle>   
         <ButtonView>
-            <OneTouchableTitle  title="Filtros"/>
-            <FilterIcon name="filter-list"/>
+          <ExportButton onPress={handleExport}>
+            <DownloadIcon name="file-download"/>
+            <ExportButtonText>Exportar Registros</ExportButtonText>
+          </ExportButton>
         </ButtonView>
-          <ButtonView>
-            <ExportButton onPress={handleExport}>
-              <DownloadIcon name="file-download"/>
-              <ExportButtonText>Exportar Registros</ExportButtonText>
-            </ExportButton>
-          </ButtonView>
-      </View>
+      </OptionsView>
       <ScrollView>
-        <AddIcon></AddIcon>
+        
       </ScrollView>
 
       <AddButtonView >
