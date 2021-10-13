@@ -107,3 +107,8 @@ export const AddLogView = styled.View`
     align-items: center;
     justify-content: space-around
 `
+
+export const NotLoggedText = styled.Text`
+font-family: ${({ theme }) => theme.fonts.bold};
+    font-size: ${RFValue(20, 640)}px;
+`

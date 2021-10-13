@@ -2,11 +2,12 @@ import { fishLogService } from "./fishLogService";
 
 
 async function GetAllFishLogs(
-  fishLogId: string
+  token: string,
     
 ) {
-    const res = await fishLogService.get("/fishlog/");
-    return res
+  const userToken = `Bearer ${token}`;
+  const res = await fishLogService.get(`/fishLog/`, { headers: { Authorization: userToken } });
+  return res.data;
 }
 
 export { GetAllFishLogs };

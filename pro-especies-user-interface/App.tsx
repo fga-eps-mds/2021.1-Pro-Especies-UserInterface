@@ -24,8 +24,8 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      {/* <Navigation /> */}
-      <FishLogs />
+      <Navigation />
+      {/* <FishLogs /> */}
     </ThemeProvider>
   );
 }
