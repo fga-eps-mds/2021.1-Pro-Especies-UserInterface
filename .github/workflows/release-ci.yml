@@ -30,51 +30,52 @@ jobs:
         env:
           SONAR_URL: ${{ secrets.SONAR_URL }}
 
-      # - name: Pushes sonar file
-      #   uses: dmnemec/copy_file_to_another_repo_action@main
-      #   env:
-      #     API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
-      #   with:
-      #     source_file: ${{ steps.report.outputs.report_file_name }}.json
-      #     destination_repo: "fga-eps-mds/2021.1-Pro-Especies-Docs"
-      #     destination_folder: "analytics-raw-data"
-      #     user_email: ${{ secrets.GIT_EMAIL}}
-      #     user_name: ${{ secrets.GIT_USER }}
-      #     commit_message: Upload a new metrics from ${{ github.event.repository.name }}
+      - name: Pushes sonar file
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
+        with:
+          source_file: ${{ steps.report.outputs.report_file_name }}.json
+          destination_repo: "fga-eps-mds/2021.1-Pro-Especies-Docs"
+          destination_folder: "analytics-raw-data"
+          user_email: ${{ secrets.GIT_EMAIL}}
+          user_name: ${{ secrets.GIT_USER }}
+          commit_message: Upload a new metrics from ${{ github.event.repository.name }}
 
       - name: Increase app version
         run: |
           python increase_version.py ${{steps.tag_version.outputs.new_tag}} app.json
           cat app.json
+          touch expo-project.apk
 
-      - name: Set Expo enviroments
-        uses: expo/expo-github-action@v5
-        with:
-          expo-version: 3.x
-          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      # - name: Set Expo enviroments
+      #   uses: expo/expo-github-action@v5
+      #   with:
+      #     expo-version: 3.x
+      #     expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+      #     expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
 
-      - name: Install Turtle
-        run: |
-          yarn install
-          yarn global add turtle-cli
+      # - name: Install Turtle
+      #   run: |
+      #     yarn install
+      #     yarn global add turtle-cli
     
-      - name: Building Expo standalone app
-        env:
-          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
-          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
-          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD}}
-          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
-          EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
-          EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
-        run: |
-          echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
-          base64 --decode expo-project.jks.base64 > expo-project.jks
-          turtle build:android \
-            --keystore-path ./expo-project.jks \
-            --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
-            --type apk \
-            -o expo-project.apk
+      # - name: Building Expo standalone app
+      #   env:
+      #     EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
+      #     EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
+      #     EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD}}
+      #     EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
+      #     EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+      #     EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+      #   run: |
+      #     echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
+      #     base64 --decode expo-project.jks.base64 > expo-project.jks
+      #     turtle build:android \
+      #       --keystore-path ./expo-project.jks \
+      #       --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+      #       --type apk \
+      #       -o expo-project.apk
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
