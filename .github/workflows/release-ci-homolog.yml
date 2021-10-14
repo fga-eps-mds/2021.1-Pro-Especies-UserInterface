@@ -1,9 +1,8 @@
-name: Generate Release
+name: Generate Pre-Release
 on:
-  [pull_request]
-  # push:
-  # branches:
-  #   - main
+  push:
+  branches:
+    - devel
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -48,34 +47,34 @@ jobs:
           cat app.json
           touch expo-project.apk
 
-      # - name: Set Expo enviroments
-      #   uses: expo/expo-github-action@v5
-      #   with:
-      #     expo-version: 3.x
-      #     expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
-      #     expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+      - name: Set Expo enviroments
+        uses: expo/expo-github-action@v5
+        with:
+          expo-version: 3.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
 
-      # - name: Install Turtle
-      #   run: |
-      #     yarn install
-      #     yarn global add turtle-cli
+      - name: Install Turtle
+        run: |
+          yarn install
+          yarn global add turtle-cli
     
-      # - name: Building Expo standalone app
-      #   env:
-      #     EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
-      #     EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
-      #     EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD}}
-      #     EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
-      #     EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
-      #     EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
-      #   run: |
-      #     echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
-      #     base64 --decode expo-project.jks.base64 > expo-project.jks
-      #     turtle build:android \
-      #       --keystore-path ./expo-project.jks \
-      #       --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
-      #       --type apk \
-      #       -o expo-project.apk
+      - name: Building Expo standalone app
+        env:
+          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
+          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
+          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD}}
+          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
+          EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+          EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+        run: |
+          echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
+          base64 --decode expo-project.jks.base64 > expo-project.jks
+          turtle build:android \
+            --keystore-path ./expo-project.jks \
+            --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+            --type apk \
+            -o expo-project.apk
 
       - name: Create a GitHub release
         uses: ncipollo/release-action@v1
@@ -84,6 +83,7 @@ jobs:
           tag: ${{ steps.tag_version.outputs.new_tag }}
           name: Release ${{ steps.tag_version.outputs.new_tag }}
           body: ${{ steps.tag_version.outputs.changelog }}
+          prerelease: true
           artifacts: |
             ${{ steps.report.outputs.report_file_name }}.json ,
             expo-project.apk
