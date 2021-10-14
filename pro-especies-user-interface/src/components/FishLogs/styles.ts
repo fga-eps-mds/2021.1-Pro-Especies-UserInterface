@@ -1,10 +1,12 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'; 
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
+import { IFish } from "../FishCard";
+import { FlatList } from "react-native";
 
 export const Container = styled.View`
-    flex: 1;
-    background-color: ${({ theme }) => theme.colors.background};
+    height: 80%;
+    width: 100%;
 `
 
 export const LeftContainer = styled.View`
@@ -14,7 +16,6 @@ export const LeftContainer = styled.View`
 `
 
 export const FilterContainer = styled.View`
-    flex:1;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -112,3 +113,13 @@ export const NotLoggedText = styled.Text`
 font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(20, 640)}px;
 `
+export const FishCardList = styled(
+    FlatList as new () => FlatList<IFish>
+).attrs({
+    numColumns: 2,
+    columnWrapperStyle: { justifyContent: 'space-around' },
+    contentContainerStyle: {
+        alignItems: "stretch",
+        paddingBottom: RFValue(156),
+    }
+})``

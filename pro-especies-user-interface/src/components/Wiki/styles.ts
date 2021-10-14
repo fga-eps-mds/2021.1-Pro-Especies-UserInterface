@@ -2,13 +2,8 @@ import styled from "styled-components/native";
 import { Searchbar } from 'react-native-paper';
 import { RFValue } from "react-native-responsive-fontsize";
 import { MaterialIcons } from '@expo/vector-icons';
-import { IFish } from "../../components/FishCard";
+import { IFish } from "../FishCard";
 import { FlatList } from "react-native";
-
-export const PageContainer = styled.View`
-    align-items: center;
-    background-color: ${({ theme }) => theme.colors.background};
-`
 
 export const SearchBarContainer = styled(Searchbar)`
     width: ${RFValue(242, 640)}px;
@@ -19,7 +14,7 @@ export const SearchBarContainer = styled(Searchbar)`
 `
 
 export const FishBodyContainer = styled.View`
-    margin: 0px 16px;
+    margin: ${RFValue(20, 640)}px ${RFValue(16, 640)}px;
 `
 
 export const RowContainer = styled.View`
@@ -44,33 +39,9 @@ export const TouchableFilter = styled.TouchableOpacity`
     flex-direction: row;
 `
 
-export const TitleContainer = styled.View`
-    width: 100%;
-    padding-left: ${RFValue(16, 640)}px;
-    margin-top: ${RFValue(32, 640)}px;
-    margin-bottom: ${RFValue(11, 640)}px;
-    flex-direction: row;
-`
-
-export const TouchableTitle = styled.TouchableOpacity`
-    text-align: center;
-`
-
-export const TitleHighlight = styled.View`
-    height: ${RFValue(1, 640)}px;
-    width: 100%;
-    background-color: ${({ theme }) => theme.colors.secondary};
-`
-
-export const TitleText = styled.Text<{ wiki: boolean }>`
-    font-family: ${({ theme }) => (p => p.wiki ? theme.fonts.regular : theme.fonts.bold)};
-    font-size: ${RFValue(12, 640)}px;
-    margin-right: ${RFValue(16, 640)}px;
-`
-
 export const NoResultContainer = styled.View`
     align-self: center;
-    align-items: center
+    align-items: center;
     width: 100%;
     justify-content: center;
 `

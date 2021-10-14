@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
 import { Register } from '../screens/Register';
-import Wiki from '../screens/Wiki';
+import { WikiFishlogs } from '../screens/WikiFishlogs';
 import { FishLog } from '../screens/ViewFishLog'
 import theme from "../global/styles/theme";
 import { useAuth, AuthProvider } from "../contexts/authContext";
@@ -32,7 +32,7 @@ const AuthRoutes = () => {
             <AuthenticateStack.Screen name="Home" component={Home} />
             <AuthenticateStack.Screen name="Login" component={Login} />
             <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
-            <AuthenticateStack.Screen name="Wiki" component={Wiki} />
+            <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
             <AuthenticateStack.Screen name="FishLog" component={FishLog} />
         </AuthenticateStack.Navigator>
     )
@@ -55,7 +55,7 @@ const AppRoutes = () => {
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
-            <Stack.Screen name="Wiki" component={Wiki} />
+            <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
         </Stack.Navigator>
     )
 }

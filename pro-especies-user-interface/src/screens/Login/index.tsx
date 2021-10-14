@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {CommonActions} from '@react-navigation/native';
 import {
     Container,
     ErrorMessage,
@@ -29,6 +30,7 @@ export default function Login({ navigation }: any) {
     const [userPassword, setUserPassword] = useState<string | undefined>();
     const { signIn, authenticated } = useAuth();
 
+
     const handleLogin = async () => {
         let alertMessage = "";
         if (userEmailPhone && userPassword) {
@@ -36,7 +38,8 @@ export default function Login({ navigation }: any) {
             const res = await signIn(userEmailPhone, userPassword);
 
             if (res.status === 200){
-                navigation.navigate('Wiki');
+                navigation.popToTop();
+                navigation.navigate('WikiFishlogs');
                 alertMessage = "Conta acessada com sucesso!";
             }
             else if (res.response.status === 404)
