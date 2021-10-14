@@ -11,7 +11,8 @@ import {
   InputView,
   InputBox,
   Input,
-  CentralizerBoxView,
+  RowView,
+  BoxView,
   HalfInputView,
   SendButtonView,
   SendButton,
@@ -67,11 +68,13 @@ export function NewFishLog({ navigation }: any) {
       return;
     }
     setFishPhoto(pickerResult.base64);
+    console.log(fishPhoto);
   }
 
   async function sendFishLogData() {
     try {
-      await createFishLog(fishPhoto,
+      await createFishLog(
+        fishPhoto,
         fishName,
         fishLargeGroup,
         fishGroup,
@@ -92,9 +95,9 @@ export function NewFishLog({ navigation }: any) {
       <ScrollView>
         <ImageContainer>
           {
-            fishPhoto != null ?
-              <FishLogImage source={{ uri: `data:image/png:base64,${fishPhoto}`}} />
-        :
+            fishPhoto ?
+              <FishLogImage source={{ uri: `data:image/png;base64,${fishPhoto}` }} />
+              :
               <FishLogImage source={require('../../assets/selectPicture.png')} />
           }
         </ImageContainer>
@@ -123,20 +126,24 @@ export function NewFishLog({ navigation }: any) {
             <Input placeholder="Nome" onChangeText={setFishName} />
             <InputBox />
           </InputView>
-          <CentralizerBoxView>
-            <HalfInputView>
-              <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLatitude(parseInt(value))} />
-            </HalfInputView>
-            <HalfInputView>
-              <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLongitude(parseInt(value))} />
-            </HalfInputView>
-            <HalfInputView>
-              <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
-            </HalfInputView>
-            <HalfInputView>
-              <Input placeholder="Comprimento (cm)" keyboardType="numeric" onChangeText={(value) => setFishLenght(parseInt(value))} />
-            </HalfInputView>
-          </CentralizerBoxView>
+          <BoxView>
+            <RowView>
+              <HalfInputView>
+                <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLatitude(parseInt(value))} />
+              </HalfInputView>
+              <HalfInputView>
+                <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLongitude(parseInt(value))} />
+              </HalfInputView>
+            </RowView>
+            <RowView>
+              <HalfInputView>
+                <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
+              </HalfInputView>
+              <HalfInputView>
+                <Input placeholder="Comprimento (cm)" keyboardType="numeric" onChangeText={(value) => setFishLenght(parseInt(value))} />
+              </HalfInputView>
+            </RowView>
+          </BoxView>
         </InputContainer>
         <SendButtonView>
           <SendButton onPress={sendFishLogData}>
