@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState } from "react";
 import { Alert, ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
 import {
@@ -28,7 +28,8 @@ export function NewFishLog({ navigation }: any) {
   const [fishSpecies, setFishSpecies] = useState<string | null>(null);
   const [fishWeight, setFishMaxWeight] = useState<number | null>(null);
   const [fishLenght, setFishLenght] = useState<number | null>(null);
-  const [fishLogcoordenates, setFishLogCoordenates] = useState<number | null>(null);
+  const [fishLatitude, setFishLatitude] = useState<number | null>(null);
+  const [fishLongitude, setFishLongitude] = useState<number | null>(null);
   async function requestPermission() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -69,7 +70,7 @@ export function NewFishLog({ navigation }: any) {
   }
 
   async function sendFishLogData() {
-    try{
+    try {
       await createFishLog(fishPhoto,
         fishName,
         fishLargeGroup,
@@ -77,16 +78,14 @@ export function NewFishLog({ navigation }: any) {
         fishSpecies,
         fishWeight,
         fishLenght,
-        fishLogcoordenates);
+        fishLatitude,
+        fishLongitude);
     }
-  catch(error){
-    console.log(error);
+    catch (error) {
+      console.log(error);
+    }
   }
-  }
-  useEffect(() => {
-    setFishLogCoordenates(opcoes[position]);
-  }, [position]);
-  
+
   return (
     <NewFishLogContainer>
       <TopBar title="Novo Registro" />
@@ -94,10 +93,10 @@ export function NewFishLog({ navigation }: any) {
         <ImageContainer>
           {
             fishPhoto != null ?
-        <FishLogImage source={{uri: `data:image/png:base64,${ fishPhoto }}` />
+              <FishLogImage source={{ uri: `data:image/png:base64,${fishPhoto}`}} />
         :
-          <FishLogImage source={require('../../assets/selectPicture.png')} />
-        }
+              <FishLogImage source={require('../../assets/selectPicture.png')} />
+          }
         </ImageContainer>
         <ImageContainer onPress={pickImage}>
           <TopIcon name="photo" />
@@ -110,10 +109,10 @@ export function NewFishLog({ navigation }: any) {
         <InputContainer>
           <InputView>
             <Input placeholder="Grande Grupo" onChangeText={setFishLargeGroup} />
-             <InputBox />
+            <InputBox />
           </InputView>
           <InputView>
-            <Input placeholder="Grupo" onChangeText={setFishGroup} />           
+            <Input placeholder="Grupo" onChangeText={setFishGroup} />
             <InputBox />
           </InputView>
           <InputView>
@@ -126,10 +125,10 @@ export function NewFishLog({ navigation }: any) {
           </InputView>
           <CentralizerBoxView>
             <HalfInputView>
-              <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))} />
+              <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLatitude(parseInt(value))} />
             </HalfInputView>
             <HalfInputView>
-              <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLogCoordenates(parseInt(value))}/>
+              <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLongitude(parseInt(value))} />
             </HalfInputView>
             <HalfInputView>
               <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />

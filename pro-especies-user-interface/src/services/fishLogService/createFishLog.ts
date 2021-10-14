@@ -9,12 +9,17 @@ export const createFishLog = async (
     species: string | null,
     weight: number | null,
     length: number | null,
-    coordenates: number | null,
+    latitude: number | null,
+    longitude: number | null
 ) => {
     const userId = await AsyncStorage.getItem("@eupescador/userId");
     const token = await AsyncStorage.getItem("@eupescador/token");
     const config = {
         headers:{Authorization:`Bearer ${token}`}
+    }
+    const coordenates = {
+        latitude: latitude,
+        longitude: longitude
     }
     await fishLogService.post(
         '/fishLog', 
