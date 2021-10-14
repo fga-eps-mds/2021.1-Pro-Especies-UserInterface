@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect} from "react";
 import { Alert, ScrollView } from "react-native";
 import { TopBar } from "../../components/TopBar";
 import {
@@ -69,16 +69,24 @@ export function NewFishLog({ navigation }: any) {
   }
 
   async function sendFishLogData() {
-    createFishLog(fishPhoto,
-      fishName,
-      fishLargeGroup,
-      fishGroup,
-      fishSpecies,
-      fishWeight,
-      fishLenght,
-      fishLogcoordenates);
+    try{
+      await createFishLog(fishPhoto,
+        fishName,
+        fishLargeGroup,
+        fishGroup,
+        fishSpecies,
+        fishWeight,
+        fishLenght,
+        fishLogcoordenates);
+    }
+  catch(error){
+    console.log(error);
   }
-
+  }
+  useEffect(() => {
+    setFishLogCoordenates(opcoes[position]);
+  }, [position]);
+  
   return (
     <NewFishLogContainer>
       <TopBar title="Novo Registro" />

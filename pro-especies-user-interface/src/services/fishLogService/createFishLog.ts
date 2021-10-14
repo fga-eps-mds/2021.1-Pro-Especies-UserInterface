@@ -8,18 +8,18 @@ export const createFishLog = async (
     group: string | null,
     species: string | null,
     weight: number | null,
-    lenght: number | null,
+    length: number | null,
     coordenates: number | null,
 ) => {
-    const _userId = AsyncStorage.getItem("@eupescador/userId");
-    const token = AsyncStorage.getItem("@eupescador/token");
+    const userId = await AsyncStorage.getItem("@eupescador/userId");
+    const token = await AsyncStorage.getItem("@eupescador/token");
     const config = {
         headers:{Authorization:`Bearer ${token}`}
     }
     await fishLogService.post(
         '/fishLog', 
         {
-            _userId,
+            userId,
             name,
             largeGroup,
             group,
