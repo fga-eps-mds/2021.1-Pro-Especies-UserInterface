@@ -68,7 +68,7 @@ export const Wiki = () => {
                                 return item;
                             }
                         })}
-                        renderItem={({ item }) => <FishCard fish={item} />}
+                        renderItem={({ item }) => <FishCard fishWiki={item} />}
                         keyExtractor={item => item._id}
                     />
                 ) : (

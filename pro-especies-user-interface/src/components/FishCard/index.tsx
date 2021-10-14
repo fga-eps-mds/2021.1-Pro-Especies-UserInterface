@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { FishCardContaner, FishImage, CommonNameText, ScientificName } from "./styles";
+import { FishCardContainer, FishImage, CommonNameText, ScientificName, TextView } from "./styles";
 
 export interface IFish {
     _id: string;
@@ -20,18 +20,49 @@ export interface IFish {
     photo: string;
 }
 
+export interface IFishLog {
+    _id: string;
+    userId: number;
+    name: string;
+    largeGroup: string;
+    group: string;
+    species: string;
+    coordenates: [number, number][];
+    photo: string;
+    length: number;
+    weight: number;
+    reviewed: boolean;
+    reviewedBy: number;
+    createdAt: Date;
+    updatedAt: Date;
+    updatedBy: number;
+    deletedAt: Date;
+    deletedBy: number;
+}
+
 interface IFishCardProps {
-    fish: IFish,
+    fishWiki?: IFish,
+    fishLog?: IFishLog,
 }
 
 export const FishCard: FC<IFishCardProps> = (
-    { fish }
+    { fishWiki, fishLog }
 ) => {
     return (
-        <FishCardContaner onPress={() => { }}>
-            <FishImage source={{ uri: `data:image/png;base64,${fish.photo}` }}></FishImage>
-            <CommonNameText>{fish.commonName}</CommonNameText>
-            <ScientificName>{fish.scientificName}</ScientificName>
-        </FishCardContaner>
+        <FishCardContainer onPress={() => { }}>
+            <FishImage source={{ uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo}` }}></FishImage>
+            <TextView>
+                <CommonNameText>
+                    {
+                    fishLog ? fishLog.name : fishWiki?.commonName
+                    }
+                </CommonNameText>
+                <ScientificName>
+                    {
+                    fishLog ? fishLog.species : fishWiki?.scientificName
+                    }
+                </ScientificName>
+            </TextView>
+        </FishCardContainer>
     )
 }

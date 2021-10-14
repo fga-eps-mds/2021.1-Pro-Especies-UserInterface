@@ -1,7 +1,7 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'; 
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
-import { IFish } from "../FishCard";
+import { IFishLog } from "../FishCard";
 import { FlatList } from "react-native";
 
 export const Container = styled.View`
@@ -26,6 +26,7 @@ export const OptionsView = styled.View`
     width:100%;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: ${RFValue(21, 640)}px;
 `
 
 export const TouchableTitle = styled.TouchableOpacity`
@@ -114,7 +115,7 @@ font-family: ${({ theme }) => theme.fonts.bold};
     font-size: ${RFValue(20, 640)}px;
 `
 export const FishCardList = styled(
-    FlatList as new () => FlatList<IFish>
+    FlatList as new () => FlatList<IFishLog>
 ).attrs({
     numColumns: 2,
     columnWrapperStyle: { justifyContent: 'space-around' },
