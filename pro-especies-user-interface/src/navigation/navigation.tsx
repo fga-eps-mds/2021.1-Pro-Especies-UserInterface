@@ -29,9 +29,6 @@ const AuthRoutes = () => {
                 },
             }}
         >
-            <AuthenticateStack.Screen name="Home" component={Home} />
-            <AuthenticateStack.Screen name="Login" component={Login} />
-            <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
             <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
             <AuthenticateStack.Screen name="FishLog" component={FishLog} />
         </AuthenticateStack.Navigator>
@@ -62,12 +59,6 @@ const AppRoutes = () => {
 
 export default function Navigation() {
     const { authenticated } = useAuth();
-
-    return (
-        <NavigationContainer>
-            <AuthProvider>
-                {authenticated ? <AuthRoutes /> : <AppRoutes />}
-            </AuthProvider>
-        </NavigationContainer>
-    );
+    console.log("aaa",authenticated);
+    return authenticated ? <AuthRoutes /> : <AppRoutes />
 }

@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { TouchableOpacity } from "react-native";
 import { FishCardContainer, FishImage, CommonNameText, ScientificName, TextView } from "./styles";
 
 export interface IFish {
@@ -43,26 +44,29 @@ export interface IFishLog {
 interface IFishCardProps {
     fishWiki?: IFish,
     fishLog?: IFishLog,
+    cardFunction: VoidFunction,
 }
 
 export const FishCard: FC<IFishCardProps> = (
-    { fishWiki, fishLog }
+    { fishWiki, fishLog, cardFunction }
 ) => {
     return (
         <FishCardContainer onPress={() => { }}>
-            <FishImage source={{ uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo}` }}></FishImage>
-            <TextView>
-                <CommonNameText>
-                    {
-                    fishLog ? fishLog.name : fishWiki?.commonName
-                    }
-                </CommonNameText>
-                <ScientificName>
-                    {
-                    fishLog ? fishLog.species : fishWiki?.scientificName
-                    }
-                </ScientificName>
-            </TextView>
+            <TouchableOpacity onPress={cardFunction}>
+                <FishImage source={{ uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo}` }}></FishImage>
+                <TextView>
+                    <CommonNameText>
+                        {
+                        fishLog ? fishLog.name : fishWiki?.commonName
+                        }
+                    </CommonNameText>
+                    <ScientificName>
+                        {
+                        fishLog ? fishLog.species : fishWiki?.scientificName
+                        }
+                    </ScientificName>
+                </TextView>
+            </TouchableOpacity>
         </FishCardContainer>
     )
 }

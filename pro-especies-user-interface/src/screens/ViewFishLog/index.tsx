@@ -8,7 +8,6 @@ import {
     RegisterButtonView,
 } from "./styles";
 
-import { TopBar } from "../../components/TopBar";
 import { Property } from '../../components/Property';
 import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
@@ -50,6 +49,8 @@ export const FishLog: FC<IFishLog> = ({
 
     const getFishLogProperties = async (token: string) => {
         try {
+            console.log(token);
+            console.log(log_id);
             const log = await GetOneFishLog(log_id, token);
             const base64Img = `data:image/png;base64,${log.photo}`;
             if(log.photo)
@@ -61,7 +62,7 @@ export const FishLog: FC<IFishLog> = ({
             setFishWeight(log.weight);
             setFishLength(log.length);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
 
@@ -71,7 +72,6 @@ export const FishLog: FC<IFishLog> = ({
 
     return (
         <FishContainer>
-            <TopBar title="Registro" />
             <ScrollView>
                 <ProfileImage source={fishPhoto ? {uri: fishPhoto} : require('../../assets/fishIcon.png')} />
 

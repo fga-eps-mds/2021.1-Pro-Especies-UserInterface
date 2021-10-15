@@ -38,7 +38,6 @@ export default function Login({ navigation }: any) {
             const res = await signIn(userEmailPhone, userPassword);
 
             if (res.status === 200){
-                navigation.popToTop();
                 navigation.navigate('WikiFishlogs');
                 alertMessage = "Conta acessada com sucesso!";
             }

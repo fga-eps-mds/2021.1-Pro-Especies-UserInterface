@@ -11,6 +11,8 @@ import {
 
 import theme from "./src/global/styles/theme";
 import AppLoading from "expo-app-loading";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthProvider } from "./src/contexts/authContext";
 
 
 export default function App() {
@@ -23,7 +25,11 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Navigation />
+      <NavigationContainer>
+            <AuthProvider>
+              <Navigation />
+            </AuthProvider>
+        </NavigationContainer>
     </ThemeProvider>
   );
 }

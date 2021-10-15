@@ -7,6 +7,7 @@ import { FlatList } from "react-native";
 export const Container = styled.View`
     height: 80%;
     width: 100%;
+    justify-content: center;
 `
 
 export const LeftContainer = styled.View`
