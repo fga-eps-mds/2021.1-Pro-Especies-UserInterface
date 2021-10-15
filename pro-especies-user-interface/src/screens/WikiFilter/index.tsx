@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Switch, TextInput } from "react-native-gesture-handler";
 import { GreenButton } from "../../components/GreenButton";
 import { TopBar } from "../../components/TopBar";
 import { GetWikiFishes } from "../../services/wikiServices/getWikiFishes";
@@ -7,18 +6,29 @@ import {
     PageContainer,
     FishBodyContainer,
     GroupContainer,
-    GroupTitle,
+    BoldText,
     GroupDropDown,
     TextInputContainer,
     InputTitle,
     InputRow,
     SwitchContainer,
-    SwitchRow,
-    SwitchTitle
+    SwitchColumn,
+    Switch,
+    SwitchTitle,
+    InputView,
+    Input
 } from "./styles";
 
 
 export const WikiFilter = () => {
+    const [isEndemic, setIsEndemic] = useState<boolean>();
+    const [isThreatened, setIsThreatened] = useState<boolean>();
+    const [hasSpawningSeason, setHasSpawningSeason] = useState<boolean>();
+    const [wasIntroduced, setWasIntroduced] = useState<boolean>();
+    const [maxWeight, setMaxWeight] = useState<number | null>();
+    const [minWeight, setMinWeight] = useState<number | null>();
+    const [maxLength, setMaxLength] = useState<number | null>();
+    const [minLength, setMinLength] = useState<number | null>();
 
     useEffect(() => {
 
@@ -29,74 +39,78 @@ export const WikiFilter = () => {
             <TopBar title='Filtros' />
             <FishBodyContainer>
                 <GroupContainer>
-                    <GroupTitle>Grande Grupo</GroupTitle>
+                    <BoldText>Grande Grupo</BoldText>
                     <GroupDropDown>
                     </GroupDropDown>
                 </GroupContainer>
 
                 <GroupContainer>
-                    <GroupTitle>Grupo</GroupTitle>
+                    <BoldText>Grupo</BoldText>
                     <GroupDropDown>
                     </GroupDropDown>
                 </GroupContainer>
 
                 <TextInputContainer>
-                    <InputTitle>Peso(kg)</InputTitle>
+                    <BoldText>Peso(kg)</BoldText>
                     <InputRow>
-                        <TextInput></TextInput>
-                        <TextInput></TextInput>
+                        <InputView>
+                            <Input keyboardType="numeric" placeholder="Mín" onChangeText={(value) => setMinWeight(parseInt(value))} />
+                        </InputView>
+                        <InputView>
+                            <Input keyboardType="numeric" placeholder="Máx" onChangeText={(value) => setMaxWeight(parseInt(value))} />
+                        </InputView>
                     </InputRow>
                 </TextInputContainer>
 
                 <TextInputContainer>
-                    <InputTitle>Tamanho(cm)</InputTitle>
+                    <BoldText>Tamanho(cm)</BoldText>
                     <InputRow>
-                        <TextInput></TextInput>
-                        <TextInput></TextInput>
+                        <InputView>
+                            <Input keyboardType="numeric" placeholder="Mín" onChangeText={(value) => setMinLength(parseInt(value))} />
+                        </InputView>
+                        <InputView>
+                            <Input keyboardType="numeric" placeholder="Máx" onChangeText={(value) => setMaxLength(parseInt(value))} />
+                        </InputView>
                     </InputRow>
                 </TextInputContainer>
 
                 <SwitchContainer>
-                    <SwitchRow>
-                        <SwitchTitle>Endémico</SwitchTitle>
+                    <SwitchColumn>
+                        <BoldText>Endémico</BoldText>
+                        <BoldText>Ameaçado</BoldText>
+                        <BoldText>Piracema</BoldText>
+                        <BoldText>Introduzido</BoldText>
+                    </SwitchColumn>
+                    <SwitchColumn>
                         <Switch
-                            // trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                            // ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch}
-                            // value={isEnabled}
+                            trackColor={{ false: "#767577", true: "#62EEFF" }}
+                            thumbColor={"#00BBD4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={setIsEndemic}
+                            value={isEndemic}
                         />
-                    </SwitchRow>
-                    <SwitchRow>
-                        <SwitchTitle>Ameaçado</SwitchTitle>
                         <Switch
-                            // trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                            // ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch}
-                            // value={isEnabled}
+                            trackColor={{ false: "#767577", true: "#62EEFF" }}
+                            thumbColor={"#00BBD4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={setIsThreatened}
+                            value={isThreatened}
                         />
-                    </SwitchRow>
-                    <SwitchRow>
-                        <SwitchTitle>Piracema</SwitchTitle>
                         <Switch
-                            // trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                            // ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch}
-                            // value={isEnabled}
+                            trackColor={{ false: "#767577", true: "#62EEFF" }}
+                            thumbColor={"#00BBD4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={setHasSpawningSeason}
+                            value={hasSpawningSeason}
                         />
-                    </SwitchRow>
-                    <SwitchRow>
-                        <SwitchTitle>Introduzido</SwitchTitle>
                         <Switch
-                            // trackColor={{ false: "#767577", true: "#81b0ff" }}
-                            // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-                            // ios_backgroundColor="#3e3e3e"
-                            // onValueChange={toggleSwitch}
-                            // value={isEnabled}
+                            trackColor={{ false: "#767577", true: "#62EEFF" }}
+                            thumbColor={"#00BBD4"}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={setWasIntroduced}
+                            value={wasIntroduced}
                         />
-                    </SwitchRow>
+                    </SwitchColumn>
                 </SwitchContainer>
 
                 <GreenButton text="Filtrar" buttonFunction={() => { }} />
