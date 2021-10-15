@@ -23,8 +23,9 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   function getValues() {
     const token = AsyncStorage.getItem("@eupescador/token");
     const _userId = AsyncStorage.getItem("@eupescador/userId");
+    const userAdmin = AsyncStorage.getItem("@eupescador/userAdmin");
 
-    return { token, _userId };
+    return { token, _userId, userAdmin };
   }
 
   useEffect(() => {

@@ -3,8 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from "@react-navigation/native";
 import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
-import {Register} from '../screens/Register';
-import Wiki from '../screens/Wiki';
+import { Register } from '../screens/Register';
+import { FishLog } from '../screens/ViewFishLog'
+import { Wiki } from '../screens/Wiki';
 import theme from "../global/styles/theme";
 import { NewFishLog } from "../screens/NewFishLog";
 import { useAuth, AuthProvider } from "../contexts/authContext";
@@ -34,6 +35,7 @@ const AuthRoutes = () => {
             <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
             <AuthenticateStack.Screen name="Wiki" component={Wiki} />
             <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog}/>
+            <AuthenticateStack.Screen name="FishLog" component={FishLog} />
         </AuthenticateStack.Navigator>
     )
 }
