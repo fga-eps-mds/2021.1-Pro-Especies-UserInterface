@@ -29,19 +29,19 @@ export const WikiFilter = () => {
             <TopBar title='Filtros' />
             <FishBodyContainer>
                 <GroupContainer>
-                    <GroupTitle text="Grande Grupo" />
+                    <GroupTitle>Grande Grupo</GroupTitle>
                     <GroupDropDown>
                     </GroupDropDown>
                 </GroupContainer>
 
                 <GroupContainer>
-                    <GroupTitle text="Grupo" />
+                    <GroupTitle>Grupo</GroupTitle>
                     <GroupDropDown>
                     </GroupDropDown>
                 </GroupContainer>
 
                 <TextInputContainer>
-                    <InputTitle text="Peso(kg)" />
+                    <InputTitle>Peso(kg)</InputTitle>
                     <InputRow>
                         <TextInput></TextInput>
                         <TextInput></TextInput>
@@ -49,7 +49,7 @@ export const WikiFilter = () => {
                 </TextInputContainer>
 
                 <TextInputContainer>
-                    <InputTitle text="Tamanho(cm)" />
+                    <InputTitle>Tamanho(cm)</InputTitle>
                     <InputRow>
                         <TextInput></TextInput>
                         <TextInput></TextInput>
@@ -58,7 +58,7 @@ export const WikiFilter = () => {
 
                 <SwitchContainer>
                     <SwitchRow>
-                        <SwitchTitle text="Endémico" />
+                        <SwitchTitle>Endémico</SwitchTitle>
                         <Switch
                             // trackColor={{ false: "#767577", true: "#81b0ff" }}
                             // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -68,7 +68,7 @@ export const WikiFilter = () => {
                         />
                     </SwitchRow>
                     <SwitchRow>
-                        <SwitchTitle text="Ameaçado" />
+                        <SwitchTitle>Ameaçado</SwitchTitle>
                         <Switch
                             // trackColor={{ false: "#767577", true: "#81b0ff" }}
                             // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -78,7 +78,7 @@ export const WikiFilter = () => {
                         />
                     </SwitchRow>
                     <SwitchRow>
-                        <SwitchTitle text="Piracema" />
+                        <SwitchTitle>Piracema</SwitchTitle>
                         <Switch
                             // trackColor={{ false: "#767577", true: "#81b0ff" }}
                             // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
@@ -88,7 +88,7 @@ export const WikiFilter = () => {
                         />
                     </SwitchRow>
                     <SwitchRow>
-                        <SwitchTitle text="Introduzido" />
+                        <SwitchTitle>Introduzido</SwitchTitle>
                         <Switch
                             // trackColor={{ false: "#767577", true: "#81b0ff" }}
                             // thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
