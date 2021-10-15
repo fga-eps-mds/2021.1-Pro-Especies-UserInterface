@@ -73,6 +73,7 @@ export function NewFishLog({ navigation }: any) {
   async function sendFishLogData() {
     let alertMessage = "";
     try {
+      console.log(typeof fishPhoto);
       await createFishLog(
         fishPhoto,
         fishName,
@@ -84,23 +85,30 @@ export function NewFishLog({ navigation }: any) {
         fishLatitude,
         fishLongitude);
 
-      alertMessage="Registro criado com sucesso!";
+      alertMessage = "Registro criado com sucesso!";
+      navigation.goBack();
     }
-    catch (error) {
+    catch (error: any) {
       console.log(error);
-      alertMessage="Falha ao criar registro!";
+      if (error.response.status === 400)
+        alertMessage = "Informe no mínimo o grande grupo, espécie ou foto do peixe";
+      else if (error.response.status === 413)
+        alertMessage = "Falha ao criar registro! Arquivo muito grande";
+      else
+        alertMessage = "Falha ao criar registro!";
+
     }
     if (alertMessage) {
       Alert.alert(
-          "Registro",
-          alertMessage,
-          [
-              {
-                  text: "Ok",
-              }
-          ]
+        "Registro",
+        alertMessage,
+        [
+          {
+            text: "Ok",
+          }
+        ]
       )
-  }
+    }
   }
 
   return (

@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 import fishLogService from "./fishService";
 
 export const createFishLog = async (
-  photo: string | null | undefined,
+  photoString: string | null | undefined,
   name: string | null,
   largeGroup: string | null,
   group: string | null,
@@ -15,17 +15,17 @@ export const createFishLog = async (
 ) => {
   const userId = await AsyncStorage.getItem("@eupescador/userId");
   const token = await AsyncStorage.getItem("@eupescador/token");
-  let bindata = null;
+  let photo = null;
 
   const coordenates = {
     latitude: latitude,
     longitude: longitude,
   };
   
-  if(photo){
-    bindata = Buffer.from(photo, "base64");
+  if(photoString){
+    photo = Buffer.from(photoString, "base64");
   }
-  console.log(bindata);
+  console.log("registro criado");
 
   await fishLogService.post(
     "/fishLog/",
@@ -36,7 +36,7 @@ export const createFishLog = async (
       group,
       species,
       coordenates,
-      bindata,
+      photo,
       length,
       weight,
     },
