@@ -68,10 +68,10 @@ export function NewFishLog({ navigation }: any) {
       return;
     }
     setFishPhoto(pickerResult.base64);
-    console.log(fishPhoto);
   }
 
   async function sendFishLogData() {
+    let alertMessage = "";
     try {
       await createFishLog(
         fishPhoto,
@@ -83,10 +83,24 @@ export function NewFishLog({ navigation }: any) {
         fishLenght,
         fishLatitude,
         fishLongitude);
+
+      alertMessage="Registro criado com sucesso!";
     }
     catch (error) {
       console.log(error);
+      alertMessage="Falha ao criar registro!";
     }
+    if (alertMessage) {
+      Alert.alert(
+          "Registro",
+          alertMessage,
+          [
+              {
+                  text: "Ok",
+              }
+          ]
+      )
+  }
   }
 
   return (
@@ -137,7 +151,7 @@ export function NewFishLog({ navigation }: any) {
             </RowView>
             <RowView>
               <HalfInputView>
-                <Input placeholder="Peso" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
+                <Input placeholder="Peso (kg)" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
               </HalfInputView>
               <HalfInputView>
                 <Input placeholder="Comprimento (cm)" keyboardType="numeric" onChangeText={(value) => setFishLenght(parseInt(value))} />
