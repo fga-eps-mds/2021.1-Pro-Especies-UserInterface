@@ -1,8 +1,8 @@
 name: Set Release
 on:
   push:
-  branches:
-    - main
+    branches:
+      - devel
 jobs:
   build:
     runs-on: ubuntu-latest
