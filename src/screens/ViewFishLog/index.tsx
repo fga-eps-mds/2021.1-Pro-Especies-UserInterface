@@ -55,10 +55,10 @@ export const FishLog = ({ route }: any) => {
             setFishGroup(log.group);
             setFishWeight(log.weight);
             setFishLength(log.length);
-            setIsLoading(false);
         } catch (error) {
             console.log(error);
         }
+        setIsLoading(false);
     };
 
     useEffect(() => {

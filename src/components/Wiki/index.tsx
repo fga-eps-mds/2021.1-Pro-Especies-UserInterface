@@ -29,10 +29,10 @@ export const Wiki = () => {
         try {
             const data = await GetWikiFishes();
             setFishes(data);
-            setIsLoading(false);
         } catch (error: any) {
             console.log(error);
         }
+        setIsLoading(false);
     }
     useEffect(() => {
         updateFishes();

@@ -20,10 +20,10 @@ export const FishLogs = ({token}: Props) => {
     try {
       const data = await GetAllFishLogs(token);
       setFishLog(data);
-      setIsLoading(false);
     } catch (error: any) {
       console.log(error);
     }
+    setIsLoading(false);
   }
 
   const handleNavigation = (id: string) => {
