@@ -1,8 +1,9 @@
 name: Generate Pre-Release
+
 on:
   push:
-  branches:
-    - devel
+    branches:
+      - devel
 jobs:
   build:
     runs-on: ubuntu-latest
