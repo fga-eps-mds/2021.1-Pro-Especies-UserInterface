@@ -30,7 +30,7 @@ const AuthRoutes = () => {
             }}
         >
             <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
-            <AuthenticateStack.Screen name="FishLog" component={FishLog} />
+            <AuthenticateStack.Screen name="FishLog" component={FishLog} options={{ title: "Registro", headerShown: true }}  />
         </AuthenticateStack.Navigator>
     )
 }
@@ -59,6 +59,5 @@ const AppRoutes = () => {
 
 export default function Navigation() {
     const { authenticated } = useAuth();
-    console.log("aaa",authenticated);
     return authenticated ? <AuthRoutes /> : <AppRoutes />
 }

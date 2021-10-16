@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../../contexts/authContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
+import { CommonActions } from '@react-navigation/native';
 
 
 
@@ -23,7 +24,6 @@ export const WikiFishlogs = ({navigation}: any) => {
 
     const getData = async () => {
         const token = await AsyncStorage.getItem("@eupescador/token");
-        const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         if(token) {
             setToken(token);
             setIsLogged(true);
@@ -47,7 +47,11 @@ export const WikiFishlogs = ({navigation}: any) => {
                     text: "Sim",
                     onPress: () => {
                         signOut();
-                        navigation.navigate('Home');
+                        const resetAction = CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'Home'}],
+                        });
+                        navigation.dispatch(resetAction);
                     }
                 }
             ]
