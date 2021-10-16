@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import CheckBox from '@react-native-community/checkbox';
 import { GreenButton } from "../../components/GreenButton";
+import { RegularText } from "../../components/RegularText";
 import { TopBar } from "../../components/TopBar";
 import { GetWikiFishes } from "../../services/wikiServices/getWikiFishes";
 import {
@@ -7,14 +9,12 @@ import {
     FishBodyContainer,
     GroupContainer,
     BoldText,
-    GroupDropDown,
+    GroupOptionsContainer,
     TextInputContainer,
-    InputTitle,
     InputRow,
     SwitchContainer,
     SwitchColumn,
     Switch,
-    SwitchTitle,
     InputView,
     Input
 } from "./styles";
@@ -29,6 +29,78 @@ export const WikiFilter = () => {
     const [minWeight, setMinWeight] = useState<number | null>();
     const [maxLength, setMaxLength] = useState<number | null>();
     const [minLength, setMinLength] = useState<number | null>();
+    const [largeGroups, setLargeGroups] = useState<string[]>();
+    const [groups, setGroups] = useState<string[]>();
+    const [selectedLargeGroups, setSelectedLargeGroups] = useState<string[]>();
+    const [selectedGroups, setSelectedGroups] = useState<string[]>();
+
+    const getLargeGroups = async () => {
+        let newGroups: string[] = [];
+        try {
+            const wikiData = await GetWikiFishes();
+            for (let i = 0; i < wikiData.length; i++) {
+                if (!newGroups.includes(wikiData[i].largeGroup))
+                    newGroups.push(wikiData[i].largeGroup);
+            }
+            setLargeGroups(newGroups);
+            console.log(largeGroups);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getGroups = async () => {
+        let newGroups: string[] = [];
+        try {
+            const wikiData = await GetWikiFishes();
+            for (let i = 0; i < wikiData.length; i++) {
+                if (
+                    largeGroups?.includes(wikiData[i].largeGroup) &&
+                    (!newGroups.includes(wikiData[i].group))
+                ) {
+                    newGroups.push(wikiData[i].group);
+                }
+            }
+            setGroups(newGroups);
+            console.log(groups);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const selectLargeGroup = (largeGroup: string, checked: boolean) => {
+        let newLargeGroups: string[] | undefined = [];
+        newLargeGroups = selectedLargeGroups;
+        if (checked) {
+            newLargeGroups?.push(largeGroup);
+        } else if (newLargeGroups?.includes(largeGroup)) {
+            newLargeGroups = newLargeGroups.filter((item) => {
+                if (!largeGroup) {
+                    return item;
+                }
+            })
+        }
+
+        setSelectedLargeGroups(newLargeGroups);
+        console.log(selectedLargeGroups);
+    };
+
+    const selectGroup = (group: string, checked: boolean) => {
+        let newGroups: string[] | undefined = [];
+        newGroups = selectedGroups;
+        if (checked) {
+            newGroups?.push(group);
+        } else if (newGroups?.includes(group)) {
+            newGroups = newGroups.filter((item) => {
+                if (!group) {
+                    return item;
+                }
+            })
+        }
+
+        setSelectedGroups(newGroups);
+        console.log(selectedGroups);
+    };
 
     useEffect(() => {
 
@@ -40,14 +112,30 @@ export const WikiFilter = () => {
             <FishBodyContainer>
                 <GroupContainer>
                     <BoldText>Grande Grupo</BoldText>
-                    <GroupDropDown>
-                    </GroupDropDown>
+                    <GroupOptionsContainer>
+                        <InputRow>
+                            <CheckBox
+                                disabled={false}
+                                value={false}
+                                onValueChange={() => { }}
+                            />
+                            <RegularText text="Arraia" />
+                        </InputRow>
+                    </GroupOptionsContainer>
                 </GroupContainer>
 
                 <GroupContainer>
                     <BoldText>Grupo</BoldText>
-                    <GroupDropDown>
-                    </GroupDropDown>
+                    <GroupOptionsContainer>
+                        <InputRow>
+                            <CheckBox
+                                disabled={false}
+                                value={false}
+                                onValueChange={() => { }}
+                            />
+                            <RegularText text="Arraia" />
+                        </InputRow>
+                    </GroupOptionsContainer>
                 </GroupContainer>
 
                 <TextInputContainer>
@@ -115,6 +203,6 @@ export const WikiFilter = () => {
 
                 <GreenButton text="Filtrar" buttonFunction={() => { }} />
             </FishBodyContainer>
-        </PageContainer>
+        </PageContainer >
     )
 }

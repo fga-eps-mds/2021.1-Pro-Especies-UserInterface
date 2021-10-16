@@ -7,7 +7,8 @@ export const PageContainer = styled.View`
 `
 
 export const FishBodyContainer = styled.View`
-    margin: 0px ${RFValue(32,640)}px;;
+    margin: 0px ${RFValue(32,640)}px;
+    margin-top: ${RFValue(19,640)}px;
     justify-content: flex-start;
     align-items: flex-start;
 `
@@ -22,18 +23,17 @@ export const BoldText = styled.Text`
     color: ${({ theme }) => theme.colors.on_background};
     margin: ${RFValue(8, 640)}px 0;
 `
-export const GroupDropDown = styled.View`
+export const GroupOptionsContainer = styled.View`
+    background-color: rgba(32, 46, 53, 0.05);
+    width: ${RFValue(360,640)}px;
 `
 
 export const TextInputContainer = styled.View`
-    
-`
-
-export const InputTitle = styled.Text`
 `
 
 export const InputRow = styled.View`
     flex-direction: row;
+    align-items: center;
 `
 export const InputView = styled.View`
     align-self: center;
@@ -71,17 +71,3 @@ export const Switch = styled.Switch`
     margin-top: ${RFValue(7, 640)}px;
     margin-left: ${RFValue(50, 640)}px;
 `
-
-export const SwitchTitle = styled.Text`
-`
-
-    // GroupContainer,
-    // GroupTitle,
-    // GroupDropDown,
-    // TextInputContainer,
-    // InputTitle,
-    // InputRow,
-    // SwitchContainer,
-    // SwitchRow,
-    // SwitchTitle
-
