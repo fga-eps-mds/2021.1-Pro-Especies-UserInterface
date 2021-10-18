@@ -31,7 +31,7 @@ const AuthRoutes = () => {
         >
             <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
             <AuthenticateStack.Screen name="FishLog" component={FishLog} options={{ title: "Registro", headerShown: true }}  />
-            <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog}/>
+            <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog} options={{ title: "Novo Registro", headerShown: true }}/>
         </AuthenticateStack.Navigator>
     )
 }
