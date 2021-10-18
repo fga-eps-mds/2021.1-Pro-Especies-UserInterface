@@ -1,13 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from "@react-navigation/native";
 import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
 import { Register } from '../screens/Register';
 import { WikiFishlogs } from '../screens/WikiFishlogs';
-import { FishLog } from '../screens/ViewFishLog'
+import { FishLog } from '../screens/ViewFishLog';
 import theme from "../global/styles/theme";
-import { useAuth, AuthProvider } from "../contexts/authContext";
+import { NewFishLog } from "../screens/NewFishLog";
+import { useAuth } from "../contexts/authContext";
 
 
 const AuthenticateStack = createNativeStackNavigator();
@@ -17,7 +17,7 @@ const Stack = createNativeStackNavigator();
 const AuthRoutes = () => {
     return (
         <AuthenticateStack.Navigator
-            initialRouteName="Home"
+            initialRouteName="WikiFishlogs"
             screenOptions={{
                 headerShown: false,
                 headerStyle: {
@@ -31,6 +31,7 @@ const AuthRoutes = () => {
         >
             <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
             <AuthenticateStack.Screen name="FishLog" component={FishLog} options={{ title: "Registro", headerShown: true }}  />
+            <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog}/>
         </AuthenticateStack.Navigator>
     )
 }

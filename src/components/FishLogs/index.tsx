@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ButtonView, Container ,ExportButton, ExportButtonText, LeftContainer, FilterContainer, DownloadIcon, FilterIcon, AddLogButton, AddIcon, AddLogView, AddButtonView, TouchableTitle, TitleText, OptionsView, NotLoggedText, FishCardList } from "./styles";
-import { GetAllFishLogs } from "../../services/fishLogServices/getAllLogs";
+import { GetAllFishLogs } from "../../services/fishLogService/getAllLogs";
 import { FishCard, IFishLog } from "../FishCard";
 import { ActivityIndicator } from "react-native";
 import { useNavigation } from '@react-navigation/native';
@@ -35,8 +35,9 @@ export const FishLogs = ({token}: Props) => {
   const handleExport = async () => {
 
   }
-  const handleAddLog = async () => {
 
+  const handleAddLog = async () => {
+    navigation.navigate('NewFishLog');
   }
 
   useEffect(() => {

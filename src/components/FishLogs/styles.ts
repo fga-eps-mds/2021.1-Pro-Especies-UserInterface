@@ -1,11 +1,11 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons'; 
 import { RFValue, RFPercentage } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { IFishLog } from "../FishCard";
 import { FlatList } from "react-native";
 
 export const Container = styled.View`
-    height: ${RFPercentage(80)}%;
+    flex: 1;
     width: 100%;
     justify-content: center;
 `

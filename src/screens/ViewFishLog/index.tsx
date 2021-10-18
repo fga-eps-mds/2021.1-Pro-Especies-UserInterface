@@ -16,7 +16,7 @@ import { MapViewImage } from "../../components/MapViewImage";
 import { GreenButton } from "../../components/GreenButton";
 import { ActivityIndicator } from "react-native";
 
-import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
+import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const FishLog = ({ route }: any) => {
