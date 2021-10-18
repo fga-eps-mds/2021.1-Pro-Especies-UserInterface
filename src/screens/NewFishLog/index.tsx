@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import SelectDropdown from 'react-native-select-dropdown'
 import { TopBar } from '../../components/TopBar';
 import {
   NewFishLogContainer,
@@ -33,9 +34,9 @@ export function NewFishLog({ navigation }: any) {
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
 
-  const [largeGroupOptions, setLargeGroupOptions] = useState<string[]>();
-  const [groupOptions, setGroupOptions] = useState<string[]>();
-  const [speciesOptions, setSpeciesOptions] = useState<string[]>();
+  const [largeGroupOptions, setLargeGroupOptions] = useState<any[]>([]);
+  const [groupOptions, setGroupOptions] = useState<any[]>([]);
+  const [speciesOptions, setSpeciesOptions] = useState<any[]>([]);
 
   const getLargeGroupsOptions = async () => {
     let newGroups: string[] = [];
@@ -43,10 +44,11 @@ export function NewFishLog({ navigation }: any) {
       const wikiData = await GetWikiFishes();
       for (let i = 0; i < wikiData.length; i++) {
         if (!newGroups.includes(wikiData[i].largeGroup))
+          //console.log(wikiData[i]);
           newGroups.push(wikiData[i].largeGroup);
       }
       setLargeGroupOptions(newGroups);
-      console.log(largeGroupOptions);
+      console.log("Grande Grupo: ", largeGroupOptions);
     } catch (error) {
       console.log(error);
     }
@@ -62,7 +64,7 @@ export function NewFishLog({ navigation }: any) {
         }
       }
       setGroupOptions(newGroups);
-      console.log(groupOptions);
+      console.log("Grupo: ", groupOptions);
     } catch (error) {
       console.log(error);
     }
@@ -73,16 +75,22 @@ export function NewFishLog({ navigation }: any) {
     try {
       const wikiData = await GetWikiFishes();
       for (let i = 0; i < wikiData.length; i++) {
-        if (!newSpecies.includes(wikiData[i].species)) {
-          newSpecies.push(wikiData[i].species);
+        if (!newSpecies.includes(wikiData[i].scientificName)) {
+          newSpecies.push(wikiData[i].scientificName);
         }
       }
       setSpeciesOptions(newSpecies);
-      console.log(speciesOptions);
+      console.log("Especies: ", speciesOptions);
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    getLargeGroupsOptions();
+    getGroupsOptions();
+    getSpeciesOptions();
+  }, []);
 
   async function requestPermission() {
     const permissionResult =
@@ -182,6 +190,24 @@ export function NewFishLog({ navigation }: any) {
           <TopIcon name="camera" />
           <TextClick>Tirar Foto</TextClick>
         </ImageContainer>
+
+        <SelectDropdown
+          data={groupOptions}
+          onSelect={(selectedItem, index) => {
+            console.log(selectedItem, index)
+          }}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            // text represented after item is selected
+            // if data array is an array of objects then return selectedItem.property to render after item is selected
+            return selectedItem
+          }}
+          rowTextForSelection={(item, index) => {
+            // text represented for each item in dropdown
+            // if data array is an array of objects then return item.property to represent item in dropdown
+            return item
+          }}
+        />
+
         <InputContainer>
           <InputView>
             <Input
