@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Alert, ScrollView } from "react-native";
-import { TopBar } from "../../components/TopBar";
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -113,7 +112,6 @@ export function NewFishLog({ navigation }: any) {
 
   return (
     <NewFishLogContainer>
-      <TopBar title="Novo Registro" />
       <ScrollView>
         <ImageContainer>
           {

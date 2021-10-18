@@ -8,24 +8,18 @@ import {
     RegisterButtonView,
 } from "./styles";
 
-import { TopBar } from "../../components/TopBar";
 import { Property } from '../../components/Property';
 import { Title } from "../../components/Title";
 import { HalfToneText } from "../../components/HalfToneText";
 import { ProfileImage } from "../../components/ProfileImage";
 import { MapViewImage } from "../../components/MapViewImage";
 import { GreenButton } from "../../components/GreenButton";
+import { ActivityIndicator } from "react-native";
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-type IFishLog = {
-    log_id: string;
-}
-
-export const FishLog: FC<IFishLog> = ({
-    log_id
-}) => {
+export const FishLog = ({ route }: any) => {
     const [fishName, setFishName] = useState();
     const [fishPhoto, setFishPhoto] = useState<String>();
     const [fishLargeGroup, setFishLargeGroup] = useState();
@@ -34,6 +28,7 @@ export const FishLog: FC<IFishLog> = ({
     const [fishWeight, setFishWeight] = useState();
     const [fishLength, setFishLength] = useState();
     const [isAdmin, setIsAdmin] = useState<Boolean>();
+    const [isLoading, setIsLoading] = useState(true);
 
 
     const getData = async () => {
@@ -45,11 +40,11 @@ export const FishLog: FC<IFishLog> = ({
             setIsAdmin(true);
         else
             setIsAdmin(false);
-
     }
 
     const getFishLogProperties = async (token: string) => {
         try {
+            const {log_id} = route.params;
             const log = await GetOneFishLog(log_id, token);
             const base64Img = `data:image/png;base64,${log.photo}`;
             if(log.photo)
@@ -61,8 +56,9 @@ export const FishLog: FC<IFishLog> = ({
             setFishWeight(log.weight);
             setFishLength(log.length);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
+        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -71,56 +67,59 @@ export const FishLog: FC<IFishLog> = ({
 
     return (
         <FishContainer>
-            <TopBar title="Registro" />
-            <ScrollView>
-                <ProfileImage source={fishPhoto ? {uri: fishPhoto} : require('../../assets/fishIcon.png')} />
+            {
+                isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
+                    <ScrollView>
+                        <ProfileImage source={fishPhoto ? {uri: fishPhoto} : require('../../assets/fishIcon.png')} />
 
-                <DescriptionContainer>
-                    <Title text={
-                        fishName ? fishName : "Nome não informado"
-                    } />
-                    <HalfToneText text={
-                        fishSpecies ? fishSpecies : "Espécie não informado"
-                    } />
-                </DescriptionContainer>
+                        <DescriptionContainer>
+                            <Title text={
+                                fishName ? fishName : "Nome não informado"
+                            } />
+                            <HalfToneText text={
+                                fishSpecies ? fishSpecies : "Espécie não informado"
+                            } />
+                        </DescriptionContainer>
 
-                <PropertyRow>
-                    <Property property="Grande Grupo" value={
-                        fishLargeGroup ? JSON.stringify(fishLargeGroup) : "Não informado"
-                    } />
+                        <PropertyRow>
+                            <Property property="Grande Grupo" value={
+                                fishLargeGroup ? JSON.stringify(fishLargeGroup) : "Não informado"
+                            } />
 
-                    <Property property="Grupo" value={
-                        fishGroup ? JSON.stringify(fishGroup) : "Não informado"
-                    }/>
-                </PropertyRow>
+                            <Property property="Grupo" value={
+                                fishGroup ? JSON.stringify(fishGroup) : "Não informado"
+                            }/>
+                        </PropertyRow>
 
-                <PropertyRow>
-                    <Property property="Tamanho(cm)" value={
-                        fishLength ? JSON.stringify(fishLength) : "Não informado"
-                    } />
+                        <PropertyRow>
+                            <Property property="Tamanho(cm)" value={
+                                fishLength ? JSON.stringify(fishLength) : "Não informado"
+                            } />
 
-                    <Property property="Peso(kg)" value={
-                        fishWeight ? JSON.stringify(fishWeight) : "Não informado"
-                    }/>
-                </PropertyRow>
+                            <Property property="Peso(kg)" value={
+                                fishWeight ? JSON.stringify(fishWeight) : "Não informado"
+                            }/>
+                        </PropertyRow>
 
-                <MapViewImage source={require('../../assets/map.png')} />
+                        <MapViewImage source={require('../../assets/map.png')} />
 
-                <RegisterButtonView>
-                    {
-                        isAdmin ? (
-                            <>
-                                <GreenButton text="Revisar" buttonFunction={() => { }} />
-                                <GreenButton text="Exportar" buttonFunction={() => { }} />
-                            </>
-                        ) : (
-                            <GreenButton text="Editar" buttonFunction={() => { }} />
-                        )
-                    }
+                        <RegisterButtonView>
+                            {
+                                isAdmin ? (
+                                    <>
+                                        <GreenButton text="Revisar" buttonFunction={() => { }} />
+                                        <GreenButton text="Exportar" buttonFunction={() => { }} />
+                                    </>
+                                ) : (
+                                    <GreenButton text="Editar" buttonFunction={() => { }} />
+                                )
+                            }
 
-                    <GreenButton text="Excluir" buttonFunction={() => { }} />
-                </RegisterButtonView>
-            </ScrollView>
+                            <GreenButton text="Excluir" buttonFunction={() => { }} />
+                        </RegisterButtonView>
+                    </ScrollView>
+                )
+            }
         </FishContainer>
     )
 }

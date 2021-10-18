@@ -1,14 +1,13 @@
 import React from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from "@react-navigation/native";
 import Home from '../screens/HomeScreen';
 import Login from '../screens/Login';
 import { Register } from '../screens/Register';
-import { FishLog } from '../screens/ViewFishLog'
-import { Wiki } from '../screens/Wiki';
+import { WikiFishlogs } from '../screens/WikiFishlogs';
+import { FishLog } from '../screens/ViewFishLog';
 import theme from "../global/styles/theme";
 import { NewFishLog } from "../screens/NewFishLog";
-import { useAuth, AuthProvider } from "../contexts/authContext";
+import { useAuth } from "../contexts/authContext";
 
 
 const AuthenticateStack = createNativeStackNavigator();
@@ -18,7 +17,7 @@ const Stack = createNativeStackNavigator();
 const AuthRoutes = () => {
     return (
         <AuthenticateStack.Navigator
-            initialRouteName="Home"
+            initialRouteName="WikiFishlogs"
             screenOptions={{
                 headerShown: false,
                 headerStyle: {
@@ -30,12 +29,9 @@ const AuthRoutes = () => {
                 },
             }}
         >
-            <AuthenticateStack.Screen name="Home" component={Home} />
-            <AuthenticateStack.Screen name="Login" component={Login} />
-            <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
-            <AuthenticateStack.Screen name="Wiki" component={Wiki} />
-            <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog}/>
-            <AuthenticateStack.Screen name="FishLog" component={FishLog} />
+            <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
+            <AuthenticateStack.Screen name="FishLog" component={FishLog} options={{ title: "Registro", headerShown: true }}  />
+            <AuthenticateStack.Screen name="NewFishLog" component={NewFishLog} options={{ title: "Novo Registro", headerShown: true }}/>
         </AuthenticateStack.Navigator>
     )
 }
@@ -57,19 +53,12 @@ const AppRoutes = () => {
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
-            <Stack.Screen name="Wiki" component={Wiki} />
+            <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
         </Stack.Navigator>
     )
 }
 
 export default function Navigation() {
     const { authenticated } = useAuth();
-
-    return (
-        <NavigationContainer>
-            <AuthProvider>
-                {authenticated ? <AuthRoutes /> : <AppRoutes />}
-            </AuthProvider>
-        </NavigationContainer>
-    );
+    return authenticated ? <AuthRoutes /> : <AppRoutes />
 }
