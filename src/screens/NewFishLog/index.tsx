@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Alert, ScrollView } from "react-native";
-import { TopBar } from "../../components/TopBar";
+import React, { useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { TopBar } from '../../components/TopBar';
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -17,9 +18,9 @@ import {
   SendButtonView,
   SendButton,
   SendButtonText,
-} from "./styles";
-import * as ImagePicker from 'expo-image-picker'
-import { createFishLog } from "../../services/fishLogService/createFishLog";
+} from './styles';
+import { createFishLog } from '../../services/fishLogService/createFishLog';
+import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 
 export function NewFishLog({ navigation }: any) {
   const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
@@ -31,12 +32,63 @@ export function NewFishLog({ navigation }: any) {
   const [fishLenght, setFishLenght] = useState<number | null>(null);
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
+
+  const [largeGroupOptions, setLargeGroupOptions] = useState<string[]>();
+  const [groupOptions, setGroupOptions] = useState<string[]>();
+  const [speciesOptions, setSpeciesOptions] = useState<string[]>();
+
+  const getLargeGroupsOptions = async () => {
+    let newGroups: string[] = [];
+    try {
+      const wikiData = await GetWikiFishes();
+      for (let i = 0; i < wikiData.length; i++) {
+        if (!newGroups.includes(wikiData[i].largeGroup))
+          newGroups.push(wikiData[i].largeGroup);
+      }
+      setLargeGroupOptions(newGroups);
+      console.log(largeGroupOptions);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getGroupsOptions = async () => {
+    let newGroups: string[] = [];
+    try {
+      const wikiData = await GetWikiFishes();
+      for (let i = 0; i < wikiData.length; i++) {
+        if (!newGroups.includes(wikiData[i].group)) {
+          newGroups.push(wikiData[i].group);
+        }
+      }
+      setGroupOptions(newGroups);
+      console.log(groupOptions);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const getSpeciesOptions = async () => {
+    let newSpecies: string[] = [];
+    try {
+      const wikiData = await GetWikiFishes();
+      for (let i = 0; i < wikiData.length; i++) {
+        if (!newSpecies.includes(wikiData[i].species)) {
+          newSpecies.push(wikiData[i].species);
+        }
+      }
+      setSpeciesOptions(newSpecies);
+      console.log(speciesOptions);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function requestPermission() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      Alert.alert("Error", "É preciso permissão para colocar uma foto");
-      return;
+      Alert.alert('Error', 'É preciso permissão para colocar uma foto');
     }
   }
 
@@ -57,7 +109,7 @@ export function NewFishLog({ navigation }: any) {
   async function pickImage() {
     await requestPermission();
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       quality: 0.5,
       aspect: [1, 1],
@@ -71,7 +123,7 @@ export function NewFishLog({ navigation }: any) {
   }
 
   async function sendFishLogData() {
-    let alertMessage = "";
+    let alertMessage = '';
     try {
       console.log(typeof fishPhoto);
       await createFishLog(
@@ -83,45 +135,44 @@ export function NewFishLog({ navigation }: any) {
         fishWeight,
         fishLenght,
         fishLatitude,
-        fishLongitude);
+        fishLongitude,
+      );
 
-      alertMessage = "Registro criado com sucesso!";
+      alertMessage = 'Registro criado com sucesso!';
       navigation.goBack();
-    }
-    catch (error: any) {
+    } catch (error: any) {
       console.log(error);
       if (error.response.status === 400)
-        alertMessage = "Informe no mínimo o grande grupo, espécie ou foto do peixe";
+        alertMessage =
+          'Informe no mínimo o grande grupo, espécie ou foto do peixe';
       else if (error.response.status === 413)
-        alertMessage = "Falha ao criar registro! Arquivo muito grande";
-      else
-        alertMessage = "Falha ao criar registro!";
-
+        alertMessage = 'Falha ao criar registro! Arquivo muito grande';
+      else alertMessage = 'Falha ao criar registro!';
     }
     if (alertMessage) {
-      Alert.alert(
-        "Registro",
-        alertMessage,
-        [
-          {
-            text: "Ok",
-          }
-        ]
-      )
+      Alert.alert('Registro', alertMessage, [
+        {
+          text: 'Ok',
+        },
+      ]);
     }
   }
+
+
+
 
   return (
     <NewFishLogContainer>
       <TopBar title="Novo Registro" />
       <ScrollView>
         <ImageContainer>
-          {
-            fishPhoto ?
-              <FishLogImage source={{ uri: `data:image/png;base64,${fishPhoto}` }} />
-              :
-              <FishLogImage source={require('../../assets/selectPicture.png')} />
-          }
+          {fishPhoto ? (
+            <FishLogImage
+              source={{ uri: `data:image/png;base64,${fishPhoto}` }}
+            />
+          ) : (
+            <FishLogImage source={require('../../assets/selectPicture.png')} />
+          )}
         </ImageContainer>
         <ImageContainer onPress={pickImage}>
           <TopIcon name="photo" />
@@ -133,7 +184,10 @@ export function NewFishLog({ navigation }: any) {
         </ImageContainer>
         <InputContainer>
           <InputView>
-            <Input placeholder="Grande Grupo" onChangeText={setFishLargeGroup} />
+            <Input
+              placeholder="Grande Grupo"
+              onChangeText={setFishLargeGroup}
+            />
             <InputBox />
           </InputView>
           <InputView>
@@ -151,18 +205,34 @@ export function NewFishLog({ navigation }: any) {
           <BoxView>
             <RowView>
               <HalfInputView>
-                <Input placeholder="Latitude" keyboardType="numeric" onChangeText={(value) => setFishLatitude(parseInt(value))} />
+                <Input
+                  placeholder="Latitude"
+                  keyboardType="numeric"
+                  onChangeText={value => setFishLatitude(parseInt(value))}
+                />
               </HalfInputView>
               <HalfInputView>
-                <Input placeholder="Longitude" keyboardType="numeric" onChangeText={(value) => setFishLongitude(parseInt(value))} />
+                <Input
+                  placeholder="Longitude"
+                  keyboardType="numeric"
+                  onChangeText={value => setFishLongitude(parseInt(value))}
+                />
               </HalfInputView>
             </RowView>
             <RowView>
               <HalfInputView>
-                <Input placeholder="Peso (kg)" keyboardType="numeric" onChangeText={(value) => setFishMaxWeight(parseInt(value))} />
+                <Input
+                  placeholder="Peso (kg)"
+                  keyboardType="numeric"
+                  onChangeText={value => setFishMaxWeight(parseInt(value))}
+                />
               </HalfInputView>
               <HalfInputView>
-                <Input placeholder="Comprimento (cm)" keyboardType="numeric" onChangeText={(value) => setFishLenght(parseInt(value))} />
+                <Input
+                  placeholder="Comprimento (cm)"
+                  keyboardType="numeric"
+                  onChangeText={value => setFishLenght(parseInt(value))}
+                />
               </HalfInputView>
             </RowView>
           </BoxView>
@@ -174,5 +244,5 @@ export function NewFishLog({ navigation }: any) {
         </SendButtonView>
       </ScrollView>
     </NewFishLogContainer>
-  )
+  );
 }
