@@ -16,7 +16,7 @@ import { ProfileImage } from "../../components/ProfileImage";
 import { MapViewImage } from "../../components/MapViewImage";
 import { GreenButton } from "../../components/GreenButton";
 
-import { GetOneFishLog } from '../../services/fishLogServices/getOneFishLog';
+import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type IFishLog = {

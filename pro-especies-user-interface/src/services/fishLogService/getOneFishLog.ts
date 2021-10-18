@@ -1,4 +1,4 @@
-import { fishLogService } from './fishLogService';
+import { fishLogService } from './fishService';
 
 
 async function GetOneFishLog(

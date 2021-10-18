@@ -41,7 +41,7 @@ export function NewFishLog({ navigation }: any) {
   }
 
   async function openCamera() {
-    requestPermission();
+    await requestPermission();
 
     const pickerResult = await ImagePicker.launchCameraAsync({
       base64: true,
@@ -55,7 +55,7 @@ export function NewFishLog({ navigation }: any) {
   }
 
   async function pickImage() {
-    requestPermission();
+    await requestPermission();
 
     let pickerResult = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
