@@ -30,18 +30,6 @@ jobs:
         env:
           SONAR_URL: ${{ secrets.SONAR_URL }}
 
-      - name: Pushes sonar file
-        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
-        with:
-          source_file: ${{ steps.report.outputs.report_file_name }}.json
-          destination_repo: "fga-eps-mds/2021.1-Pro-Especies-Docs"
-          destination_folder: "analytics-raw-data"
-          user_email: ${{ secrets.GIT_EMAIL}}
-          user_name: ${{ secrets.GIT_USER }}
-          commit_message: Upload a new metrics from ${{ github.event.repository.name }}
-
       - name: Increase app version
         run: |
           python increase_version.py ${{steps.tag_version.outputs.new_tag}} app.json
@@ -51,13 +39,14 @@ jobs:
       - name: Set Expo enviroments
         uses: expo/expo-github-action@v5
         with:
-          expo-version: 3.x
+          expo-version: 4.x
           expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
           expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
 
       - name: Install Turtle
         run: |
           yarn install
+          yarn global add expo-cli
           yarn global add turtle-cli
     
       - name: Building Expo standalone app
@@ -88,3 +77,16 @@ jobs:
           artifacts: |
             ${{ steps.report.outputs.report_file_name }}.json ,
             expo-project.apk
+      
+      - name: Pushes sonar file
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
+        with:
+          source_file: ${{ steps.report.outputs.report_file_name }}.json
+          destination_repo: "fga-eps-mds/2021.1-Pro-Especies-Docs"
+          destination_folder: "analytics-raw-data"
+          user_email: ${{ secrets.GIT_EMAIL}}
+          user_name: ${{ secrets.GIT_USER }}
+          commit_message: Upload a new metrics from ${{ github.event.repository.name }}
+
