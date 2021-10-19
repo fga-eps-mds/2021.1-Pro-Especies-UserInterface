@@ -19,7 +19,7 @@ import { ActivityIndicator } from "react-native";
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const FishLog = ({ route }: any) => {
+export const FishLog = ({ navigation, route }: any) => {
     const [fishName, setFishName] = useState();
     const [fishPhoto, setFishPhoto] = useState<String>();
     const [fishLargeGroup, setFishLargeGroup] = useState();
@@ -29,6 +29,7 @@ export const FishLog = ({ route }: any) => {
     const [fishLength, setFishLength] = useState();
     const [isAdmin, setIsAdmin] = useState<Boolean>();
     const [isLoading, setIsLoading] = useState(true);
+    const [logId, setLogId] = useState("");
 
 
     const getData = async () => {
@@ -45,6 +46,7 @@ export const FishLog = ({ route }: any) => {
     const getFishLogProperties = async (token: string) => {
         try {
             const {log_id} = route.params;
+            setLogId(log_id);
             const log = await GetOneFishLog(log_id, token);
             const base64Img = `data:image/png;base64,${log.photo}`;
             if(log.photo)
@@ -107,11 +109,20 @@ export const FishLog = ({ route }: any) => {
                             {
                                 isAdmin ? (
                                     <>
-                                        <GreenButton text="Revisar" buttonFunction={() => { }} />
+                                        <GreenButton text="Revisar" buttonFunction={() => {
+                                        navigation.navigate("NewFishLog" as never, {
+                                            isNewRegister: false,
+                                        } as never);
+                                    }} />
                                         <GreenButton text="Exportar" buttonFunction={() => { }} />
                                     </>
                                 ) : (
-                                    <GreenButton text="Editar" buttonFunction={() => { }} />
+                                    <GreenButton text="Editar" buttonFunction={() => {
+                                        navigation.navigate("NewFishLog" as never, {
+                                            isNewRegister: false,
+                                            log_id: logId,
+                                        } as never);
+                                    }} />
                                 )
                             }
 

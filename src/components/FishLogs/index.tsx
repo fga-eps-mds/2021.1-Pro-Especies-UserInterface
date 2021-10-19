@@ -37,7 +37,9 @@ export const FishLogs = ({token}: Props) => {
   }
 
   const handleAddLog = async () => {
-    navigation.navigate('NewFishLog');
+    navigation.navigate("NewFishLog" as never, {
+      isNewRegister: true,
+    } as never);
   }
 
   useEffect(() => {
