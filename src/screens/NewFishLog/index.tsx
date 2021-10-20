@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import SelectDropdown from 'react-native-select-dropdown'
 import { TopBar } from '../../components/TopBar';
 import {
   NewFishLogContainer,
@@ -19,6 +18,7 @@ import {
   SendButtonView,
   SendButton,
   SendButtonText,
+  Dropdown,
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
@@ -26,7 +26,7 @@ import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 export function NewFishLog({ navigation }: any) {
   const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
   const [fishName, setFishName] = useState<string | null>(null);
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>(null);
+  const [fishLargeGroup, setFishLargeGroup] = useState<string>('');
   const [fishGroup, setFishGroup] = useState<string | null>(null);
   const [fishSpecies, setFishSpecies] = useState<string | null>(null);
   const [fishWeight, setFishMaxWeight] = useState<number | null>(null);
@@ -35,7 +35,7 @@ export function NewFishLog({ navigation }: any) {
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
 
   const [largeGroupOptions, setLargeGroupOptions] = useState<any[]>([]);
-  const [groupOptions, setGroupOptions] = useState<any[]>([]);
+  const [groupOptions, setGroupOptions] = useState<any[]>(['cascudo', 'escama', 'peixe', 'arraia e ta deboa']);
   const [speciesOptions, setSpeciesOptions] = useState<any[]>([]);
 
   const getLargeGroupsOptions = async () => {
@@ -69,6 +69,8 @@ export function NewFishLog({ navigation }: any) {
       console.log(error);
     }
   }
+
+
 
   const getSpeciesOptions = async () => {
     let newSpecies: string[] = [];
@@ -191,29 +193,16 @@ export function NewFishLog({ navigation }: any) {
           <TextClick>Tirar Foto</TextClick>
         </ImageContainer>
 
-        <SelectDropdown
-          data={groupOptions}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item
-          }}
-        />
+
 
         <InputContainer>
           <InputView>
             <Input
               placeholder="Grande Grupo"
               onChangeText={setFishLargeGroup}
+              value={fishLargeGroup}
             />
+            <Dropdown options={groupOptions} style={{width:30}} dropdownStyle={{width:100}}/>
             <InputBox />
           </InputView>
           <InputView>

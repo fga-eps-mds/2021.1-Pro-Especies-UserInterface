@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { MaterialIcons } from '@expo/vector-icons';
+import ModalDropdown from 'react-native-modal-dropdown';
+
 
 export const NewFishLogContainer = styled.View`
     flex: 1;
@@ -54,7 +56,7 @@ export const InputBox = styled.View`
 `
 export const Input = styled.TextInput`
     height: ${RFValue(40, 640)}px;
-    width: 90%;
+    width: 80%;
     flex-direction: row;
     justify-content: flex-start;    
     font-family: ${({ theme }) => theme.fonts.regular};
@@ -103,6 +105,10 @@ export const SendButtonText = styled.Text`
     font-size: ${RFValue(12, 640)}px;
 `
 
+export const Dropdown =styled(ModalDropdown)`
+    /* width: ${RFValue(30, 640)}px; */
+    margin-right: ${RFValue(300, 640)}px;
 
+`
 
 
