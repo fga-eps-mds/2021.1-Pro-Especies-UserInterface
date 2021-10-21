@@ -160,13 +160,22 @@ export const FishLog = ({ navigation, route }: any) => {
 
                             <GreenButton text="Excluir" buttonFunction={() => {
                                 if(isReviewed){
-                                    Alert.alert("Registro", "Não é possível deletar esse registro pois ele já foi revisado por um pesquisador.", [
+                                    Alert.alert("Excluir Registro", "Não é possível deletar esse registro pois ele já foi revisado por um pesquisador.", [
                                         {
                                           text: "Ok",
                                         },
                                       ]);
                                 } else {
-                                    handleDelete();
+                                    Alert.alert("Excluir Registro", "Você tem certeza que deseja excluir este registro?", [
+                                        {
+                                          text: "Cancelar",
+                                          style: "cancel"
+                                        },
+                                        {
+                                            text: "Ok",
+                                            onPress: () => handleDelete()
+                                        }
+                                      ]);
                                 }
                             }} />
                         </RegisterButtonView>

@@ -118,6 +118,7 @@ export function NewFishLog({ navigation, route }: any) {
 
   const handleEditFishLog = async () => {
     let alertMessage = '';
+    let alertTitle = '';
     const {log_id} = route.params;
     let reviewed = false;
       if(isAdmin){
@@ -140,6 +141,7 @@ export function NewFishLog({ navigation, route }: any) {
           isAdmin
         );
         alertMessage = "Registro atualizado com sucesso";
+        alertTitle = 'Editar registro'
         const resetAction = CommonActions.reset({
           index: 0,
           routes: [{ name: 'WikiFishlogs'}],
@@ -147,10 +149,12 @@ export function NewFishLog({ navigation, route }: any) {
         navigation.dispatch(resetAction);
       } catch (error) {
         console.log(error);
+        if(error.response.status === 400)
+          alertTitle = 'Sem informação'
         alertMessage = error.response.data.message;
       }
     if (alertMessage) {
-      Alert.alert('Registro', alertMessage, [
+      Alert.alert(alertTitle, alertMessage, [
         {
           text: 'Ok',
         },
