@@ -1,5 +1,5 @@
-import "react-native";
+import 'react-native';
 
-it("renders correctly", () => {
+it('renders correctly', () => {
   // renderer.create(<App />);
 });

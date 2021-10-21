@@ -50,7 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
     "babel-plugin-transform-inline-environment-variables": "^0.4.3",
-    "eslint": "^8.0.1",
+    "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.2",
@@ -62,13 +62,14 @@
     "jest-expo": "^42.1.0",
     "prettier": "^2.4.1",
     "react-native-dotenv": "^3.2.0",
+    "react-test-renderer": "^17.0.2",
     "styled-components": "^5.3.3",
     "typescript": "~4.0.0"
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-native/extend-expect"
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ],
     "testMatch": [
       "**/**/*.spec.ts"

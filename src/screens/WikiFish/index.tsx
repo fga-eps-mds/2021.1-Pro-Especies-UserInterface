@@ -1,6 +1,6 @@
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC } from 'react';
 
-import { ScrollView } from "react-native";
+import { ScrollView } from 'react-native';
 import {
   FishContainer,
   FishDescription,
@@ -8,35 +8,35 @@ import {
   PropertyColumn,
   ColumnContainer,
   DescriptionContainer,
-} from "./styles";
-import { GetOneWikiFish } from "../../services/wikiServices/getOneWikiFish";
-import { TopBar } from "../../components/TopBar";
-import { ProfileImage } from "../../components/ProfileImage";
-import { Property } from "../../components/Property";
-import { Title } from "../../components/Title";
-import { HalfToneText } from "../../components/HalfToneText";
-import { RegularText } from "../../components/RegularText";
+} from './styles';
+import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
+import { TopBar } from '../../components/TopBar';
+import { ProfileImage } from '../../components/ProfileImage';
+import { Property } from '../../components/Property';
+import { Title } from '../../components/Title';
+import { HalfToneText } from '../../components/HalfToneText';
+import { RegularText } from '../../components/RegularText';
 
 type IFish = {
   fish_id: string;
 };
 
 export const WikiFish: FC<IFish> = ({ fish_id }) => {
-  const [fishName, setFishName] = useState("");
-  const [fishPhoto, setFishPhoto] = useState("");
-  const [fishSpecies, setFishSpecies] = useState("");
-  const [fishFunFact, setFishFuNFact] = useState("");
-  const [fishLargeGroup, setFishLargeGroup] = useState("");
-  const [fishGroup, setFishGroup] = useState("");
-  const [fishFamily, setFishFamily] = useState("");
-  const [fishFeed, setFishFeed] = useState("");
+  const [fishName, setFishName] = useState('');
+  const [fishPhoto, setFishPhoto] = useState('');
+  const [fishSpecies, setFishSpecies] = useState('');
+  const [fishFunFact, setFishFuNFact] = useState('');
+  const [fishLargeGroup, setFishLargeGroup] = useState('');
+  const [fishGroup, setFishGroup] = useState('');
+  const [fishFamily, setFishFamily] = useState('');
+  const [fishFeed, setFishFeed] = useState('');
   const [fishMaxSize, setFishMaxSize] = useState(0);
   const [fishMaxWeight, setFishMaxWeight] = useState(0);
-  const [fishHabitat, setFishHabitat] = useState("");
-  const [fishIsEndemic, setFishIsEndemic] = useState("");
-  const [fishIsThreatened, setFishIsThreatened] = useState("");
-  const [fishWasIntroduced, setFishWasIntroduced] = useState("");
-  const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState("");
+  const [fishHabitat, setFishHabitat] = useState('');
+  const [fishIsEndemic, setFishIsEndemic] = useState('');
+  const [fishIsThreatened, setFishIsThreatened] = useState('');
+  const [fishWasIntroduced, setFishWasIntroduced] = useState('');
+  const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState('');
 
   const getFishProperties = async () => {
     try {
@@ -68,7 +68,7 @@ export const WikiFish: FC<IFish> = ({ fish_id }) => {
     <FishContainer>
       <TopBar title="Informações" />
       <ScrollView>
-        <ProfileImage source={require("../../assets/Acestrorhynchus.png")} />
+        <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
 
         <DescriptionContainer>
           <Title text={fishName} />
