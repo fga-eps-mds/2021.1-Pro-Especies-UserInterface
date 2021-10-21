@@ -1,6 +1,5 @@
-import styled from "styled-components/native";
-
+import styled from 'styled-components/native';
 
 export const TitleTouchable = styled.TouchableOpacity`
-text-align: center;
-`
+  text-align: center;
+`;

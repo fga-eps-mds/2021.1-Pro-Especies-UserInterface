@@ -1,6 +1,6 @@
-import { RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { RFValue } from 'react-native-responsive-fontsize';
+import styled from 'styled-components/native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export const Box = styled.View`
   height: ${RFValue(82)}px;

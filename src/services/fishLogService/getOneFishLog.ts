@@ -1,4 +1,4 @@
-import { fishLogService } from "./fishService";
+import { fishLogService } from './fishService';
 
 async function GetOneFishLog(log_id: string, token: string) {
   const userToken = `Bearer ${token}`;

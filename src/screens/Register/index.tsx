@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Alert } from "react-native";
+import React, { useState } from 'react';
+import { Alert } from 'react-native';
 import {
   CityStateView,
   InputScroll,
@@ -18,24 +18,24 @@ import {
   TitleHighlight,
   TitleText,
   TouchableTitle,
-} from "./styles";
-import { CreateUser } from "../../services/userServices/createUser";
-import { GreenButton } from "../../components/GreenButton";
+} from './styles';
+import { CreateUser } from '../../services/userServices/createUser';
+import { GreenButton } from '../../components/GreenButton';
 
 export function Register() {
   const [admin, setAdmin] = useState(false);
   const [userName, setUserName] = useState<string | undefined>();
   const [userEmail, setUserEmail] = useState<string | undefined>();
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isEmailValidMessage, setIsEmailValidMessage] = useState("");
+  const [isEmailValidMessage, setIsEmailValidMessage] = useState('');
   const [userPhone, setUserPhone] = useState<string | undefined>();
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-  const [isPhoneValidMessage, setIsPhoneValidMessage] = useState("");
+  const [isPhoneValidMessage, setIsPhoneValidMessage] = useState('');
   const [userState, setUserState] = useState<string | undefined>();
   const [userCity, setUserCity] = useState<string | undefined>();
   const [userPassword, setUserPassword] = useState<string | undefined>();
   const [isPasswordValid, setIsPasswordValid] = useState(true);
-  const [isPasswordValidMessage, setIsPasswordValidMessage] = useState("");
+  const [isPasswordValidMessage, setIsPasswordValidMessage] = useState('');
   const [userConfirmPassword, setUserConfirmPassword] = useState<
     string | undefined
   >();
@@ -47,13 +47,13 @@ export function Register() {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
       if (email.length > 254) {
-        setIsEmailValidMessage("Email muito extenso!");
+        setIsEmailValidMessage('Email muito extenso!');
         setIsEmailValid(false);
       } else if (!emailRegex.test(email)) {
-        setIsEmailValidMessage("Formato de email inválido!");
+        setIsEmailValidMessage('Formato de email inválido!');
         setIsEmailValid(false);
-      } else if (email.split("@")[0].length > 64) {
-        setIsEmailValidMessage("Email muito extenso!");
+      } else if (email.split('@')[0].length > 64) {
+        setIsEmailValidMessage('Email muito extenso!');
         setIsEmailValid(false);
       } else setIsEmailValid(true);
     }
@@ -61,7 +61,7 @@ export function Register() {
 
   const validatePassword = (password: string) => {
     if (userPassword !== password) {
-      setIsPasswordValidMessage("Digite a mesma senha!");
+      setIsPasswordValidMessage('Digite a mesma senha!');
       setIsPasswordValid(false);
     } else {
       setIsPasswordValid(true);
@@ -70,7 +70,7 @@ export function Register() {
 
   const validatePhone = (phone: string) => {
     if (phone.length < 15) {
-      setIsPhoneValidMessage("Tamanho de telefone inválido!"),
+      setIsPhoneValidMessage('Tamanho de telefone inválido!'),
         setIsPhoneValid(false);
     } else {
       setIsPhoneValid(true);
@@ -78,7 +78,7 @@ export function Register() {
   };
 
   const handleRegister = async () => {
-    let alertMessage = "";
+    let alertMessage = '';
     if (
       userName &&
       userEmail &&
@@ -98,23 +98,23 @@ export function Register() {
             userCity,
             userPassword,
             admin,
-            adminToken
+            adminToken,
           );
-          alertMessage = "Conta criada com sucesso!";
+          alertMessage = 'Conta criada com sucesso!';
         } catch (error: any) {
           console.log(error);
           alertMessage = error.response.data.message;
         }
       } else {
-        alertMessage = "Preencha todos os dados corretamente!";
+        alertMessage = 'Preencha todos os dados corretamente!';
       }
     } else {
       alertMessage =
-        "Preencha todos os campos de dados para realizar o cadastro!";
+        'Preencha todos os campos de dados para realizar o cadastro!';
     }
-    Alert.alert("Cadastro", alertMessage, [
+    Alert.alert('Cadastro', alertMessage, [
       {
-        text: "Ok",
+        text: 'Ok',
       },
     ]);
   };
@@ -183,9 +183,9 @@ export function Register() {
             <InputMask
               type="cel-phone"
               options={{
-                maskType: "BRL",
+                maskType: 'BRL',
                 withDDD: true,
-                dddMask: "(99) ",
+                dddMask: '(99) ',
               }}
               value={userPhone}
               onChangeText={handlePhone}
