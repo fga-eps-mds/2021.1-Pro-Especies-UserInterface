@@ -1,6 +1,8 @@
 import styled from "styled-components/native";
 import { RFValue } from "react-native-responsive-fontsize";
 import { MaterialIcons } from '@expo/vector-icons';
+import { FlatList } from "react-native";
+import { IFish } from "./index";
 
 export const NewFishLogContainer = styled.View`
     flex: 1;
@@ -54,13 +56,30 @@ export const InputBox = styled.View`
 `
 export const Input = styled.TextInput`
     height: ${RFValue(40, 640)}px;
-    width: 90%;
+    width: 95%;
     flex-direction: row;
     justify-content: flex-start;    
     font-family: ${({ theme }) => theme.fonts.regular};
     font-size: ${RFValue(12, 640)}px;
     margin-left: ${RFValue(4, 640)}px;
 `
+
+export const OptionList = styled(FlatList as new () => FlatList<IFish>)`
+    margin: ${RFValue(6, 640)}px ${RFValue(7, 640)}px;
+`
+
+export const OptionListItem = styled.TouchableOpacity`
+    margin: ${RFValue(2, 640)}px ${RFValue(2, 640)}px;
+`
+
+export const OptionsContainer = styled.View`
+    height: auto;
+    width: ${RFValue(258, 640)}px;
+    border-radius: 5px;
+    background: ${({ theme }) => theme.colors.background};
+    border: .5px;
+`
+
 export const RowView = styled.View`
     justify-content: center;
     height: ${RFValue(40, 640)}px;

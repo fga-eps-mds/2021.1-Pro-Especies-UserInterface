@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import SelectDropdown from 'react-native-select-dropdown'
 import { TopBar } from '../../components/TopBar';
 import {
   NewFishLogContainer,
@@ -19,77 +18,70 @@ import {
   SendButtonView,
   SendButton,
   SendButtonText,
+  OptionList,
+  OptionsContainer,
+  OptionListItem,
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
+import { RegularText } from '../../components/RegularText';
+
+
+export interface IFish {
+  _id: string;
+  largeGroup: string;
+  group: string;
+  commonName: string;
+  scientificName: string;
+  family: string;
+  food: string;
+  habitat: string;
+  maxSize: number;
+  maxWeight: number;
+  isEndemic: string;
+  isThreatened: string;
+  hasSpawningSeason: string;
+  wasIntroduced: string;
+  funFact: string;
+  photo: string;
+}
 
 export function NewFishLog({ navigation }: any) {
   const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
-  const [fishName, setFishName] = useState<string | null>(null);
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>(null);
-  const [fishGroup, setFishGroup] = useState<string | null>(null);
-  const [fishSpecies, setFishSpecies] = useState<string | null>(null);
+  const [fishName, setFishName] = useState<string>("");
+  const [fishLargeGroup, setFishLargeGroup] = useState<string>("");
+  const [fishGroup, setFishGroup] = useState<string>("");
+  const [fishSpecies, setFishSpecies] = useState<string>("");
   const [fishWeight, setFishMaxWeight] = useState<number | null>(null);
   const [fishLenght, setFishLenght] = useState<number | null>(null);
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
+  const [fishes, setFishes] = useState<IFish[]>([]);
 
-  const [largeGroupOptions, setLargeGroupOptions] = useState<any[]>([]);
-  const [groupOptions, setGroupOptions] = useState<any[]>([]);
-  const [speciesOptions, setSpeciesOptions] = useState<any[]>([]);
-
-  const getLargeGroupsOptions = async () => {
-    let newGroups: string[] = [];
+  const getFishOptions = async () => {
+    let newFishes: IFish[] = [];
     try {
       const wikiData = await GetWikiFishes();
       for (let i = 0; i < wikiData.length; i++) {
-        if (!newGroups.includes(wikiData[i].largeGroup))
-          //console.log(wikiData[i]);
-          newGroups.push(wikiData[i].largeGroup);
+        if (!newFishes.includes(wikiData[i])) {
+          newFishes.push(wikiData[i]);
+        }
       }
-      setLargeGroupOptions(newGroups);
-      console.log("Grande Grupo: ", largeGroupOptions);
+      setFishes(newFishes);
+      console.log("Peixe: ", fishes);
     } catch (error) {
       console.log(error);
     }
   }
 
-  const getGroupsOptions = async () => {
-    let newGroups: string[] = [];
-    try {
-      const wikiData = await GetWikiFishes();
-      for (let i = 0; i < wikiData.length; i++) {
-        if (!newGroups.includes(wikiData[i].group)) {
-          newGroups.push(wikiData[i].group);
-        }
-      }
-      setGroupOptions(newGroups);
-      console.log("Grupo: ", groupOptions);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const getSpeciesOptions = async () => {
-    let newSpecies: string[] = [];
-    try {
-      const wikiData = await GetWikiFishes();
-      for (let i = 0; i < wikiData.length; i++) {
-        if (!newSpecies.includes(wikiData[i].scientificName)) {
-          newSpecies.push(wikiData[i].scientificName);
-        }
-      }
-      setSpeciesOptions(newSpecies);
-      console.log("Especies: ", speciesOptions);
-    } catch (error) {
-      console.log(error);
-    }
+  const setFishProps = async (fish: IFish) => {
+    setFishSpecies(fish.scientificName);
+    setFishLargeGroup(fish.largeGroup);
+    setFishGroup(fish.group);
   }
 
   useEffect(() => {
-    getLargeGroupsOptions();
-    getGroupsOptions();
-    getSpeciesOptions();
+    getFishOptions();
   }, []);
 
   async function requestPermission() {
@@ -167,8 +159,6 @@ export function NewFishLog({ navigation }: any) {
   }
 
 
-
-
   return (
     <NewFishLogContainer>
       <TopBar title="Novo Registro" />
@@ -191,43 +181,59 @@ export function NewFishLog({ navigation }: any) {
           <TextClick>Tirar Foto</TextClick>
         </ImageContainer>
 
-        <SelectDropdown
-          data={groupOptions}
-          onSelect={(selectedItem, index) => {
-            console.log(selectedItem, index)
-          }}
-          buttonTextAfterSelection={(selectedItem, index) => {
-            // text represented after item is selected
-            // if data array is an array of objects then return selectedItem.property to render after item is selected
-            return selectedItem
-          }}
-          rowTextForSelection={(item, index) => {
-            // text represented for each item in dropdown
-            // if data array is an array of objects then return item.property to represent item in dropdown
-            return item
-          }}
-        />
-
         <InputContainer>
+          <InputView>
+            <Input placeholder="Espécie" value={fishSpecies} onChangeText={setFishSpecies} />
+            <InputBox />
+          </InputView>
+          {
+            (fishSpecies && fishes.filter((item) => {
+              if (
+                item.scientificName.toLowerCase().includes(fishSpecies.toLowerCase().trim())
+                && item.scientificName.toLowerCase() != fishSpecies.toLowerCase().trim()
+              ) {
+                return item;
+              }
+            }).length) ? (
+              <OptionsContainer>
+                <OptionList
+                  data={fishes.filter((item) => {
+                    if (
+                      item.scientificName.toLowerCase().includes(fishSpecies.toLowerCase().trim())
+                    ) {
+                      return item;
+                    }
+                  })}
+                  renderItem={({ item }) =>
+                    <OptionListItem onPress={() => setFishProps(item)}>
+                      <RegularText text={item.scientificName} />
+                    </OptionListItem>
+                  }
+                  keyExtractor={(item) => item._id}
+                />
+              </OptionsContainer>
+            ) : (null)
+          }
           <InputView>
             <Input
               placeholder="Grande Grupo"
+              value={fishLargeGroup}
               onChangeText={setFishLargeGroup}
             />
             <InputBox />
           </InputView>
+
           <InputView>
-            <Input placeholder="Grupo" onChangeText={setFishGroup} />
+            <Input placeholder="Grupo" value={fishGroup} onChangeText={setFishGroup} />
             <InputBox />
           </InputView>
-          <InputView>
-            <Input placeholder="Espécie" onChangeText={setFishSpecies} />
-            <InputBox />
-          </InputView>
+
+
           <InputView>
             <Input placeholder="Nome" onChangeText={setFishName} />
             <InputBox />
           </InputView>
+
           <BoxView>
             <RowView>
               <HalfInputView>
