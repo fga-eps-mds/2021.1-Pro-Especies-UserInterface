@@ -122,6 +122,3 @@ export const SendButtonText = styled.Text`
     font-size: ${RFValue(12, 640)}px;
 `
 
-
-
-
