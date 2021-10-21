@@ -20,17 +20,15 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState<boolean | undefined>();
   const [userId, setUserId] = useState("");
 
-  function getValues() {
-    const token = AsyncStorage.getItem("@eupescador/token");
-    const _userId = AsyncStorage.getItem("@eupescador/userId");
-    const userAdmin = AsyncStorage.getItem("@eupescador/userAdmin");
+  async function getValues() {
+    const token = await AsyncStorage.getItem("@eupescador/token");
+    const _userId = await AsyncStorage.getItem("@eupescador/userId");
+    const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
 
     return { token, _userId, userAdmin };
   }
-
-  useEffect(() => {
-    const values = getValues();
-
+  const handleAutenticate = async () => {
+    const values = await getValues();
     if (values.token && values._userId) {
       userService.defaults.headers.Authorization = `Bearer ${values.token}`;
       setAuthenticated(true);
@@ -38,6 +36,9 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
     } else {
       setAuthenticated(false);
     }
+  }
+  useEffect(() => {
+    handleAutenticate()
   }, []);
 
   async function signIn(email: string, password: string) {

@@ -25,10 +25,10 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-            <AuthProvider>
-              <Navigation />
-            </AuthProvider>
-        </NavigationContainer>
+        <AuthProvider>
+          <Navigation />
+        </AuthProvider>
+      </NavigationContainer>
     </ThemeProvider>
   );
 }
