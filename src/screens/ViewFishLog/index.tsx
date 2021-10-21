@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FC } from "react";
-
-import { ScrollView } from "react-native";
+import { Buffer } from "buffer";
+import { ScrollView, Alert, ActivityIndicator } from "react-native";
+import { CommonActions } from '@react-navigation/native';
 import {
     FishContainer,
     PropertyRow,
@@ -14,9 +15,9 @@ import { HalfToneText } from "../../components/HalfToneText";
 import { ProfileImage } from "../../components/ProfileImage";
 import { MapViewImage } from "../../components/MapViewImage";
 import { GreenButton } from "../../components/GreenButton";
-import { ActivityIndicator } from "react-native";
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
+import { DeleteFishLog } from "../../services/fishLogService/deleteFishLog";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const FishLog = ({ navigation, route }: any) => {
@@ -30,17 +31,34 @@ export const FishLog = ({ navigation, route }: any) => {
     const [isAdmin, setIsAdmin] = useState<Boolean>();
     const [isLoading, setIsLoading] = useState(true);
     const [logId, setLogId] = useState("");
+    const [isReviewed, setIsReviewed] = useState(false);
+    const [userToken, setUserToken] = useState("");
 
 
     const getData = async () => {
         const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         const token = await AsyncStorage.getItem("@eupescador/token");
-        if (token)
+        if (token){
             getFishLogProperties(token);
+            setUserToken(token);
+        }
         if (userAdmin === "true")
             setIsAdmin(true);
         else
             setIsAdmin(false);
+    }
+
+    const handleDelete = async () => {
+        try {
+            await DeleteFishLog(userToken, logId);
+            const resetAction = CommonActions.reset({
+                index: 0,
+                routes: [{ name: 'WikiFishlogs'}],
+            });
+            navigation.dispatch(resetAction);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const getFishLogProperties = async (token: string) => {
@@ -48,15 +66,18 @@ export const FishLog = ({ navigation, route }: any) => {
             const {log_id} = route.params;
             setLogId(log_id);
             const log = await GetOneFishLog(log_id, token);
-            const base64Img = `data:image/png;base64,${log.photo}`;
-            if(log.photo)
+            if(log.photo){
+                const log64 = Buffer.from(log.photo).toString('base64');
+                const base64Img = `data:image/png;base64,${log64}`;
                 setFishPhoto(base64Img);
+              }
             setFishName(log.name);
             setFishSpecies(log.species);
             setFishLargeGroup(log.largeGroup);
             setFishGroup(log.group);
             setFishWeight(log.weight);
             setFishLength(log.length);
+            setIsReviewed(log.reviewed);
         } catch (error) {
             console.log(error);
         }
@@ -112,21 +133,42 @@ export const FishLog = ({ navigation, route }: any) => {
                                         <GreenButton text="Revisar" buttonFunction={() => {
                                         navigation.navigate("NewFishLog" as never, {
                                             isNewRegister: false,
+                                            log_id: logId,
+                                            name: "Revisar Registro",
                                         } as never);
                                     }} />
                                         <GreenButton text="Exportar" buttonFunction={() => { }} />
                                     </>
                                 ) : (
                                     <GreenButton text="Editar" buttonFunction={() => {
-                                        navigation.navigate("NewFishLog" as never, {
-                                            isNewRegister: false,
-                                            log_id: logId,
-                                        } as never);
+                                        if(isReviewed){
+                                            Alert.alert("Registro", "Não é possível editar esse registro pois ele já foi revisado por um pesquisador.", [
+                                                {
+                                                  text: "Ok",
+                                                },
+                                              ]);
+                                        } else {
+                                            navigation.navigate("NewFishLog" as never, {
+                                                isNewRegister: false,
+                                                log_id: logId,
+                                                name: "Editar Registro",
+                                            } as never);
+                                        }
                                     }} />
                                 )
                             }
 
-                            <GreenButton text="Excluir" buttonFunction={() => { }} />
+                            <GreenButton text="Excluir" buttonFunction={() => {
+                                if(isReviewed){
+                                    Alert.alert("Registro", "Não é possível deletar esse registro pois ele já foi revisado por um pesquisador.", [
+                                        {
+                                          text: "Ok",
+                                        },
+                                      ]);
+                                } else {
+                                    handleDelete();
+                                }
+                            }} />
                         </RegisterButtonView>
                     </ScrollView>
                 )

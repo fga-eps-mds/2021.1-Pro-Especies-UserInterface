@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { Buffer } from "buffer";
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CommonActions } from '@react-navigation/native';
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -20,7 +23,7 @@ import {
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
 
 export function NewFishLog({ navigation, route }: any) {
   const [isNew, setIsNew] = useState(false);
@@ -59,8 +62,8 @@ export function NewFishLog({ navigation, route }: any) {
         const {log_id} = route.params;
         const log = await GetOneFishLog(log_id, token);
         if(log.photo){
-          const base64Img = `data:image/png;base64,${log.photo}`;
-          setFishPhoto(base64Img);
+          const log64 = Buffer.from(log.photo).toString('base64');
+          setFishPhoto(log64);
         }
         setFishName(log.name);
         setFishSpecies(log.species);
@@ -113,10 +116,51 @@ export function NewFishLog({ navigation, route }: any) {
     setFishPhoto(pickerResult.base64);
   }
 
-  async function sendFishLogData() {
+  const handleEditFishLog = async () => {
+    let alertMessage = '';
+    const {log_id} = route.params;
+    let reviewed = false;
+      if(isAdmin){
+        reviewed = true;
+      }
+
+      try {
+        const res = await UpdateFishLog(
+          log_id,
+          fishName,
+          fishLargeGroup,
+          fishGroup,
+          fishSpecies,
+          fishLatitude,
+          fishLongitude,
+          fishPhoto,
+          fishLength,
+          fishWeight,
+          reviewed,
+          isAdmin
+        );
+        alertMessage = "Registro atualizado com sucesso";
+        const resetAction = CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'WikiFishlogs'}],
+        });
+        navigation.dispatch(resetAction);
+      } catch (error) {
+        console.log(error);
+        alertMessage = error.response.data.message;
+      }
+    if (alertMessage) {
+      Alert.alert('Registro', alertMessage, [
+        {
+          text: 'Ok',
+        },
+      ]);
+    }
+  }
+
+  async function handleCreateFishLog() {
     let alertMessage = '';
     try {
-      console.log(typeof fishPhoto);
       await createFishLog(
         fishPhoto,
         fishName,
@@ -130,7 +174,11 @@ export function NewFishLog({ navigation, route }: any) {
       );
 
       alertMessage = 'Registro criado com sucesso!';
-      navigation.goBack();
+      const resetAction = CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'WikiFishlogs'}],
+      });
+      navigation.dispatch(resetAction);
     } catch (error: any) {
       console.log(error);
       if (error.response.status === 400)
@@ -181,7 +229,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input
               placeholder="Grande Grupo"
-              value={isNew ? "" : fishLargeGroup}
+              value={isNew ? null : fishLargeGroup}
               onChangeText={setFishLargeGroup}
             />
             <InputBox />
@@ -189,7 +237,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input 
               placeholder="Grupo"
-              value={isNew ? "" : fishGroup}
+              value={isNew ? null : fishGroup}
               onChangeText={setFishGroup} 
             />
             <InputBox />
@@ -197,7 +245,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input 
               placeholder="Espécie"
-              value={isNew ? "" : fishSpecies}
+              value={isNew ? null : fishSpecies}
               onChangeText={setFishSpecies} 
             />
             <InputBox />
@@ -205,7 +253,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input 
               placeholder="Nome" 
-              value={isNew ? "" : fishName}
+              value={isNew ? null : fishName}
               onChangeText={setFishName} 
             />
             <InputBox />
@@ -215,7 +263,7 @@ export function NewFishLog({ navigation, route }: any) {
               <HalfInputView>
                 <Input
                   placeholder="Latitude"
-                  value={isNew ? "" : JSON.stringify(fishLatitude)}
+                  value={(isNew || !fishLatitude) ? null : JSON.stringify(fishLatitude)}
                   keyboardType="numeric"
                   onChangeText={value => setFishLatitude(parseInt(value))}
                 />
@@ -223,7 +271,7 @@ export function NewFishLog({ navigation, route }: any) {
               <HalfInputView>
                 <Input
                   placeholder="Longitude"
-                  value={isNew ? "" : JSON.stringify(fishLongitude)}
+                  value={(isNew || !fishLongitude) ? null : JSON.stringify(fishLongitude)}
                   keyboardType="numeric"
                   onChangeText={value => setFishLongitude(parseInt(value))}
                 />
@@ -233,7 +281,7 @@ export function NewFishLog({ navigation, route }: any) {
               <HalfInputView>
                 <Input
                   placeholder="Peso (kg)"
-                  value={isNew ? "" : JSON.stringify(fishWeight)}
+                  value={(isNew || !fishWeight) ? null : JSON.stringify(fishWeight)}
                   keyboardType="numeric"
                   onChangeText={value => setFishWeight(parseInt(value))}
                 />
@@ -241,7 +289,7 @@ export function NewFishLog({ navigation, route }: any) {
               <HalfInputView>
                 <Input
                   placeholder="Comprimento (cm)"
-                  value={isNew ? "" : JSON.stringify(fishLength)}
+                  value={(isNew || !fishLength) ? null : JSON.stringify(fishLength)}
                   keyboardType="numeric"
                   onChangeText={value => setFishLength(parseInt(value))}
                 />
@@ -250,8 +298,14 @@ export function NewFishLog({ navigation, route }: any) {
           </BoxView>
         </InputContainer>
         <SendButtonView>
-          <SendButton onPress={sendFishLogData}>
-            <SendButtonText>Enviar</SendButtonText>
+          <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
+            {
+              (isNew || !isAdmin) ? (
+                <SendButtonText>Enviar</SendButtonText>
+              ) : (
+                <SendButtonText>Revisar</SendButtonText>
+              )
+            }
           </SendButton>
         </SendButtonView>
       </ScrollView>

@@ -25,7 +25,6 @@ export const createFishLog = async (
   if(photoString){
     photo = Buffer.from(photoString, "base64");
   }
-  console.log("registro criado");
 
   await fishLogService.post(
     "/fishLog/",

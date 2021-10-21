@@ -39,6 +39,7 @@ export const FishLogs = ({token}: Props) => {
   const handleAddLog = async () => {
     navigation.navigate("NewFishLog" as never, {
       isNewRegister: true,
+      name: "Novo Registro",
     } as never);
   }
 
