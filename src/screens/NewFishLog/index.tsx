@@ -75,6 +75,7 @@ export function NewFishLog({ navigation }: any) {
   }
 
   const setFishProps = async (fish: IFish) => {
+    setFishName(fish.commonName);
     setFishSpecies(fish.scientificName);
     setFishLargeGroup(fish.largeGroup);
     setFishGroup(fish.group);
@@ -183,14 +184,14 @@ export function NewFishLog({ navigation }: any) {
 
         <InputContainer>
           <InputView>
-            <Input placeholder="Espécie" value={fishSpecies} onChangeText={setFishSpecies} />
+            <Input placeholder="Nome" value={fishName} onChangeText={setFishName} />
             <InputBox />
           </InputView>
           {
-            (fishSpecies && fishes.filter((item) => {
+            (fishName && fishes.filter((item) => {
               if (
-                item.scientificName.toLowerCase().includes(fishSpecies.toLowerCase().trim())
-                && item.scientificName.toLowerCase() != fishSpecies.toLowerCase().trim()
+                item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+                && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
               ) {
                 return item;
               }
@@ -199,14 +200,14 @@ export function NewFishLog({ navigation }: any) {
                 <OptionList
                   data={fishes.filter((item) => {
                     if (
-                      item.scientificName.toLowerCase().includes(fishSpecies.toLowerCase().trim())
+                      item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
                     ) {
                       return item;
                     }
                   })}
                   renderItem={({ item }) =>
                     <OptionListItem onPress={() => setFishProps(item)}>
-                      <RegularText text={item.scientificName} />
+                      <RegularText text={item.commonName} />
                     </OptionListItem>
                   }
                   keyExtractor={(item) => item._id}
@@ -214,6 +215,12 @@ export function NewFishLog({ navigation }: any) {
               </OptionsContainer>
             ) : (null)
           }
+
+          <InputView>
+            <Input placeholder="Espécie" value={fishSpecies} onChangeText={setFishSpecies} />
+            <InputBox />
+          </InputView>
+
           <InputView>
             <Input
               placeholder="Grande Grupo"
@@ -225,12 +232,6 @@ export function NewFishLog({ navigation }: any) {
 
           <InputView>
             <Input placeholder="Grupo" value={fishGroup} onChangeText={setFishGroup} />
-            <InputBox />
-          </InputView>
-
-
-          <InputView>
-            <Input placeholder="Nome" onChangeText={setFishName} />
             <InputBox />
           </InputView>
 
