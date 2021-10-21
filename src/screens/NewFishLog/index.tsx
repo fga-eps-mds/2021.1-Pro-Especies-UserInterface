@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {
   NewFishLogContainer,
@@ -17,8 +17,13 @@ import {
   SendButtonView,
   SendButton,
   SendButtonText,
+  AddLocaleButton,
+  AddLocaleButtonLabel,
+  AddLocaleButtonIcon,
+  NewFishlogScroll,
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export function NewFishLog({ navigation }: any) {
   const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
@@ -106,7 +111,7 @@ export function NewFishLog({ navigation }: any) {
 
   return (
     <NewFishLogContainer>
-      <ScrollView>
+      <NewFishlogScroll>
         <ImageContainer>
           {fishPhoto ? (
             <FishLogImage
@@ -179,12 +184,16 @@ export function NewFishLog({ navigation }: any) {
             </RowView>
           </BoxView>
         </InputContainer>
+        <AddLocaleButton onPress={() => { navigation.navigate("Maps") }}>
+          <AddLocaleButtonIcon name="map" />
+          <AddLocaleButtonLabel> Abrir mapa</AddLocaleButtonLabel>
+        </AddLocaleButton>
         <SendButtonView>
           <SendButton onPress={sendFishLogData}>
             <SendButtonText>Enviar</SendButtonText>
           </SendButton>
         </SendButtonView>
-      </ScrollView>
+      </NewFishlogScroll>
     </NewFishLogContainer>
   );
 }

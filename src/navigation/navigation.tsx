@@ -8,6 +8,7 @@ import { FishLog } from '../screens/ViewFishLog';
 import theme from '../global/styles/theme';
 import { NewFishLog } from '../screens/NewFishLog';
 import { useAuth } from '../contexts/authContext';
+import { MyMap } from '../screens/Maps';
 
 const AuthenticateStack = createNativeStackNavigator();
 
@@ -38,6 +39,10 @@ const AuthRoutes = () => {
         name="NewFishLog"
         component={NewFishLog}
         options={{ title: 'Novo Registro', headerShown: true }}
+      />
+      <AuthenticateStack.Screen
+        name="Maps"
+        component={MyMap}
       />
     </AuthenticateStack.Navigator>
   );
