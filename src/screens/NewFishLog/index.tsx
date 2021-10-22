@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Alert, ScrollView, Text } from 'react-native';
+import { Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -24,6 +25,7 @@ import {
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ActivityIndicator } from 'react-native-paper';
 
 export function NewFishLog({ navigation }: any) {
   const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
@@ -35,6 +37,8 @@ export function NewFishLog({ navigation }: any) {
   const [fishLenght, setFishLenght] = useState<number | null>(null);
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   async function requestPermission() {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -76,7 +80,7 @@ export function NewFishLog({ navigation }: any) {
   async function sendFishLogData() {
     let alertMessage = '';
     try {
-      console.log(typeof fishPhoto);
+      setIsLoading(true);
       await createFishLog(
         fishPhoto,
         fishName,
@@ -89,9 +93,11 @@ export function NewFishLog({ navigation }: any) {
         fishLongitude,
       );
 
+      setIsLoading(false);
       alertMessage = 'Registro criado com sucesso!';
       navigation.goBack();
     } catch (error: any) {
+      setIsLoading(false);
       console.log(error);
       if (error.response.status === 400)
         alertMessage =
@@ -109,91 +115,106 @@ export function NewFishLog({ navigation }: any) {
     }
   }
 
+  const handleOpenMap = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      return;
+    }
+    setIsLoading(true);
+    let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+    setIsLoading(false);
+    navigation.navigate("Maps", { loc })
+  }
+
   return (
     <NewFishLogContainer>
-      <NewFishlogScroll>
-        <ImageContainer>
-          {fishPhoto ? (
-            <FishLogImage
-              source={{ uri: `data:image/png;base64,${fishPhoto}` }}
-            />
-          ) : (
-            <FishLogImage source={require('../../assets/selectPicture.png')} />
-          )}
-        </ImageContainer>
-        <ImageContainer onPress={pickImage}>
-          <TopIcon name="photo" />
-          <TextClick>Selecionar Foto</TextClick>
-        </ImageContainer>
-        <ImageContainer onPress={openCamera}>
-          <TopIcon name="camera" />
-          <TextClick>Tirar Foto</TextClick>
-        </ImageContainer>
-        <InputContainer>
-          <InputView>
-            <Input
-              placeholder="Grande Grupo"
-              onChangeText={setFishLargeGroup}
-            />
-            <InputBox />
-          </InputView>
-          <InputView>
-            <Input placeholder="Grupo" onChangeText={setFishGroup} />
-            <InputBox />
-          </InputView>
-          <InputView>
-            <Input placeholder="Espécie" onChangeText={setFishSpecies} />
-            <InputBox />
-          </InputView>
-          <InputView>
-            <Input placeholder="Nome" onChangeText={setFishName} />
-            <InputBox />
-          </InputView>
-          <BoxView>
-            <RowView>
-              <HalfInputView>
-                <Input
-                  placeholder="Latitude"
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLatitude(parseInt(value))}
-                />
-              </HalfInputView>
-              <HalfInputView>
-                <Input
-                  placeholder="Longitude"
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLongitude(parseInt(value))}
-                />
-              </HalfInputView>
-            </RowView>
-            <RowView>
-              <HalfInputView>
-                <Input
-                  placeholder="Peso (kg)"
-                  keyboardType="numeric"
-                  onChangeText={value => setFishMaxWeight(parseInt(value))}
-                />
-              </HalfInputView>
-              <HalfInputView>
-                <Input
-                  placeholder="Comprimento (cm)"
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLenght(parseInt(value))}
-                />
-              </HalfInputView>
-            </RowView>
-          </BoxView>
-        </InputContainer>
-        <AddLocaleButton onPress={() => { navigation.navigate("Maps") }}>
-          <AddLocaleButtonIcon name="map" />
-          <AddLocaleButtonLabel> Abrir mapa</AddLocaleButtonLabel>
-        </AddLocaleButton>
-        <SendButtonView>
-          <SendButton onPress={sendFishLogData}>
-            <SendButtonText>Enviar</SendButtonText>
-          </SendButton>
-        </SendButtonView>
-      </NewFishlogScroll>
-    </NewFishLogContainer>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) :
+        (< NewFishlogScroll >
+          <ImageContainer>
+            {fishPhoto ? (
+              <FishLogImage
+                source={{ uri: `data:image/png;base64,${fishPhoto}` }}
+              />
+            ) : (
+              <FishLogImage source={require('../../assets/selectPicture.png')} />
+            )}
+          </ImageContainer>
+          <ImageContainer onPress={pickImage}>
+            <TopIcon name="photo" />
+            <TextClick>Selecionar Foto</TextClick>
+          </ImageContainer>
+          <ImageContainer onPress={openCamera}>
+            <TopIcon name="camera" />
+            <TextClick>Tirar Foto</TextClick>
+          </ImageContainer>
+          <InputContainer>
+            <InputView>
+              <Input
+                placeholder="Grande Grupo"
+                onChangeText={setFishLargeGroup}
+              />
+              <InputBox />
+            </InputView>
+            <InputView>
+              <Input placeholder="Grupo" onChangeText={setFishGroup} />
+              <InputBox />
+            </InputView>
+            <InputView>
+              <Input placeholder="Espécie" onChangeText={setFishSpecies} />
+              <InputBox />
+            </InputView>
+            <InputView>
+              <Input placeholder="Nome" onChangeText={setFishName} />
+              <InputBox />
+            </InputView>
+            <BoxView>
+              <RowView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Latitude"
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLatitude(parseInt(value))}
+                  />
+                </HalfInputView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Longitude"
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLongitude(parseInt(value))}
+                  />
+                </HalfInputView>
+              </RowView>
+              <RowView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Peso (kg)"
+                    keyboardType="numeric"
+                    onChangeText={value => setFishMaxWeight(parseInt(value))}
+                  />
+                </HalfInputView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Comprimento (cm)"
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLenght(parseInt(value))}
+                  />
+                </HalfInputView>
+              </RowView>
+            </BoxView>
+          </InputContainer>
+          <AddLocaleButton onPress={handleOpenMap}>
+            <AddLocaleButtonIcon name="map" />
+            <AddLocaleButtonLabel> Abrir mapa</AddLocaleButtonLabel>
+          </AddLocaleButton>
+          <SendButtonView>
+            <SendButton onPress={sendFishLogData}>
+              <SendButtonText>Enviar</SendButtonText>
+            </SendButton>
+          </SendButtonView>
+        </NewFishlogScroll>)
+      }
+    </NewFishLogContainer >
   );
 }

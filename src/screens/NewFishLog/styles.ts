@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 export const NewFishLogContainer = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+  justify-content: center;
 `;
 export const ImageContainer = styled.TouchableOpacity`
   align-self: center;

@@ -1,4 +1,4 @@
-import { MAPS_API_KEY } from 'reac';
+import { MAPS_API_KEY } from 'react-native-dotenv';
 
 export default ({ config }) => {
     return {
