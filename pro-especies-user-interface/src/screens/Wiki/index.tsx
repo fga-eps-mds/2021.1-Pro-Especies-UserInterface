@@ -22,8 +22,9 @@ import {
 } from "./styles";
 
 
-export const Wiki = () => {
+export const Wiki = ({route}:any) => {
 
+    const { filterQuery } = route.params;
     const [searchQuery, setSearchQuery] = React.useState('');
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);

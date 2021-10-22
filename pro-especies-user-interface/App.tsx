@@ -11,6 +11,7 @@ import {
 
 import theme from "./src/global/styles/theme";
 import AppLoading from "expo-app-loading";
+import { WikiFilter } from "./src/screens/WikiFilter";
 
 
 export default function App() {
@@ -23,7 +24,7 @@ export default function App() {
     return <AppLoading />
   return (
     <ThemeProvider theme={theme}>
-      <Navigation />
+      <WikiFilter />
     </ThemeProvider>
   );
 }

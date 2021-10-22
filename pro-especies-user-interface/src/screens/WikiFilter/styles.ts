@@ -26,6 +26,7 @@ export const BoldText = styled.Text`
 export const GroupOptionsContainer = styled.View`
     background-color: rgba(32, 46, 53, 0.05);
     width: ${RFValue(360,640)}px;
+    margin-left: ${RFValue(-32,640)}px;
 `
 
 export const TextInputContainer = styled.View`
@@ -35,6 +36,11 @@ export const InputRow = styled.View`
     flex-direction: row;
     align-items: center;
 `
+
+export const CheckBoxRow = styled(InputRow)`
+    margin-left: ${RFValue(32,640)}px;
+`
+
 export const InputView = styled.View`
     align-self: center;
     align-items: center;
