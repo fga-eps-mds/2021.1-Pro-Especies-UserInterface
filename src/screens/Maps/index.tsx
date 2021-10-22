@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Map, MapButtonsView, MapContainer, MapInfoView, MapInstructions, MapInstructionsText } from './styles';
+import { LocationUsageInfoContainer, LocationUsageInfoText, LocationUsageInfoTitle, LocationUsageInfoView, Map, MapButtonsView, MapContainer, MapInfoView, MapInstructions, MapInstructionsText } from './styles';
 import { Marker, MapEvent } from 'react-native-maps';
 import { TouchableOpacity, Text } from 'react-native';
-import { GreenButton } from '../../components/GreenButton';
+import { DefaultButton } from '../../components/Button';
+import { useNavigation } from '@react-navigation/core';
 
 export const MyMap = ({ route }: any) => {
     const [mark, setMark] = useState<any>({ latitude: route.params.loc.coords.latitude, longitude: route.params.loc.coords.longitude });
-
+    const navigation = useNavigation();
     const handleDrag = (e: MapEvent) => {
-        console.log(e.nativeEvent.coordinate);
         setMark(e.nativeEvent.coordinate);
     }
 
@@ -18,8 +18,8 @@ export const MyMap = ({ route }: any) => {
                 initialRegion={{
                     latitude: route.params.loc.coords.latitude,
                     longitude: route.params.loc.coords.longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitudeDelta: 0.0322,
+                    longitudeDelta: 0.0121,
                 }}
                 onPress={handleDrag}
             >
@@ -29,10 +29,16 @@ export const MyMap = ({ route }: any) => {
                 <MapInstructions>
                     <MapInstructionsText>Clique no mapa para marcar o local onde pegou o peixe</MapInstructionsText>
                 </MapInstructions>
-                <MapButtonsView>
-                    <GreenButton text="Cancelar" buttonFunction={() => { }} />
-                    <GreenButton text="Confirmar Localização" buttonFunction={() => { }} />
-                </MapButtonsView>
+                <LocationUsageInfoView>
+                    <LocationUsageInfoContainer>
+                        <LocationUsageInfoTitle>Por que precisamos da localização?</LocationUsageInfoTitle>
+                        <LocationUsageInfoText>A localização enviada será utilizada pelas unidades ambientais responsáveis para mapear a posição das espécies marítimas</LocationUsageInfoText>
+                    </LocationUsageInfoContainer>
+                    <MapButtonsView>
+                        <DefaultButton type="secondary" text="Cancelar" buttonFunction={() => { navigation.goBack() }} />
+                        <DefaultButton text="Confirmar" buttonFunction={() => { }} />
+                    </MapButtonsView>
+                </LocationUsageInfoView>
             </MapInfoView>
         </MapContainer>
     )

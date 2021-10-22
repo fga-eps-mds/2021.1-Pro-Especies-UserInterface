@@ -14,7 +14,7 @@ import { Title } from '../../components/Title';
 import { HalfToneText } from '../../components/HalfToneText';
 import { ProfileImage } from '../../components/ProfileImage';
 import { MapViewImage } from '../../components/MapViewImage';
-import { GreenButton } from '../../components/GreenButton';
+import { DefaultButton } from '../../components/Button';
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 
@@ -111,14 +111,14 @@ export const FishLog = ({ route }: any) => {
           <RegisterButtonView>
             {isAdmin ? (
               <>
-                <GreenButton text="Revisar" buttonFunction={() => {}} />
-                <GreenButton text="Exportar" buttonFunction={() => {}} />
+                <DefaultButton text="Revisar" buttonFunction={() => { }} />
+                <DefaultButton text="Exportar" buttonFunction={() => { }} />
               </>
             ) : (
-              <GreenButton text="Editar" buttonFunction={() => {}} />
+              <DefaultButton text="Editar" buttonFunction={() => { }} />
             )}
 
-            <GreenButton text="Excluir" buttonFunction={() => {}} />
+            <DefaultButton text="Excluir" buttonFunction={() => { }} />
           </RegisterButtonView>
         </ScrollView>
       )}
