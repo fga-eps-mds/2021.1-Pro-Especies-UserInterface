@@ -1,6 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Buffer } from 'buffer';
-import { fishLogService } from './fishService';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Buffer } from "buffer";
+import { fishLogService } from "./fishService";
 
 export const createFishLog = async (
   photoString: string | null | undefined,
@@ -25,7 +25,6 @@ export const createFishLog = async (
   if (photoString) {
     photo = Buffer.from(photoString, 'base64');
   }
-  console.log('registro criado');
 
   await fishLogService.post(
     '/fishLog/',
