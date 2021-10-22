@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Buffer } from "buffer";
-import fishLogService from "./fishService";
+import {fishLogService} from "./fishService";
 
 export const createFishLog = async (
   photoString: string | null | undefined,

@@ -68,7 +68,6 @@ export function NewFishLog({ navigation }: any) {
         }
       }
       setFishes(newFishes);
-      console.log("Peixe: ", fishes);
     } catch (error) {
       console.log(error);
     }
@@ -126,7 +125,6 @@ export function NewFishLog({ navigation }: any) {
   async function sendFishLogData() {
     let alertMessage = '';
     try {
-      console.log(typeof fishPhoto);
       await createFishLog(
         fishPhoto,
         fishName,

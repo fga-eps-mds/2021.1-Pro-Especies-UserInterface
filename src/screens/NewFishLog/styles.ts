@@ -77,7 +77,7 @@ export const OptionsContainer = styled.View`
     width: ${RFValue(258, 640)}px;
     border-radius: 5px;
     background: ${({ theme }) => theme.colors.background};
-    border: .5px;
+    elevation: 8;
 `
 
 export const RowView = styled.View`
