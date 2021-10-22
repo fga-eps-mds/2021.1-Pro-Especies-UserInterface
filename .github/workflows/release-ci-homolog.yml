@@ -1,9 +1,7 @@
 name: Generate Pre-Release
 
-on:
-  push:
-    branches:
-      - devel
+on: [pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -58,8 +56,10 @@ jobs:
           EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
           EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
           EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+          CONFIG_FILE_BASE64: ${{ secrets.CONFIG_FILE_BASE64 }}
         run: |
           echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
+          echo "$CONFIG_FILE_BASE64" > config.js
           base64 --decode expo-project.jks.base64 > expo-project.jks
           turtle build:android \
             --keystore-path ./expo-project.jks \
