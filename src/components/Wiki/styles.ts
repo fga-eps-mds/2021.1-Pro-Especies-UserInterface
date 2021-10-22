@@ -1,9 +1,9 @@
-import styled from "styled-components/native";
-import { Searchbar } from "react-native-paper";
-import { RFValue } from "react-native-responsive-fontsize";
-import { MaterialIcons } from "@expo/vector-icons";
-import { FlatList } from "react-native";
-import { IFish } from "../FishCard";
+import styled from 'styled-components/native';
+import { Searchbar } from 'react-native-paper';
+import { RFValue } from 'react-native-responsive-fontsize';
+import { MaterialIcons } from '@expo/vector-icons';
+import { FlatList } from 'react-native';
+import { IFish } from '../FishCard';
 
 export const PageContainer = styled.View`
   align-items: center;
@@ -32,7 +32,7 @@ export const RowContainer = styled.View`
 
 export const TextFilter = styled.Text<{ filter: boolean }>`
   font-family: ${({ theme }) =>
-    (p) =>
+    p =>
       p.filter ? theme.fonts.regular : theme.fonts.bold};
   font-size: ${RFValue(16, 640)}px;
 `;
@@ -66,7 +66,7 @@ export const TitleHighlight = styled.View`
 
 export const TitleText = styled.Text<{ wiki: boolean }>`
   font-family: ${({ theme }) =>
-    (p) =>
+    p =>
       p.wiki ? theme.fonts.regular : theme.fonts.bold};
   font-size: ${RFValue(12, 640)}px;
   margin-right: ${RFValue(16, 640)}px;
@@ -105,12 +105,12 @@ export const SearchImage = styled.Image`
 export const FishCardList = styled(FlatList as new () => FlatList<IFish>).attrs(
   {
     numColumns: 2,
-    columnWrapperStyle: { justifyContent: "space-around" },
+    columnWrapperStyle: { justifyContent: 'space-around' },
     contentContainerStyle: {
-      alignItems: "stretch",
+      alignItems: 'stretch',
       paddingBottom: RFValue(156),
     },
-  }
+  },
 )``;
 
 export const Spacer = styled.View`

@@ -1,5 +1,5 @@
-import { RFValue } from "react-native-responsive-fontsize";
-import styled from "styled-components/native";
+import { RFValue } from 'react-native-responsive-fontsize';
+import styled from 'styled-components/native';
 
 export const Text = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};

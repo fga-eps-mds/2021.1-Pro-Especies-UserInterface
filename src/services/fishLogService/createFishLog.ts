@@ -11,23 +11,23 @@ export const createFishLog = async (
   weight: number | null,
   length: number | null,
   latitude: number | null,
-  longitude: number | null
+  longitude: number | null,
 ) => {
-  const userId = await AsyncStorage.getItem("@eupescador/userId");
-  const token = await AsyncStorage.getItem("@eupescador/token");
+  const userId = await AsyncStorage.getItem('@eupescador/userId');
+  const token = await AsyncStorage.getItem('@eupescador/token');
   let photo = null;
 
   const coordenates = {
-    latitude: latitude,
-    longitude: longitude,
+    latitude,
+    longitude,
   };
-  
-  if(photoString){
-    photo = Buffer.from(photoString, "base64");
+
+  if (photoString) {
+    photo = Buffer.from(photoString, 'base64');
   }
 
   await fishLogService.post(
-    "/fishLog/",
+    '/fishLog/',
     {
       userId,
       name,
@@ -39,6 +39,6 @@ export const createFishLog = async (
       length,
       weight,
     },
-    { headers: { Authorization: `Bearer ${token}` } }
+    { headers: { Authorization: `Bearer ${token}` } },
   );
 };
