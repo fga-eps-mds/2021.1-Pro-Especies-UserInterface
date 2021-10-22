@@ -8,6 +8,7 @@ import { FishLog } from '../screens/ViewFishLog'
 import { Wiki } from '../screens/Wiki';
 import theme from "../global/styles/theme";
 import { useAuth, AuthProvider } from "../contexts/authContext";
+import { WikiFilter } from "../screens/WikiFilter";
 
 
 const AuthenticateStack = createNativeStackNavigator();
@@ -34,6 +35,7 @@ const AuthRoutes = () => {
             <AuthenticateStack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
             <AuthenticateStack.Screen name="Wiki" component={Wiki} />
             <AuthenticateStack.Screen name="FishLog" component={FishLog} />
+            <AuthenticateStack.Screen name="WikiFilter" component={WikiFilter} />
         </AuthenticateStack.Navigator>
     )
 }
@@ -56,6 +58,7 @@ const AppRoutes = () => {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} options={{ title: "Cadastro", headerShown: true }} />
             <Stack.Screen name="Wiki" component={Wiki} />
+            <Stack.Screen name="WikiFilter" component={WikiFilter} />
         </Stack.Navigator>
     )
 }

@@ -17,15 +17,17 @@ import {
 import { useAuth } from "../../contexts/authContext";
 
 
-export default function Home({navigation}: any) {
+export default function Home({ navigation }: any) {
     const { authenticated } = useAuth();
-    useEffect(()=>{
-        if (authenticated){
+    useEffect(() => {
+        if (authenticated) {
             console.log(authenticated);
-            navigation.navigate("Wiki");
+            navigation.navigate('Wiki', {
+                filterQuery: "",
+            });
         }
-            
-    },[authenticated]);
+
+    }, [authenticated]);
     return (
         <HomeContainer>
             <HomeLogoContainer>
@@ -39,7 +41,9 @@ export default function Home({navigation}: any) {
                 Descubra os peixes da sua região e colabore com seus registros.
             </HomeWelcomeText>
 
-            <HomeWikiButton onPress={() => navigation.navigate('Wiki')}>
+            <HomeWikiButton onPress={() => navigation.navigate('Wiki', {
+                filterQuery: "",
+            })}>
                 <HomeWikiText>Visualizar Biblioteca de Peixes</HomeWikiText>
             </HomeWikiButton>
 

@@ -22,9 +22,17 @@ import {
 } from "./styles";
 
 
-export const Wiki = ({route}:any) => {
+export const Wiki = ({ navigation, route }: any) => {
 
-    const { filterQuery } = route.params;
+    const {
+        filterQuery,
+        fishMaxSize,
+        fishMinSize,
+        fishMaxWeight,
+        fishMinWeight
+    } = route.params;
+
+    console.log(filterQuery);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);
@@ -32,12 +40,55 @@ export const Wiki = ({route}:any) => {
 
     const updateFishes = async () => {
         try {
-            const data = await GetWikiFishes();
+            const data = await GetWikiFishes(filterQuery);
             setFishes(data);
         } catch (error: any) {
             console.log(error);
         }
     }
+
+    const checkSizes = (maxSize: number, minSize: number, fishSize: number) => {
+        if (maxSize && minSize) {
+            if (fishSize >= minSize && fishSize <= maxSize) {
+                return true;
+            }
+            return false;
+        } else if (minSize) {
+            if (fishSize >= minSize) {
+                return true;
+            }
+            return false;
+        } else if (maxSize) {
+            if (fishSize <= maxSize) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+    };
+
+    const checkWeights = (maxWeight: number, minWeight: number, fishWeight: number) => {
+        if (maxWeight && minWeight) {
+            if (fishWeight >= minWeight && fishWeight <= maxWeight) {
+                return true;
+            }
+            return false;
+        } else if (minWeight) {
+            if (fishWeight >= minWeight) {
+                return true;
+            }
+            return false;
+        } else if (maxWeight) {
+            if (fishWeight <= maxWeight) {
+                return true;
+            }
+            return false;
+        } else {
+            return true;
+        }
+    };
+
     useEffect(() => {
         updateFishes();
     }, [])
@@ -68,7 +119,7 @@ export const Wiki = ({route}:any) => {
                         value={searchQuery}
                         iconColor="#202E35"
                     />
-                    <TouchableFilter onPress={() => { setFilter(false) }}>
+                    <TouchableFilter onPress={() => navigation.navigate('WikiFilter')}>
                         <TextFilter filter={filter}>Filtro</TextFilter>
                     </TouchableFilter>
                     <IconFilter name="filter-list" />
@@ -81,6 +132,14 @@ export const Wiki = ({route}:any) => {
                         ) {
                             return fish;
                         }
+                    }).filter((item) => {
+                        if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
+                            return item;
+                        }
+                    }).filter((item) => {
+                        if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
+                            return item;
+                        }
                     }).length ? (
                         <FishCardList
                             data={fishes.filter((item) => {
@@ -88,6 +147,14 @@ export const Wiki = ({route}:any) => {
                                     item.commonName.toLowerCase().includes(searchQuery.toLowerCase().trim()) ||
                                     item.scientificName.toLowerCase().includes(searchQuery.toLowerCase().trim())
                                 ) {
+                                    return item;
+                                }
+                            }).filter((item) => {
+                                if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
+                                    return item;
+                                }
+                            }).filter((item) => {
+                                if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
                                     return item;
                                 }
                             })}

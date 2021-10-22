@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { CommonActions } from '@react-navigation/native';
 import Checkbox from 'expo-checkbox';
 import { GreenButton } from "../../components/GreenButton";
 import { RegularText } from "../../components/RegularText";
@@ -16,7 +17,8 @@ import {
     Switch,
     InputView,
     Input,
-    CheckBoxRow
+    CheckBoxRow,
+    TextContainer
 } from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -43,7 +45,7 @@ interface IGroup {
 const initialState: IGroup = {
     arraias: {
         name: "Arraia",
-        activate: true,
+        activate: false,
         subGroups: [
             {
                 name: "Arraia1",
@@ -61,7 +63,7 @@ const initialState: IGroup = {
     },
     cascudos: {
         name: "Cascudo",
-        activate: true,
+        activate: false,
         subGroups: [
             {
                 name: "Cascudo1",
@@ -80,43 +82,6 @@ const initialState: IGroup = {
 }
 
 
-// interface IGroup {
-//     arraias: {
-//         name: string,
-//         activate: boolean,
-//         subGroups: {
-//             arraia: boolean,
-//         }
-//     },
-//     cascudos: {
-//         name: string,
-//         activate: boolean,
-//         subGroups: {
-//             cascao: boolean,
-//         }
-//     }
-// }
-
-// const initialState: IGroup = {
-//     arraias: {
-//         name: "Arraia",
-//         activate: true,
-//         subGroups:
-//             {
-//                 arraia: false
-//             }
-//     },
-//     cascudos: {
-//         name: "Cascudo",
-//         activate: true,
-//         subGroups:
-//         {
-//             cascao: false
-//         }
-//     }
-// }
-
-
 export const WikiFilter = ({ navigation }: any) => {
     const [isEndemic, setIsEndemic] = useState<boolean>(true);
     const [isThreatened, setIsThreatened] = useState<boolean>(true);
@@ -126,51 +91,73 @@ export const WikiFilter = ({ navigation }: any) => {
     const [minWeight, setMinWeight] = useState<number | null>();
     const [maxLength, setMaxLength] = useState<number | null>();
     const [minLength, setMinLength] = useState<number | null>();
-
     const [isChecked, setIsChecked] = useState(initialState);
-    const [filterQuery, setFilterQuery] = useState<string>();
 
     const createURLQuery = () => {
         // ?largeGroup=escama&group=Silva&group=famosos&commonName=salmao%20%20albino
         let new_url: string = "?";
 
         if (isChecked.arraias.activate || isChecked.cascudos.activate) {
-            if (isChecked.arraias.activate)
+            if (isChecked.arraias.activate) {
+                if (new_url != "?")
+                    new_url += "&"
                 new_url += "largeGroup=" + isChecked.arraias.name.toLowerCase();
-            if (isChecked.cascudos.activate)
-                new_url += "&largeGroup=" + isChecked.cascudos.name.toLowerCase();
+            }
+            if (isChecked.cascudos.activate) {
+                if (new_url != "?")
+                    new_url += "&"
+                new_url += "largeGroup=" + isChecked.cascudos.name.toLowerCase();
+            }
 
             for (let i = 0; i < isChecked.arraias.subGroups.length; i++) {
-                console.log(i);
-                if (isChecked.arraias.subGroups[i].activate)
-                    new_url += "&group=" + isChecked.arraias.subGroups[i].name.toLowerCase();
+                if (isChecked.arraias.subGroups[i].activate) {
+                    if (new_url != "?")
+                        new_url += "&"
+                    new_url += "group=" + isChecked.arraias.subGroups[i].name.toLowerCase();
+                }
             }
 
             for (let i = 0; i < isChecked.cascudos.subGroups.length; i++) {
-                if (isChecked.cascudos.subGroups[i].activate)
-                    new_url += "&group=" + isChecked.cascudos.subGroups[i].name.toLowerCase();
+                if (isChecked.cascudos.subGroups[i].activate) {
+                    if (new_url != "?")
+                        new_url += "&"
+                    new_url += "group=" + isChecked.cascudos.subGroups[i].name.toLowerCase();
+                }
             }
         }
 
-        new_url += "&isEndemic=" + JSON.stringify(isEndemic);
-        new_url += "&isThreatened=" + JSON.stringify(isThreatened);
-        new_url += "&hasSpawningSeason=" + JSON.stringify(hasSpawningSeason);
-        new_url += "&wasIntroduced=" + JSON.stringify(wasIntroduced);
+        if (new_url != "?")
+            new_url += "&"
+        new_url += "isEndemic=" + JSON.stringify(isEndemic);
 
-        if (maxWeight)
-            new_url += "&maxWeight=" + JSON.stringify(maxWeight);
-        if (maxLength)
-            new_url += "&maxSize=" + JSON.stringify(maxLength);
+        if (new_url != "?")
+            new_url += "&"
+        new_url += "isThreatened=" + JSON.stringify(isThreatened);
 
-        setFilterQuery(new_url);
-        console.log(filterQuery);
-    }
+        if (new_url != "?")
+            new_url += "&"
+        new_url += "hasSpawningSeason=" + JSON.stringify(hasSpawningSeason);
 
-    const filterWiki = () => {
-        createURLQuery();
-        navigation.navigate('Wiki', {
-            filterQuery: filterQuery,
+        if (new_url != "?")
+            new_url += "&"
+        new_url += "wasIntroduced=" + JSON.stringify(wasIntroduced);
+
+        console.log(new_url);
+
+        const resetAction = CommonActions.reset({
+            index: 0,
+            routes: [{
+                name: 'Wiki',
+                params: {
+                    filterQuery: new_url,
+                    fishMaxSize: maxLength,
+                    fishMinSize: minLength,
+                    fishMaxWeight: maxWeight,
+                    fishMinWeight: minWeight,
+                },
+            }],
         });
+        navigation.dispatch(resetAction);
     }
 
     useEffect(() => {
@@ -358,12 +345,9 @@ export const WikiFilter = ({ navigation }: any) => {
 
                     <SwitchContainer>
                         <SwitchColumn>
-                            <BoldText>Endémico</BoldText>
-                            <BoldText>Ameaçado</BoldText>
-                            <BoldText>Piracema</BoldText>
-                            <BoldText>Introduzido</BoldText>
-                        </SwitchColumn>
-                        <SwitchColumn>
+                            <TextContainer>
+                                <BoldText>Endémico</BoldText>
+                            </TextContainer>
                             <Switch
                                 trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
                                 thumbColor={"#00BBD4"}
@@ -371,6 +355,11 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setIsEndemic}
                                 value={isEndemic}
                             />
+                        </SwitchColumn>
+                        <SwitchColumn>
+                            <TextContainer>
+                                <BoldText>Ameaçado</BoldText>
+                            </TextContainer>
                             <Switch
                                 trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
                                 thumbColor={"#00BBD4"}
@@ -378,6 +367,11 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setIsThreatened}
                                 value={isThreatened}
                             />
+                        </SwitchColumn>
+                        <SwitchColumn>
+                            <TextContainer>
+                                <BoldText>Piracema</BoldText>
+                            </TextContainer>
                             <Switch
                                 trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
                                 thumbColor={"#00BBD4"}
@@ -385,6 +379,11 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setHasSpawningSeason}
                                 value={hasSpawningSeason}
                             />
+                        </SwitchColumn>
+                        <SwitchColumn>
+                            <TextContainer>
+                                <BoldText>Introduzido</BoldText>
+                            </TextContainer>
                             <Switch
                                 trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
                                 thumbColor={"#00BBD4"}

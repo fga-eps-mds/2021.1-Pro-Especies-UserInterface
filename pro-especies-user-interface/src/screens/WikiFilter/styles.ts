@@ -64,16 +64,25 @@ export const Input = styled.TextInput`
 `
 
 export const SwitchContainer = styled.View`
-    flex-direction: row;
     margin-bottom: ${RFValue(24, 640)}px;
     margin-top: ${RFValue(8, 640)}px;
+    align-items: center;
+    width: 65%;
 `
 
 export const SwitchColumn = styled.View`
+    width: 100%;
+    flex-direction: row;
+    align-self: center;
+    justify-content: flex-end;
+`
+
+export const TextContainer = styled.View`
+    width: 50%;
+    justify-content: flex-start;
 `
 
 export const Switch = styled.Switch`
-    margin-bottom: ${RFValue(8, 640)}px;
-    margin-top: ${RFValue(7, 640)}px;
+    align-self: center;
     margin-left: ${RFValue(50, 640)}px;
 `
