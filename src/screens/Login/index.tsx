@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Alert, TouchableOpacity } from "react-native";
+import React, { useState } from 'react';
+import { CommonActions } from '@react-navigation/native';
+import { Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
   ErrorMessage,
@@ -15,37 +16,37 @@ import {
   HomePhraseContainer,
   HomeRegularText,
   HomeLogLink,
-} from "./styles";
-import { useAuth } from "../../contexts/authContext";
-import { GreenButton } from "../../components/GreenButton";
+} from './styles';
+import { useAuth } from '../../contexts/authContext';
+import { GreenButton } from '../../components/GreenButton';
 
 export default function Login({ navigation }: any) {
   const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
   const [isEmailPhoneValid, setIsEmailPhoneValid] = useState(true);
   const [isEmailPhoneValidMessage, setIsEmailPhoneValidMessage] = useState(
-    "Usuário não encontrado"
+    'Usuário não encontrado',
   );
   const [userPassword, setUserPassword] = useState<string | undefined>();
   const { signIn, authenticated } = useAuth();
 
   const handleLogin = async () => {
-    let alertMessage = "";
+    let alertMessage = '';
     if (userEmailPhone && userPassword) {
       setIsEmailPhoneValid(true);
       const res = await signIn(userEmailPhone, userPassword);
 
       if (res.status === 200) {
-        navigation.navigate("Wiki");
-        alertMessage = "Conta acessada com sucesso!";
+        navigation.navigate('WikiFishlogs');
+        alertMessage = 'Conta acessada com sucesso!';
       } else if (res.response.status === 404) setIsEmailPhoneValid(false);
       else alertMessage = res.response.data.message;
     } else {
-      alertMessage = "Preencha todos os campos de dados para realizar o login!";
+      alertMessage = 'Preencha todos os campos de dados para realizar o login!';
     }
     if (alertMessage) {
-      Alert.alert("Login", alertMessage, [
+      Alert.alert('Login', alertMessage, [
         {
-          text: "Ok",
+          text: 'Ok',
         },
       ]);
     }
@@ -54,7 +55,7 @@ export default function Login({ navigation }: any) {
   return (
     <Container>
       <HomeLogoContainer>
-        <HomeAppImage source={require("../../assets/logo.png")} />
+        <HomeAppImage source={require('../../assets/logo.png')} />
         <HomeAppTitle>
           Eu<HomeAppTitleBlue>Pescador</HomeAppTitleBlue>
         </HomeAppTitle>
@@ -86,7 +87,7 @@ export default function Login({ navigation }: any) {
         </LoginButtonView>
         <HomePhraseContainer>
           <HomeRegularText>Não possui uma conta ainda?</HomeRegularText>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
             <HomeLogLink> Cadastre-se</HomeLogLink>
           </TouchableOpacity>
         </HomePhraseContainer>

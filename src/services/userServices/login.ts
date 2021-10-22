@@ -1,7 +1,7 @@
-import { userService } from "./userService";
+import { userService } from './userService';
 
 async function UserLogin(emailPhone: string, password: string) {
-  const res = await userService.post("/user/login", {
+  const res = await userService.post('/user/login', {
     emailPhone,
     password,
   });

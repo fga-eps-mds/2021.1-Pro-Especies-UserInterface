@@ -1,10 +1,12 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
+import { TouchableOpacity } from 'react-native';
 import {
-  FishCardContaner,
+  FishCardContainer,
   FishImage,
   CommonNameText,
   ScientificName,
-} from "./styles";
+  TextView,
+} from './styles';
 
 export interface IFish {
   _id: string;
@@ -25,16 +27,56 @@ export interface IFish {
   photo: string;
 }
 
-interface IFishCardProps {
-  fish: IFish;
+export interface IFishLog {
+  _id: string;
+  userId: number;
+  name: string;
+  largeGroup: string;
+  group: string;
+  species: string;
+  coordenates: [number, number][];
+  photo: string;
+  length: number;
+  weight: number;
+  reviewed: boolean;
+  reviewedBy: number;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: number;
+  deletedAt: Date;
+  deletedBy: number;
 }
 
-export const FishCard: FC<IFishCardProps> = ({ fish }) => {
+interface IFishCardProps {
+  fishWiki?: IFish;
+  fishLog?: IFishLog;
+  cardFunction: VoidFunction;
+}
+
+export const FishCard: FC<IFishCardProps> = ({
+  fishWiki,
+  fishLog,
+  cardFunction,
+}) => {
   return (
-    <FishCardContaner onPress={() => {}}>
-      <FishImage source={{ uri: `data:image/png;base64,${fish.photo}` }} />
-      <CommonNameText>{fish.commonName}</CommonNameText>
-      <ScientificName>{fish.scientificName}</ScientificName>
-    </FishCardContaner>
+    <FishCardContainer onPress={() => {}}>
+      <TouchableOpacity onPress={cardFunction}>
+        <FishImage
+          source={{
+            uri: `data:image/png;base64,${
+              fishLog ? fishLog.photo : fishWiki?.photo
+            }`,
+          }}
+        />
+        <TextView>
+          <CommonNameText>
+            {fishLog ? fishLog.name : fishWiki?.commonName}
+          </CommonNameText>
+          <ScientificName>
+            {fishLog ? fishLog.species : fishWiki?.scientificName}
+          </ScientificName>
+        </TextView>
+      </TouchableOpacity>
+    </FishCardContainer>
   );
 };

@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, ButtonText } from "./styles";
+import React from 'react';
+import { Button, ButtonText } from './styles';
 
 interface Props {
   text: string;

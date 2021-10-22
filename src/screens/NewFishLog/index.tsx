@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { TopBar } from '../../components/TopBar';
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -160,7 +159,6 @@ export function NewFishLog({ navigation }: any) {
 
   return (
     <NewFishLogContainer>
-      <TopBar title="Novo Registro" />
       <ScrollView>
         <ImageContainer>
           {fishPhoto ? (
