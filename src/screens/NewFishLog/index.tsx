@@ -24,7 +24,6 @@ import {
   NewFishlogScroll,
 } from './styles';
 import { createFishLog } from '../../services/fishLogService/createFishLog';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ActivityIndicator } from 'react-native-paper';
 
 export function NewFishLog({ navigation }: any) {
@@ -118,6 +117,10 @@ export function NewFishLog({ navigation }: any) {
   const handleOpenMap = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
+      Alert.alert(
+        "Sem permissão de localização",
+        "Para abrir o mapa é necessário que você aceite a permissão de localização."
+      );
       return;
     }
     setIsLoading(true);
