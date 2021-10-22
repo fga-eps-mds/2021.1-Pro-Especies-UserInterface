@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { IP_ADDRESS } from '@env';
+import config from '../../../config';
 
 const userService = axios.create({
-  baseURL: `http://${IP_ADDRESS}:4000`,
+  baseURL: `http://${config.IP_ADDRESS}:4000`,
 });
 
 export { userService };
