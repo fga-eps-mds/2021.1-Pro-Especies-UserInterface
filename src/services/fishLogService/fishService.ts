@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from '../../../config';
+const config = require('../../../config');
 
 const fishLogService = axios.create({
   baseURL: `http://${config.IP_ADDRESS}:4001`,
