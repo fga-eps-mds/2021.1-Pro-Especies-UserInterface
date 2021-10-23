@@ -38,7 +38,10 @@ const AuthRoutes = () => {
       <AuthenticateStack.Screen
         name="NewFishLog"
         component={NewFishLog}
-        options={{ title: 'Novo Registro', headerShown: true }}
+        options={({ route }) => ({
+          title: route.params.name,
+          headerShown: true,
+        })}
       />
       <AuthenticateStack.Screen
         name="Maps"

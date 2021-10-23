@@ -90,6 +90,7 @@ export const AddLocaleButton = styled.TouchableOpacity`
   width: ${RFValue(156, 640)}px;
   flex-direction: row;
   align-items: center;
+  align-self: center;
   justify-content: center;
 `
 
