@@ -262,7 +262,7 @@ export function NewFishLog({ navigation, route }: any) {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
         return item;
       }
-    }).map((item) => {
+    }).map((item, index) => {
       return (
         <OptionListItem onPress={() => setFishProps(item)}>
           <RegularText text={item.commonName} />
@@ -296,7 +296,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input
               placeholder="Nome"
-              value={isNew ? null : fishName}
+              value={fishName}
               onChangeText={setFishName}
             />
             <InputBox />
@@ -319,7 +319,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input
               placeholder="Espécie"
-              value={isNew ? null : fishSpecies}
+              value={fishSpecies}
               onChangeText={setFishSpecies}
             />
             <InputBox />
@@ -328,7 +328,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input
               placeholder="Grande Grupo"
-              value={isNew ? null : fishLargeGroup}
+              value={fishLargeGroup}
               onChangeText={setFishLargeGroup}
             />
             <InputBox />
@@ -337,7 +337,7 @@ export function NewFishLog({ navigation, route }: any) {
           <InputView>
             <Input
               placeholder="Grupo"
-              value={isNew ? null : fishGroup}
+              value={fishGroup}
               onChangeText={setFishGroup}
             />
             <InputBox />
