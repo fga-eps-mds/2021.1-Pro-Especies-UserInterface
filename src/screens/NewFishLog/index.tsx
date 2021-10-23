@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Buffer } from "buffer";
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
-import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
-import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
-import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 import { RegularText } from '../../components/RegularText';
+import { createFishLog } from '../../services/fishLogService/createFishLog';
+import { ActivityIndicator } from 'react-native-paper';
+import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
+import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
 import {
   NewFishLogContainer,
   ImageContainer,
@@ -28,8 +30,11 @@ import {
   OptionList,
   OptionsContainer,
   OptionListItem,
+  AddLocaleButton,
+  AddLocaleButtonLabel,
+  AddLocaleButtonIcon,
+  NewFishlogScroll,
 } from './styles';
-
 export interface IFish {
   _id: string;
   largeGroup: string;
@@ -49,7 +54,6 @@ export interface IFish {
   photo: string;
 }
 
-
 export function NewFishLog({ navigation, route }: any) {
   const [isNew, setIsNew] = useState(false);
   const [isAdmin, setIsAdmin] = useState<Boolean>(false);
@@ -63,6 +67,7 @@ export function NewFishLog({ navigation, route }: any) {
   const [fishLength, setFishLength] = useState<number | null>(null);
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
   const [fishLongitude, setFishLongitude] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
 
@@ -212,6 +217,7 @@ export function NewFishLog({ navigation, route }: any) {
   async function handleCreateFishLog() {
     let alertMessage = '';
     try {
+      setIsLoading(true);
       await createFishLog(
         fishPhoto,
         fishName,
@@ -224,6 +230,7 @@ export function NewFishLog({ navigation, route }: any) {
         fishLongitude,
       );
 
+      setIsLoading(false);
       alertMessage = 'Registro criado com sucesso!';
       const resetAction = CommonActions.reset({
         index: 0,
@@ -231,6 +238,7 @@ export function NewFishLog({ navigation, route }: any) {
       });
       navigation.dispatch(resetAction);
     } catch (error: any) {
+      setIsLoading(false);
       console.log(error);
       if (error.response.status === 400)
         alertMessage =
@@ -246,6 +254,21 @@ export function NewFishLog({ navigation, route }: any) {
         },
       ]);
     }
+  }
+
+  const handleOpenMap = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert(
+        "Sem permissão de localização",
+        "Para abrir o mapa é necessário que você aceite a permissão de localização."
+      );
+      return;
+    }
+    setIsLoading(true);
+    let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+    setIsLoading(false);
+    navigation.navigate("Maps", { loc })
   }
 
   useEffect(() => {
@@ -273,127 +296,135 @@ export function NewFishLog({ navigation, route }: any) {
 
   return (
     <NewFishLogContainer>
-      <ScrollView>
-        <ImageContainer>
-          {fishPhoto ? (
-            <FishLogImage
-              source={{ uri: `data:image/png;base64,${fishPhoto}` }}
-            />
-          ) : (
-            <FishLogImage source={require('../../assets/selectPicture.png')} />
-          )}
-        </ImageContainer>
-        <ImageContainer onPress={pickImage}>
-          <TopIcon name="photo" />
-          <TextClick>Selecionar Foto</TextClick>
-        </ImageContainer>
-        <ImageContainer onPress={openCamera}>
-          <TopIcon name="camera" />
-          <TextClick>Tirar Foto</TextClick>
-        </ImageContainer>
 
-        <InputContainer>
-          <InputView>
-            <Input
-              placeholder="Nome"
-              value={fishName}
-              onChangeText={setFishName}
-            />
-            <InputBox />
-          </InputView>
-          {
-            (fishName && fishes.filter((item) => {
-              if (
-                item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
-                && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
-              ) {
-                return item;
-              }
-            }).length) ? (
-              <OptionsContainer>
-                <OptionList>{list()}</OptionList>
-              </OptionsContainer>
-            ) : (null)
-          }
-
-          <InputView>
-            <Input
-              placeholder="Espécie"
-              value={fishSpecies}
-              onChangeText={setFishSpecies}
-            />
-            <InputBox />
-          </InputView>
-
-          <InputView>
-            <Input
-              placeholder="Grande Grupo"
-              value={fishLargeGroup}
-              onChangeText={setFishLargeGroup}
-            />
-            <InputBox />
-          </InputView>
-
-          <InputView>
-            <Input
-              placeholder="Grupo"
-              value={fishGroup}
-              onChangeText={setFishGroup}
-            />
-            <InputBox />
-          </InputView>
-
-          <BoxView>
-            <RowView>
-              <HalfInputView>
-                <Input
-                  placeholder="Latitude"
-                  value={(isNew || !fishLatitude) ? null : JSON.stringify(fishLatitude)}
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLatitude(parseInt(value))}
-                />
-              </HalfInputView>
-              <HalfInputView>
-                <Input
-                  placeholder="Longitude"
-                  value={(isNew || !fishLongitude) ? null : JSON.stringify(fishLongitude)}
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLongitude(parseInt(value))}
-                />
-              </HalfInputView>
-            </RowView>
-            <RowView>
-              <HalfInputView>
-                <Input
-                  placeholder="Peso (kg)"
-                  value={(isNew || !fishWeight) ? null : JSON.stringify(fishWeight)}
-                  keyboardType="numeric"
-                  onChangeText={value => setFishWeight(parseInt(value))}
-                />
-              </HalfInputView>
-              <HalfInputView>
-                <Input
-                  placeholder="Comprimento (cm)"
-                  value={(isNew || !fishLength) ? null : JSON.stringify(fishLength)}
-                  keyboardType="numeric"
-                  onChangeText={value => setFishLength(parseInt(value))}
-                />
-              </HalfInputView>
-            </RowView>
-          </BoxView>
-        </InputContainer>
-        <SendButtonView>
-          <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) :
+        (<ScrollView>
+          <ImageContainer>
+            {fishPhoto ? (
+              <FishLogImage
+                source={{ uri: `data:image/png;base64,${fishPhoto}` }}
+              />
+            ) : (
+              <FishLogImage source={require('../../assets/selectPicture.png')} />
+            )}
+          </ImageContainer>
+          <ImageContainer onPress={pickImage}>
+            <TopIcon name="photo" />
+            <TextClick>Selecionar Foto</TextClick>
+          </ImageContainer>
+          <ImageContainer onPress={openCamera}>
+            <TopIcon name="camera" />
+            <TextClick>Tirar Foto</TextClick>
+          </ImageContainer>
+  
+          <InputContainer>
+            <InputView>
+              <Input
+                placeholder="Nome"
+                value={fishName}
+                onChangeText={setFishName}
+              />
+              <InputBox />
+            </InputView>
             {
-              (isNew || !isAdmin) ? (
-                <SendButtonText>Enviar</SendButtonText>
-              ) : (
-                <SendButtonText>Revisar</SendButtonText>
-              )
+              (fishName && fishes.filter((item) => {
+                if (
+                  item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+                  && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
+                ) {
+                  return item;
+                }
+              }).length) ? (
+                <OptionsContainer>
+                  <OptionList>{list()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
             }
-          </SendButton>
-        </SendButtonView>
-      </ScrollView>
+  
+            <InputView>
+              <Input
+                placeholder="Espécie"
+                value={fishSpecies}
+                onChangeText={setFishSpecies}
+              />
+              <InputBox />
+            </InputView>
+  
+            <InputView>
+              <Input
+                placeholder="Grande Grupo"
+                value={fishLargeGroup}
+                onChangeText={setFishLargeGroup}
+              />
+              <InputBox />
+            </InputView>
+  
+            <InputView>
+              <Input
+                placeholder="Grupo"
+                value={fishGroup}
+                onChangeText={setFishGroup}
+              />
+              <InputBox />
+            </InputView>
+  
+            <BoxView>
+              <RowView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Latitude"
+                    value={(isNew || !fishLatitude) ? null : JSON.stringify(fishLatitude)}
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLatitude(parseInt(value))}
+                  />
+                </HalfInputView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Longitude"
+                    value={(isNew || !fishLongitude) ? null : JSON.stringify(fishLongitude)}
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLongitude(parseInt(value))}
+                  />
+                </HalfInputView>
+              </RowView>
+              <RowView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Peso (kg)"
+                    value={(isNew || !fishWeight) ? null : JSON.stringify(fishWeight)}
+                    keyboardType="numeric"
+                    onChangeText={value => setFishWeight(parseInt(value))}
+                  />
+                </HalfInputView>
+                <HalfInputView>
+                  <Input
+                    placeholder="Comprimento (cm)"
+                    value={(isNew || !fishLength) ? null : JSON.stringify(fishLength)}
+                    keyboardType="numeric"
+                    onChangeText={value => setFishLength(parseInt(value))}
+                  />
+                </HalfInputView>
+              </RowView>
+            </BoxView>
+          </InputContainer>
+          <AddLocaleButton onPress={handleOpenMap}>
+              <AddLocaleButtonIcon name="map" />
+              <AddLocaleButtonLabel> Abrir mapa</AddLocaleButtonLabel>
+            </AddLocaleButton>
+          <SendButtonView>
+            <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
+              {
+                (isNew || !isAdmin) ? (
+                  <SendButtonText>Enviar</SendButtonText>
+                ) : (
+                  <SendButtonText>Revisar</SendButtonText>
+                )
+              }
+            </SendButton>
+          </SendButtonView>
+        </ScrollView>)}
     </NewFishLogContainer>
   );
 }
