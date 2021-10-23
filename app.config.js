@@ -1,4 +1,4 @@
-import { MAPS_API_KEY } from 'react-native-dotenv';
+const env = require('./config');
 
 export default ({ config }) => {
     return {
@@ -11,7 +11,7 @@ export default ({ config }) => {
             package: "com.eupescador.app",
             config: {
                 googleMaps: {
-                    apiKey: MAPS_API_KEY
+                    apiKey: env.MAPS_API_KEY
                 }
             }
         },

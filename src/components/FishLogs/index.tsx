@@ -23,7 +23,6 @@ import {
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { FishCard, IFishLog } from '../FishCard';
 
-// TouchableTitle, TitleText, TitleHighlight
 interface Props {
   token: string;
 }
@@ -55,8 +54,11 @@ export const FishLogs = ({ token }: Props) => {
   const handleExport = async () => {};
 
   const handleAddLog = async () => {
-    navigation.navigate('NewFishLog');
-  };
+    navigation.navigate("NewFishLog" as never, {
+      isNewRegister: true,
+      name: "Novo Registro",
+    } as never);
+  }
 
   useEffect(() => {
     getFishLogs();
