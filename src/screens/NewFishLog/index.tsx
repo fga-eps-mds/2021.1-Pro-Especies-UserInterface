@@ -53,12 +53,12 @@ export interface IFish {
 export function NewFishLog({ navigation, route }: any) {
   const [isNew, setIsNew] = useState(false);
   const [isAdmin, setIsAdmin] = useState<Boolean>(false);
-  const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
+  const [fishPhoto, setFishPhoto] = useState<string | undefined | null>("");
   const [fishes, setFishes] = useState<IFish[]>([]);
-  const [fishName, setFishName] = useState<string | null>(null);
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>(null);
-  const [fishGroup, setFishGroup] = useState<string | null>(null);
-  const [fishSpecies, setFishSpecies] = useState<string | null>(null);
+  const [fishName, setFishName] = useState<string | null>("");
+  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>("");
+  const [fishGroup, setFishGroup] = useState<string | null>("");
+  const [fishSpecies, setFishSpecies] = useState<string | null>("");
   const [fishWeight, setFishWeight] = useState<number | null>(null);
   const [fishLength, setFishLength] = useState<number | null>(null);
   const [fishLatitude, setFishLatitude] = useState<number | null>(null);
@@ -264,7 +264,7 @@ export function NewFishLog({ navigation, route }: any) {
       }
     }).map((item, index) => {
       return (
-        <OptionListItem onPress={() => setFishProps(item)}>
+        <OptionListItem key={index} onPress={() => setFishProps(item)}>
           <RegularText text={item.commonName} />
         </OptionListItem>
       );

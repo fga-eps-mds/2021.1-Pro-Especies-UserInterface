@@ -1,8 +1,6 @@
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { MaterialIcons } from '@expo/vector-icons';
-import { FlatList } from "react-native";
-import { IFish } from "./index";
 
 export const NewFishLogContainer = styled.View`
   flex: 1;
