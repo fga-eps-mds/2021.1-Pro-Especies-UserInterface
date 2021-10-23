@@ -34,15 +34,15 @@ import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
 export function NewFishLog({ navigation, route }: any) {
   const [isNew, setIsNew] = useState(false);
   const [isAdmin, setIsAdmin] = useState<Boolean>(false);
-  const [fishPhoto, setFishPhoto] = useState<string | undefined | null>(null);
-  const [fishName, setFishName] = useState<string | null>(null);
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | null>(null);
-  const [fishGroup, setFishGroup] = useState<string | null>(null);
-  const [fishSpecies, setFishSpecies] = useState<string | null>(null);
-  const [fishWeight, setFishWeight] = useState<number | null>(null);
-  const [fishLength, setFishLength] = useState<number | null>(null);
-  const [fishLatitude, setFishLatitude] = useState<number | null>(null);
-  const [fishLongitude, setFishLongitude] = useState<number | null>(null);
+  const [fishPhoto, setFishPhoto] = useState<string | undefined | undefined>();
+  const [fishName, setFishName] = useState<string | undefined>();
+  const [fishLargeGroup, setFishLargeGroup] = useState<string | undefined>();
+  const [fishGroup, setFishGroup] = useState<string | undefined>();
+  const [fishSpecies, setFishSpecies] = useState<string | undefined>();
+  const [fishWeight, setFishWeight] = useState<string | undefined>();
+  const [fishLength, setFishLength] = useState<string | undefined>();
+  const [fishLatitude, setFishLatitude] = useState<string | undefined>();
+  const [fishLongitude, setFishLongitude] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
@@ -76,10 +76,10 @@ export function NewFishLog({ navigation, route }: any) {
       setFishSpecies(log.species);
       setFishLargeGroup(log.largeGroup);
       setFishGroup(log.group);
-      setFishWeight(log.weight);
-      setFishLength(log.length);
-      setFishLongitude(log.coordenates.longitude);
-      setFishLatitude(log.coordenates.latitude);
+      setFishWeight(log.weight.toString());
+      setFishLength(log.length.toString());
+      setFishLongitude(log.coordenates.longitude.toString());
+      setFishLatitude(log.coordenates.latitude.toString());
     } catch (error) {
       console.log(error);
     }
@@ -223,16 +223,52 @@ export function NewFishLog({ navigation, route }: any) {
     setIsLoading(true);
     let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
     setIsLoading(false);
-    navigation.navigate("Maps", { loc })
+    if (!fishLatitude && !fishLongitude) {
+      setFishLatitude(loc.coords.latitude.toString());
+      setFishLongitude(loc.coords.longitude.toString());
+    }
+    const latitude = fishLatitude ? parseFloat(fishLatitude) : loc.coords.latitude;
+    const longitude = fishLongitude ? parseFloat(fishLongitude) : loc.coords.longitude;
+    navigation.navigate("Maps", {
+      isNew,
+      isAdmin,
+      fishPhoto,
+      fishName,
+      fishLargeGroup,
+      fishGroup,
+      fishSpecies,
+      fishWeight,
+      fishLength,
+      fishLatitude: latitude,
+      fishLongitude: longitude,
+    })
   }
 
   useEffect(() => {
-    const { isNewRegister } = route.params;
+    const { data, isNewRegister } = route.params;
     setIsNew(isNewRegister);
-    if (!isNewRegister) {
-      getData();
+    if (data != null) {
+      setIsAdmin(data.isAdmin);
+      setFishPhoto(data.fishPhoto);
+      setFishName(data.fishName);
+      setFishLargeGroup(data.fishLargeGroup);
+      setFishGroup(data.fishGroup);
+      setFishSpecies(data.fishSpecies)
+      setFishWeight(data.fishWeight);
+      setFishLength(data.fishLength);
+      setFishLatitude(data.fishLatitude.toString());
+      setFishLongitude(data.fishLongitude.toString());
+      if (data.photo) {
+        const log64 = Buffer.from(data.photo).toString('base64');
+        setFishPhoto(log64);
+      }
     }
-  }, []);
+    else {
+      if (!isNewRegister) {
+        getData();
+      }
+    }
+  }, [route.params]);
 
   return (
     <NewFishLogContainer>
@@ -262,7 +298,7 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Grande Grupo"
-                value={isNew ? null : fishLargeGroup}
+                value={fishLargeGroup}
                 onChangeText={setFishLargeGroup}
               />
               <InputBox />
@@ -270,7 +306,7 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Grupo"
-                value={isNew ? null : fishGroup}
+                value={fishGroup}
                 onChangeText={setFishGroup}
               />
               <InputBox />
@@ -278,7 +314,7 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Espécie"
-                value={isNew ? null : fishSpecies}
+                value={fishSpecies}
                 onChangeText={setFishSpecies}
               />
               <InputBox />
@@ -286,7 +322,7 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Nome"
-                value={isNew ? null : fishName}
+                value={fishName}
                 onChangeText={setFishName}
               />
               <InputBox />
@@ -296,17 +332,17 @@ export function NewFishLog({ navigation, route }: any) {
                 <HalfInputView>
                   <Input
                     placeholder="Latitude"
-                    value={(isNew || !fishLatitude) ? null : JSON.stringify(fishLatitude)}
+                    value={fishLatitude}
                     keyboardType="numeric"
-                    onChangeText={value => setFishLatitude(parseInt(value))}
+                    onChangeText={setFishLatitude}
                   />
                 </HalfInputView>
                 <HalfInputView>
                   <Input
                     placeholder="Longitude"
-                    value={(isNew || !fishLongitude) ? null : JSON.stringify(fishLongitude)}
+                    value={fishLongitude}
                     keyboardType="numeric"
-                    onChangeText={value => setFishLongitude(parseInt(value))}
+                    onChangeText={setFishLongitude}
                   />
                 </HalfInputView>
               </RowView>
@@ -314,17 +350,17 @@ export function NewFishLog({ navigation, route }: any) {
                 <HalfInputView>
                   <Input
                     placeholder="Peso (kg)"
-                    value={(isNew || !fishWeight) ? null : JSON.stringify(fishWeight)}
+                    value={fishWeight}
                     keyboardType="numeric"
-                    onChangeText={value => setFishWeight(parseInt(value))}
+                    onChangeText={setFishWeight}
                   />
                 </HalfInputView>
                 <HalfInputView>
                   <Input
                     placeholder="Comprimento (cm)"
-                    value={(isNew || !fishLength) ? null : JSON.stringify(fishLength)}
+                    value={fishLength}
                     keyboardType="numeric"
-                    onChangeText={value => setFishLength(parseInt(value))}
+                    onChangeText={setFishLength}
                   />
                 </HalfInputView>
               </RowView>
@@ -332,7 +368,7 @@ export function NewFishLog({ navigation, route }: any) {
           </InputContainer>
           <AddLocaleButton onPress={handleOpenMap}>
             <AddLocaleButtonIcon name="map" />
-            <AddLocaleButtonLabel> Abrir mapa</AddLocaleButtonLabel>
+            <AddLocaleButtonLabel> Adicionar Localização </AddLocaleButtonLabel>
           </AddLocaleButton>
           <SendButtonView>
             <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>

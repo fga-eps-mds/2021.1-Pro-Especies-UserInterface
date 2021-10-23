@@ -3,17 +3,17 @@ import { Buffer } from "buffer";
 import { fishLogService } from './fishService';
 
 async function UpdateFishLog(
-    log_id: string, 
-    name: string | null,
-    largeGroup: string | null,
-    group: string | null,
-    species: string | null,
-    latitude: number | null,
-    longitude: number | null,
-    photoString: string | undefined | null,
-    length: number | null,
-    weight: number | null,
-    reviewed: boolean | null,
+    log_id: string,
+    name: string | undefined,
+    largeGroup: string | undefined,
+    group: string | undefined,
+    species: string | undefined,
+    latitude: string | undefined,
+    longitude: string | undefined,
+    photoString: string | undefined | undefined,
+    length: string | undefined,
+    weight: string | undefined,
+    reviewed: boolean | undefined,
     admin: Boolean,
 ) {
     const userId = await AsyncStorage.getItem("@eupescador/userId");
@@ -22,18 +22,17 @@ async function UpdateFishLog(
     let photo = null;
     let reviewedBy = null;
 
-    if(admin)
+    if (admin)
         reviewedBy = userId;
 
     const coordenates = {
-        latitude,
-        longitude
+        latitude: latitude ? parseFloat(latitude) : null,
+        longitude: longitude ? parseFloat(longitude) : null
     }
 
-    if(photoString){
+    if (photoString) {
         photo = Buffer.from(photoString, "base64");
     }
-
     const res = await fishLogService.patch(`/fishLog/${log_id}`, {
         name,
         largeGroup,
@@ -41,12 +40,12 @@ async function UpdateFishLog(
         species,
         coordenates,
         photo,
-        length,
-        weight,
+        length: length ? parseFloat(length) : null,
+        weight: weight ? parseFloat(weight) : null,
         reviewed,
         reviewedBy,
         updatedBy: userId,
-    } ,{ headers: { Authorization: userToken } });
+    }, { headers: { Authorization: userToken } });
     return res.data;
 }
 
