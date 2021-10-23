@@ -32,7 +32,7 @@ export const Wiki = ({ navigation, route }: any) => {
         fishMinWeight
     } = route.params;
 
-    console.log(filterQuery);
+    console.log(route.params);
     const [searchQuery, setSearchQuery] = React.useState('');
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);
@@ -41,24 +41,25 @@ export const Wiki = ({ navigation, route }: any) => {
     const updateFishes = async () => {
         try {
             const data = await GetWikiFishes(filterQuery);
+            console.log(data);
             setFishes(data);
         } catch (error: any) {
             console.log(error);
         }
     }
 
-    const checkSizes = (maxSize: number, minSize: number, fishSize: number) => {
-        if (maxSize && minSize) {
+    const checkSizes = (maxSize: any, minSize: any, fishSize: any) => {
+        if (typeof maxSize!=undefined && typeof minSize!=undefined) {
             if (fishSize >= minSize && fishSize <= maxSize) {
                 return true;
             }
             return false;
-        } else if (minSize) {
+        } else if (typeof minSize != undefined) {
             if (fishSize >= minSize) {
                 return true;
             }
             return false;
-        } else if (maxSize) {
+        } else if (typeof maxSize != undefined) {
             if (fishSize <= maxSize) {
                 return true;
             }
@@ -69,17 +70,17 @@ export const Wiki = ({ navigation, route }: any) => {
     };
 
     const checkWeights = (maxWeight: number, minWeight: number, fishWeight: number) => {
-        if (maxWeight && minWeight) {
+        if (typeof maxWeight != undefined && typeof minWeight != undefined) {
             if (fishWeight >= minWeight && fishWeight <= maxWeight) {
                 return true;
             }
             return false;
-        } else if (minWeight) {
+        } else if (typeof minWeight != undefined) {
             if (fishWeight >= minWeight) {
                 return true;
             }
             return false;
-        } else if (maxWeight) {
+        } else if (typeof maxWeight != undefined) {
             if (fishWeight <= maxWeight) {
                 return true;
             }
@@ -132,15 +133,7 @@ export const Wiki = ({ navigation, route }: any) => {
                         ) {
                             return fish;
                         }
-                    }).filter((item) => {
-                        if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
-                            return item;
-                        }
-                    }).filter((item) => {
-                        if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
-                            return item;
-                        }
-                    }).length ? (
+                        }).length ? (
                         <FishCardList
                             data={fishes.filter((item) => {
                                 if (!searchQuery ||
@@ -149,15 +142,16 @@ export const Wiki = ({ navigation, route }: any) => {
                                 ) {
                                     return item;
                                 }
-                            }).filter((item) => {
-                                if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
-                                    return item;
-                                }
-                            }).filter((item) => {
-                                if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
-                                    return item;
-                                }
                             })}
+                            // }).filter((item) => {
+                            //     if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
+                            //         return item;
+                            //     }
+                            // }).filter((item) => {
+                            //     if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
+                            //         return item;
+                            //     }
+                            // })}
                             renderItem={({ item }) => <FishCard fish={item} />}
                             keyExtractor={item => item._id}
                         />

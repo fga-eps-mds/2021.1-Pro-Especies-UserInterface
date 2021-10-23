@@ -24,61 +24,159 @@ import { ScrollView } from "react-native-gesture-handler";
 
 
 interface IGroup {
-    arraias: {
+    groups: {
         name: string,
         activate: boolean,
         subGroups: {
             name: string,
-            activate: boolean
-        }[]
-    },
-    cascudos: {
-        name: string,
-        activate: boolean,
-        subGroups: {
-            name: string,
-            activate: boolean
-        }[]
-    }
+            activate: boolean,
+        }[],
+    }[],
+}
+
+interface ISubGroup {
+    name: string,
+    activate: boolean,
 }
 
 const initialState: IGroup = {
-    arraias: {
-        name: "Arraia",
-        activate: false,
-        subGroups: [
-            {
-                name: "Arraia1",
-                activate: false
-            },
-            {
-                name: "Arraia2",
-                activate: false
-            },
-            {
-                name: "Arraia3",
-                activate: false
-            },
-        ]
-    },
-    cascudos: {
-        name: "Cascudo",
-        activate: false,
-        subGroups: [
-            {
-                name: "Cascudo1",
-                activate: false
-            },
-            {
-                name: "Cascudo2",
-                activate: false
-            },
-            {
-                name: "Cascudo3",
-                activate: false
-            },
-        ]
-    }
+    groups: [
+        {
+            name: "Arraias",
+            activate: false,
+            subGroups: [
+                {
+                    name: "Arraias",
+                    activate: false
+                },
+            ],
+        },
+        {
+            name: "Cascudos",
+            activate: false,
+            subGroups: [
+                {
+                    name: "Cascudos pequenos",
+                    activate: false
+                },
+                {
+                    name: "Cascudos grandes",
+                    activate: false
+                },
+            ]
+        },
+        {
+            name: "Outros",
+            activate: false,
+            subGroups: [
+                {
+                    name: "Baiacu",
+                    activate: false
+                },
+                {
+                    name: "Peixes elétricos",
+                    activate: false
+                },
+                {
+                    name: "Outros",
+                    activate: false
+                },
+            ]
+        },
+        {
+            name: "Peixes de couro",
+            activate: false,
+            subGroups: [
+                {
+                    name: "Grandes bagres",
+                    activate: false
+                },
+                {
+                    name: "Bagres médios",
+                    activate: false
+                },
+                {
+                    name: "Bagres pequenos",
+                    activate: false
+                },
+                {
+                    name: "Mandís",
+                    activate: false
+                },
+                {
+                    name: "Candirús",
+                    activate: false
+                },
+            ]
+        },
+        {
+            name: "Peixes com escamas",
+            activate: false,
+            subGroups: [
+                {
+                    name: "Cachorras",
+                    activate: false
+                },
+                {
+                    name: "Peixes pequenos",
+                    activate: false
+                },
+                {
+                    name: "Peixes médios",
+                    activate: false
+                },
+                {
+                    name: "Peixes grandes",
+                    activate: false
+                },
+                {
+                    name: "Peixes redondos",
+                    activate: false
+                },
+                {
+                    name: "Piaus",
+                    activate: false
+                },
+                {
+                    name: "Lambarís e piabas",
+                    activate: false
+                },
+                {
+                    name: "Bicudas",
+                    activate: false
+                },
+                {
+                    name: "Tucanarés",
+                    activate: false
+                },
+                {
+                    name: "Traíras",
+                    activate: false
+                },
+                {
+                    name: "Corvinas",
+                    activate: false
+                },
+                {
+                    name: "Sardinhas",
+                    activate: false
+                },
+                {
+                    name: "Papa-terras e Curimatás",
+                    activate: false
+                },
+                {
+                    name: "Carás, Marianas e Jacundás",
+                    activate: false
+                },
+                {
+                    name: "Pibanha, Matrinxã e Voadores",
+                    activate: false
+                },
+            ]
+        },
+    ]
+
 }
 
 
@@ -97,34 +195,17 @@ export const WikiFilter = ({ navigation }: any) => {
         // ?largeGroup=escama&group=Silva&group=famosos&commonName=salmao%20%20albino
         let new_url: string = "?";
 
-        if (isChecked.arraias.activate || isChecked.cascudos.activate) {
-            if (isChecked.arraias.activate) {
+        for (let i = 0; i < isChecked.groups.length; i++) {
+            if (isChecked.groups[i].activate) {
                 if (new_url != "?")
                     new_url += "&"
-                new_url += "largeGroup=" + isChecked.arraias.name.toLowerCase();
-            }
-            if (isChecked.cascudos.activate) {
-                if (new_url != "?")
-                    new_url += "&"
-                new_url += "largeGroup=" + isChecked.cascudos.name.toLowerCase();
-            }
-
-            for (let i = 0; i < isChecked.arraias.subGroups.length; i++) {
-                if (isChecked.arraias.subGroups[i].activate) {
-                    if (new_url != "?")
-                        new_url += "&"
-                    new_url += "group=" + isChecked.arraias.subGroups[i].name.toLowerCase();
-                }
-            }
-
-            for (let i = 0; i < isChecked.cascudos.subGroups.length; i++) {
-                if (isChecked.cascudos.subGroups[i].activate) {
-                    if (new_url != "?")
-                        new_url += "&"
-                    new_url += "group=" + isChecked.cascudos.subGroups[i].name.toLowerCase();
+                new_url += "largeGroup=" + isChecked.groups[i].name;
+                for (let j = 0; j < isChecked.groups[i].subGroups.length; j++) {
+                    new_url += "&group=" + isChecked.groups[i].subGroups[j].name;
                 }
             }
         }
+        
 
         if (new_url != "?")
             new_url += "&"
@@ -161,8 +242,64 @@ export const WikiFilter = ({ navigation }: any) => {
     }
 
     useEffect(() => {
-        console.log(isChecked.arraias.subGroups)
+
     }, [])
+
+    // const subGroupList = () => {
+    //     return isChecked.arraias.subGroups.map((item, index) => {
+    //         return (
+    //             <CheckBoxRow>
+    //                 <Checkbox
+    //                     value={item.activate}
+    //                     onValueChange={() => {
+    //                         const newState = { ...isChecked };
+    //                         newState.arraias.subGroups[index].activate = !newState.arraias.subGroups[index].activate;
+    //                         setIsChecked(newState);
+    //                     }}
+    //                     color={item.activate ? '#4630EB' : undefined} />
+    //                 <RegularText text={item.name} />
+    //             </CheckBoxRow>
+    //         );
+    //     });
+    // }
+
+    const subGroupList = (group: IGroup, g_index: number) => {
+        return group.groups[g_index].subGroups.map((item, index) => {
+            return (
+                <CheckBoxRow key={ `subg${index}` }>
+                    <Checkbox
+                        value={item.activate}
+                        onValueChange={() => {
+                            const newState = { ...isChecked };
+                            newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
+                            setIsChecked(newState);
+                        }}
+                        color={item.activate ? '#4630EB' : undefined}
+                    />
+                    <RegularText text={item.name} />
+                </CheckBoxRow>
+            );
+        });
+    }
+
+    const groupList = () => {
+        return isChecked.groups.map((item, index) => {
+            return (
+                <CheckBoxRow key={ `g${index}` }>
+                    <Checkbox
+                        value={item.activate}
+                        onValueChange={() => {
+                            const newState = { ...isChecked };
+                            newState.groups[index].activate = !newState.groups[index].activate;
+                            setIsChecked(newState);
+                        }}
+                        color={item.activate ? '#4630EB' : undefined}
+                    />
+                    <RegularText text={item.name} />
+                </CheckBoxRow>
+            );
+        });
+    }
 
     return (
         <PageContainer>
@@ -173,49 +310,22 @@ export const WikiFilter = ({ navigation }: any) => {
                     <GroupContainer>
                         <BoldText>Grande Grupo</BoldText>
                         <GroupOptionsContainer>
-                            <CheckBoxRow>
-                                <Checkbox
-                                    value={isChecked.arraias.activate}
-                                    onValueChange={() => {
-                                        const newState = { ...isChecked };
-                                        newState.arraias.activate = !newState.arraias.activate;
-                                        console.log(newState.arraias.activate);
-                                        setIsChecked(newState);
-                                    }}
-                                    color={isChecked.arraias.activate ? '#4630EB' : undefined}
-                                />
-                                <RegularText text={isChecked.arraias.name} />
-
-
-                                {/* {isChecked.cascudos.activate && (
-                                <>
-                                    <RegularText text="SubGrupo 2" />
-                                    <Checkbox
-                                        value={isChecked.cascudos.subGroups.cascao}
-                                        onValueChange={() => {
-                                            const newState = { ...isChecked };
-                                            newState.cascudos.subGroups.cascao = !newState.cascudos.subGroups.cascao;
-                                            setIsChecked(newState);
-                                        }}
-                                        color={isChecked.cascudos.subGroups.cascao ? '#4630EB' : undefined}
-                                    />
-                                </>
-                            )} */}
-                            </CheckBoxRow>
-
-                            <CheckBoxRow>
-                                <Checkbox
-                                    value={isChecked.cascudos.activate}
-                                    onValueChange={() => {
-                                        const newState = { ...isChecked };
-                                        newState.cascudos.activate = !newState.cascudos.activate;
-                                        console.log(newState.cascudos.activate);
-                                        setIsChecked(newState);
-                                    }}
-                                    color={isChecked.cascudos.activate ? '#4630EB' : undefined}
-                                />
-                                <RegularText text={isChecked.cascudos.name} />
-                            </CheckBoxRow>
+                            {/* // <CheckBoxRow>
+                            //     <Checkbox
+                            //         value={isChecked.arraias.activate}
+                            //         onValueChange={() => {
+                            //             const newState = { ...isChecked };
+                            //             newState.arraias.activate = !newState.arraias.activate;
+                            //             console.log(newState.arraias.activate);
+                            //             setIsChecked(newState);
+                            //         }}
+                            //         color={isChecked.arraias.activate ? '#4630EB' : undefined}
+                            //     />
+                            //     <RegularText text={isChecked.arraias.name} />
+                            // </CheckBoxRow> */}
+                            {
+                                groupList()
+                            }
 
                         </GroupOptionsContainer>
                     </GroupContainer>
@@ -223,62 +333,23 @@ export const WikiFilter = ({ navigation }: any) => {
                     <GroupContainer>
                         <BoldText>Grupo</BoldText>
                         <GroupOptionsContainer>
-                            {/* {isChecked.arraias.subGroups.map((item, index) => {
-                            <CheckBoxRow>
-                            
-                                <Checkbox
-                                    value={item.activate}
-                                    onValueChange={() => {
-                                        const newState = { ...isChecked };
-                                        newState.arraias.subGroups[index].activate = !newState.arraias.subGroups[index].activate;
-                                        setIsChecked(newState);
-                                    }}
-                                    color={item.activate ? '#4630EB' : undefined}
-                                />
-                                <RegularText text={item.name} />
-                            </CheckBoxRow>
-                            
-                        })
-                        } */}
-                            {isChecked.arraias.activate ?
-                                (<>
-                                    <CheckBoxRow>
-                                        <Checkbox
-                                            value={isChecked.arraias.subGroups[0].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.arraias.subGroups[0].activate = !newState.arraias.subGroups[0].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.arraias.subGroups[0].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.arraias.subGroups[0].name} />
-                                    </CheckBoxRow>
-                                    <CheckBoxRow>
-                                        <Checkbox
-                                            value={isChecked.arraias.subGroups[1].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.arraias.subGroups[1].activate = !newState.arraias.subGroups[1].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.arraias.subGroups[1].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.arraias.subGroups[1].name} />
-                                    </CheckBoxRow>
-                                    <CheckBoxRow>
-                                        <Checkbox
-                                            value={isChecked.arraias.subGroups[2].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.arraias.subGroups[2].activate = !newState.arraias.subGroups[2].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.arraias.subGroups[2].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.arraias.subGroups[2].name} />
-                                    </CheckBoxRow>
+                            {
+                                (isChecked.groups[0].activate) ? subGroupList(isChecked, 0) : null
+                            }
+                            {
+                                (isChecked.groups[1].activate) ? subGroupList(isChecked, 1) : null
+                            }
+                            {
+                                (isChecked.groups[2].activate) ? subGroupList(isChecked, 2) : null
+                            }
+                            {
+                                (isChecked.groups[3].activate) ? subGroupList(isChecked, 3) : null
+                            }
+                            {
+                                (isChecked.groups[4].activate) ? subGroupList(isChecked, 4) : null
+                            }
 
-                                </>) : null}
-
-                            {isChecked.cascudos.activate ?
+                            {/* {isChecked.cascudos.activate ?
                                 (<>
                                     <CheckBoxRow>
                                         <Checkbox
@@ -315,7 +386,7 @@ export const WikiFilter = ({ navigation }: any) => {
                                         <RegularText text={isChecked.cascudos.subGroups[2].name} />
                                     </CheckBoxRow>
 
-                                </>) : null}
+                                </>) : null} */}
                         </GroupOptionsContainer>
                     </GroupContainer>
 
