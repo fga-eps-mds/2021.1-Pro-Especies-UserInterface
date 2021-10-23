@@ -44,7 +44,6 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   async function signIn(email: string, password: string) {
     try {
       const result = await UserLogin(email, password);
-      // console.log(result);
 
       await AsyncStorage.setItem('@eupescador/token', result.data.token);
       await AsyncStorage.setItem('@eupescador/userId', result.data.id);
@@ -52,11 +51,9 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
         '@eupescador/userAdmin',
         JSON.stringify(result.data.admin),
       );
-
       userService.defaults.headers.Authorization = `Bearer ${result.data.token}`;
       setAuthenticated(true);
       setUserId(result.data.id);
-
       return result;
     } catch (error) {
       return error;
