@@ -63,7 +63,7 @@ export const Input = styled.TextInput`
     margin-left: ${RFValue(4, 640)}px;
 `
 
-export const OptionList = styled(FlatList as new () => FlatList<IFish>)`
+export const OptionList = styled.ScrollView`
     margin: ${RFValue(6, 640)}px ${RFValue(7, 640)}px;
 `
 

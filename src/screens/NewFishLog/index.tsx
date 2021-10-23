@@ -29,6 +29,7 @@ import {
   OptionsContainer,
   OptionListItem,
 } from './styles';
+
 export interface IFish {
   _id: string;
   largeGroup: string;
@@ -87,46 +88,40 @@ export function NewFishLog({ navigation, route }: any) {
     setFishGroup(fish.group);
   }
 
-  useEffect(() => {
-    getFishOptions();
-  }, []);
-  
-
-
   const getData = async () => {
     const id = await AsyncStorage.getItem("@eupescador/userId");
     const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
     const token = await AsyncStorage.getItem("@eupescador/token");
-    if (token){
+    if (token) {
       setUserToken(token);
       getFishLogProperties(token);
     }
     if (id)
       setUserId(id);
     if (userAdmin === "true")
-        setIsAdmin(true);
+      setIsAdmin(true);
     else
-        setIsAdmin(false);
+      setIsAdmin(false);
   }
 
   const getFishLogProperties = async (token: string) => {
     try {
-        const {log_id} = route.params;
-        const log = await GetOneFishLog(log_id, token);
-        if(log.photo){
-          const log64 = Buffer.from(log.photo).toString('base64');
-          setFishPhoto(log64);
-        }
-        setFishName(log.name);
-        setFishSpecies(log.species);
-        setFishLargeGroup(log.largeGroup);
-        setFishGroup(log.group);
-        setFishWeight(log.weight);
-        setFishLength(log.length);
-        setFishLongitude(log.coordenates.longitude);
-        setFishLatitude(log.coordenates.latitude);
+      const { log_id } = route.params;
+      const log = await GetOneFishLog(log_id, token);
+      if (log.photo) {
+        const log64 = Buffer.from(log.photo).toString('base64');
+        setFishPhoto(log64);
+      }
+      setFishName(log.name);
+      setFishSpecies(log.species);
+      setFishLargeGroup(log.largeGroup);
+      setFishGroup(log.group);
+      setFishWeight(log.weight);
+      setFishLength(log.length);
+      setFishLongitude(log.coordenates.longitude);
+      setFishLatitude(log.coordenates.latitude);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
   };
 
@@ -171,40 +166,40 @@ export function NewFishLog({ navigation, route }: any) {
   const handleEditFishLog = async () => {
     let alertMessage = '';
     let alertTitle = '';
-    const {log_id} = route.params;
+    const { log_id } = route.params;
     let reviewed = false;
-      if(isAdmin){
-        reviewed = true;
-      }
+    if (isAdmin) {
+      reviewed = true;
+    }
 
-      try {
-        const res = await UpdateFishLog(
-          log_id,
-          fishName,
-          fishLargeGroup,
-          fishGroup,
-          fishSpecies,
-          fishLatitude,
-          fishLongitude,
-          fishPhoto,
-          fishLength,
-          fishWeight,
-          reviewed,
-          isAdmin
-        );
-        alertMessage = "Registro atualizado com sucesso";
-        alertTitle = 'Editar registro'
-        const resetAction = CommonActions.reset({
-          index: 0,
-          routes: [{ name: 'WikiFishlogs'}],
-        });
-        navigation.dispatch(resetAction);
-      } catch (error) {
-        console.log(error);
-        if(error.response.status === 400)
-          alertTitle = 'Sem informação'
-        alertMessage = error.response.data.message;
-      }
+    try {
+      const res = await UpdateFishLog(
+        log_id,
+        fishName,
+        fishLargeGroup,
+        fishGroup,
+        fishSpecies,
+        fishLatitude,
+        fishLongitude,
+        fishPhoto,
+        fishLength,
+        fishWeight,
+        reviewed,
+        isAdmin
+      );
+      alertMessage = "Registro atualizado com sucesso";
+      alertTitle = 'Editar registro'
+      const resetAction = CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'WikiFishlogs' }],
+      });
+      navigation.dispatch(resetAction);
+    } catch (error) {
+      console.log(error);
+      if (error.response.status === 400)
+        alertTitle = 'Sem informação'
+      alertMessage = error.response.data.message;
+    }
     if (alertMessage) {
       Alert.alert(alertTitle, alertMessage, [
         {
@@ -232,7 +227,7 @@ export function NewFishLog({ navigation, route }: any) {
       alertMessage = 'Registro criado com sucesso!';
       const resetAction = CommonActions.reset({
         index: 0,
-        routes: [{ name: 'WikiFishlogs'}],
+        routes: [{ name: 'WikiFishlogs' }],
       });
       navigation.dispatch(resetAction);
     } catch (error: any) {
@@ -254,12 +249,27 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   useEffect(() => {
+    getFishOptions();
     const { isNewRegister } = route.params;
     setIsNew(isNewRegister);
-    if(!isNewRegister){
+    if (!isNewRegister) {
       getData();
     }
   }, []);
+
+  const list = () => {
+    return fishes.filter((item) => {
+      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+        return item;
+      }
+    }).map((item) => {
+      return (
+        <OptionListItem onPress={() => setFishProps(item)}>
+          <RegularText text={item.commonName} />
+        </OptionListItem>
+      );
+    });
+  };
 
   return (
     <NewFishLogContainer>
@@ -284,10 +294,10 @@ export function NewFishLog({ navigation, route }: any) {
 
         <InputContainer>
           <InputView>
-            <Input 
-              placeholder="Nome" 
+            <Input
+              placeholder="Nome"
               value={isNew ? null : fishName}
-              onChangeText={setFishName} 
+              onChangeText={setFishName}
             />
             <InputBox />
           </InputView>
@@ -301,35 +311,22 @@ export function NewFishLog({ navigation, route }: any) {
               }
             }).length) ? (
               <OptionsContainer>
-                <OptionList
-                  data={fishes.filter((item) => {
-                    if (
-                      item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
-                    ) {
-                      return item;
-                    }
-                  })}
-                  renderItem={({ item }) =>
-                    <OptionListItem onPress={() => setFishProps(item)}>
-                      <RegularText text={item.commonName} />
-                    </OptionListItem>
-                  }
-                  keyExtractor={(item) => item._id}
-                />
+                <OptionList>{list()}</OptionList>
               </OptionsContainer>
             ) : (null)
           }
+
           <InputView>
-            <Input 
+            <Input
               placeholder="Espécie"
               value={isNew ? null : fishSpecies}
-              onChangeText={setFishSpecies} 
+              onChangeText={setFishSpecies}
             />
             <InputBox />
           </InputView>
 
           <InputView>
-              <Input
+            <Input
               placeholder="Grande Grupo"
               value={isNew ? null : fishLargeGroup}
               onChangeText={setFishLargeGroup}
@@ -338,10 +335,10 @@ export function NewFishLog({ navigation, route }: any) {
           </InputView>
 
           <InputView>
-            <Input 
+            <Input
               placeholder="Grupo"
               value={isNew ? null : fishGroup}
-              onChangeText={setFishGroup} 
+              onChangeText={setFishGroup}
             />
             <InputBox />
           </InputView>
