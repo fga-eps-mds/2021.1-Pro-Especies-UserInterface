@@ -1,0 +1,93 @@
+name: Generate Pre-Release
+
+on:
+  push:
+    branches:
+      - devel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '8'
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v5.6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set filename
+        id: report
+        run: |
+          echo "::set-output name=report_file_name::fga-eps-mds-${{ github.event.repository.name }}-$(TZ='America/Sao_Paulo' date +'%m-%d-%Y-%H-%M')"
+      - name: Get SonarCloud metrics
+        run: |
+          wget $SONAR_URL -O ${{ steps.report.outputs.report_file_name }}.json
+        env:
+          SONAR_URL: ${{ secrets.SONAR_URL }}
+
+      - name: Increase app version
+        run: |
+          python increase_version.py ${{steps.tag_version.outputs.new_tag}} app.json
+          cat app.json
+          touch expo-project.apk
+
+      - name: Set Expo enviroments
+        uses: expo/expo-github-action@v5
+        with:
+          expo-version: 4.x
+          expo-username: ${{ secrets.EXPO_CLI_USERNAME }}
+          expo-password: ${{ secrets.EXPO_CLI_PASSWORD }}
+
+      - name: Install Turtle
+        run: |
+          yarn install
+          yarn global add expo-cli
+          yarn global add turtle-cli
+          yarn add expo
+    
+      - name: Building Expo standalone app
+        env:
+          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
+          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
+          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD}}
+          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
+          EXPO_USERNAME: ${{ secrets.EXPO_CLI_USERNAME }}
+          EXPO_PASSWORD: ${{ secrets.EXPO_CLI_PASSWORD }}
+        run: |
+          echo "$EXPO_ANDROID_KEYSTORE_BASE64" > expo-project.jks.base64
+          base64 --decode expo-project.jks.base64 > expo-project.jks
+          turtle build:android \
+            --keystore-path ./expo-project.jks \
+            --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS \
+            --type apk \
+            -o expo-project.apk
+
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+          prerelease: true
+          artifacts: |
+            ${{ steps.report.outputs.report_file_name }}.json ,
+            expo-project.apk
+      
+      - name: Pushes sonar file
+        uses: dmnemec/copy_file_to_another_repo_action@v1.1.1
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GIT_TOKEN }}
+        with:
+          source_file: ${{ steps.report.outputs.report_file_name }}.json
+          destination_repo: "fga-eps-mds/2021.1-Pro-Especies-Docs"
+          destination_folder: "analytics-raw-data"
+          user_email: ${{ secrets.GIT_EMAIL}}
+          user_name: ${{ secrets.GIT_USER }}
+          commit_message: Upload a new metrics from ${{ github.event.repository.name }}
+
