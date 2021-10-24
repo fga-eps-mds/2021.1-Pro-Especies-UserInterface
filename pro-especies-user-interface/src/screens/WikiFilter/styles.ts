@@ -67,13 +67,14 @@ export const SwitchContainer = styled.View`
     margin-bottom: ${RFValue(24, 640)}px;
     margin-top: ${RFValue(8, 640)}px;
     align-items: center;
-    width: 65%;
+    width: 85%;
 `
 
 export const SwitchColumn = styled.View`
     width: 100%;
     flex-direction: row;
     align-self: center;
+    align-items: center;
     justify-content: flex-end;
 `
 

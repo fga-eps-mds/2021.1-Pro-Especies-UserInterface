@@ -33,6 +33,7 @@ export const Wiki = ({ navigation, route }: any) => {
     } = route.params;
 
     console.log(route.params);
+    console.log(fishMinSize, typeof fishMaxSize!="undefined");
     const [searchQuery, setSearchQuery] = React.useState('');
     const [wiki, setWiki] = useState(false);
     const [filter, setFilter] = useState(false);
@@ -41,7 +42,6 @@ export const Wiki = ({ navigation, route }: any) => {
     const updateFishes = async () => {
         try {
             const data = await GetWikiFishes(filterQuery);
-            console.log(data);
             setFishes(data);
         } catch (error: any) {
             console.log(error);
@@ -133,6 +133,22 @@ export const Wiki = ({ navigation, route }: any) => {
                         ) {
                             return fish;
                         }
+                        }).filter((item) => {
+                            if (typeof fishMaxSize!="undefined" && typeof fishMinSize!="undefined") {
+                                if (item.maxSize >= fishMinSize && item.maxSize <= fishMaxSize) {
+                                    return item;
+                                }
+                            } else if (typeof fishMinSize != "undefined") {
+                                if (item.maxSize >= fishMinSize) {
+                                    return item;
+                                }
+                            } else if (typeof fishMaxSize != "undefined") {
+                                if (item.maxSize <= fishMaxSize) {
+                                    return item;
+                                }
+                            } else {
+                                return item;
+                            }
                         }).length ? (
                         <FishCardList
                             data={fishes.filter((item) => {
@@ -142,16 +158,23 @@ export const Wiki = ({ navigation, route }: any) => {
                                 ) {
                                     return item;
                                 }
+                            }).filter((item) => {
+                                if (typeof fishMaxSize!="undefined" && typeof fishMinSize!="undefined") {
+                                    if (item.maxSize >= fishMinSize && item.maxSize <= fishMaxSize) {
+                                        return item;
+                                    }
+                                } else if (typeof fishMinSize != "undefined") {
+                                    if (item.maxSize >= fishMinSize) {
+                                        return item;
+                                    }
+                                } else if (typeof fishMaxSize != "undefined") {
+                                    if (item.maxSize <= fishMaxSize) {
+                                        return item;
+                                    }
+                                } else {
+                                    return item;
+                                }
                             })}
-                            // }).filter((item) => {
-                            //     if (checkSizes(fishMaxSize, fishMinSize, item.maxSize)) {
-                            //         return item;
-                            //     }
-                            // }).filter((item) => {
-                            //     if (checkWeights(fishMaxWeight, fishMinWeight, item.maxWeight)) {
-                            //         return item;
-                            //     }
-                            // })}
                             renderItem={({ item }) => <FishCard fish={item} />}
                             keyExtractor={item => item._id}
                         />

@@ -185,6 +185,10 @@ export const WikiFilter = ({ navigation }: any) => {
     const [isThreatened, setIsThreatened] = useState<boolean>(true);
     const [hasSpawningSeason, setHasSpawningSeason] = useState<boolean>(true);
     const [wasIntroduced, setWasIntroduced] = useState<boolean>(true);
+    const [checkForEndemic, setCheckForEndemic] = useState<boolean>(false);
+    const [checkForThreatened, setCheckForThreatened] = useState<boolean>(false);
+    const [checkForSpawningSeason, setCheckForSpawningSeason] = useState<boolean>(false);
+    const [checkForIntroduced, setCheckForIntroduced] = useState<boolean>(false);
     const [maxWeight, setMaxWeight] = useState<number | null>();
     const [minWeight, setMinWeight] = useState<number | null>();
     const [maxLength, setMaxLength] = useState<number | null>();
@@ -201,27 +205,35 @@ export const WikiFilter = ({ navigation }: any) => {
                     new_url += "&"
                 new_url += "largeGroup=" + isChecked.groups[i].name;
                 for (let j = 0; j < isChecked.groups[i].subGroups.length; j++) {
-                    new_url += "&group=" + isChecked.groups[i].subGroups[j].name;
+                    if(isChecked.groups[i].subGroups[j].activate)
+                        new_url += "&group=" + isChecked.groups[i].subGroups[j].name;
                 }
             }
         }
-        
 
-        if (new_url != "?")
-            new_url += "&"
-        new_url += "isEndemic=" + JSON.stringify(isEndemic);
+        if (checkForEndemic) {
+            if (new_url != "?")
+                new_url += "&"
+            new_url += "isEndemic=" + JSON.stringify(isEndemic);
+        }
 
-        if (new_url != "?")
-            new_url += "&"
-        new_url += "isThreatened=" + JSON.stringify(isThreatened);
+        if (checkForThreatened) {
+            if (new_url != "?")
+                new_url += "&"
+            new_url += "isThreatened=" + JSON.stringify(isThreatened);
+        }
 
-        if (new_url != "?")
-            new_url += "&"
-        new_url += "hasSpawningSeason=" + JSON.stringify(hasSpawningSeason);
+        if (checkForSpawningSeason) {
+            if (new_url != "?")
+                new_url += "&"
+            new_url += "hasSpawningSeason=" + JSON.stringify(hasSpawningSeason);
+        }
 
-        if (new_url != "?")
-            new_url += "&"
-        new_url += "wasIntroduced=" + JSON.stringify(wasIntroduced);
+        if (checkForIntroduced) {
+            if (new_url != "?")
+                new_url += "&"
+            new_url += "wasIntroduced=" + JSON.stringify(wasIntroduced);
+        }
 
         console.log(new_url);
 
@@ -245,28 +257,10 @@ export const WikiFilter = ({ navigation }: any) => {
 
     }, [])
 
-    // const subGroupList = () => {
-    //     return isChecked.arraias.subGroups.map((item, index) => {
-    //         return (
-    //             <CheckBoxRow>
-    //                 <Checkbox
-    //                     value={item.activate}
-    //                     onValueChange={() => {
-    //                         const newState = { ...isChecked };
-    //                         newState.arraias.subGroups[index].activate = !newState.arraias.subGroups[index].activate;
-    //                         setIsChecked(newState);
-    //                     }}
-    //                     color={item.activate ? '#4630EB' : undefined} />
-    //                 <RegularText text={item.name} />
-    //             </CheckBoxRow>
-    //         );
-    //     });
-    // }
-
     const subGroupList = (group: IGroup, g_index: number) => {
         return group.groups[g_index].subGroups.map((item, index) => {
             return (
-                <CheckBoxRow key={ `subg${index}` }>
+                <CheckBoxRow key={`subg${index}`}>
                     <Checkbox
                         value={item.activate}
                         onValueChange={() => {
@@ -274,7 +268,7 @@ export const WikiFilter = ({ navigation }: any) => {
                             newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#4630EB' : undefined}
+                        color={item.activate ? '#00BBD4' : undefined}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
@@ -285,7 +279,7 @@ export const WikiFilter = ({ navigation }: any) => {
     const groupList = () => {
         return isChecked.groups.map((item, index) => {
             return (
-                <CheckBoxRow key={ `g${index}` }>
+                <CheckBoxRow key={`g${index}`}>
                     <Checkbox
                         value={item.activate}
                         onValueChange={() => {
@@ -293,7 +287,7 @@ export const WikiFilter = ({ navigation }: any) => {
                             newState.groups[index].activate = !newState.groups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#4630EB' : undefined}
+                        color={item.activate ? '#00BBD4' : undefined}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
@@ -310,23 +304,9 @@ export const WikiFilter = ({ navigation }: any) => {
                     <GroupContainer>
                         <BoldText>Grande Grupo</BoldText>
                         <GroupOptionsContainer>
-                            {/* // <CheckBoxRow>
-                            //     <Checkbox
-                            //         value={isChecked.arraias.activate}
-                            //         onValueChange={() => {
-                            //             const newState = { ...isChecked };
-                            //             newState.arraias.activate = !newState.arraias.activate;
-                            //             console.log(newState.arraias.activate);
-                            //             setIsChecked(newState);
-                            //         }}
-                            //         color={isChecked.arraias.activate ? '#4630EB' : undefined}
-                            //     />
-                            //     <RegularText text={isChecked.arraias.name} />
-                            // </CheckBoxRow> */}
                             {
                                 groupList()
                             }
-
                         </GroupOptionsContainer>
                     </GroupContainer>
 
@@ -348,45 +328,6 @@ export const WikiFilter = ({ navigation }: any) => {
                             {
                                 (isChecked.groups[4].activate) ? subGroupList(isChecked, 4) : null
                             }
-
-                            {/* {isChecked.cascudos.activate ?
-                                (<>
-                                    <CheckBoxRow>
-                                        <Checkbox
-                                            value={isChecked.cascudos.subGroups[0].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.cascudos.subGroups[0].activate = !newState.cascudos.subGroups[0].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.cascudos.subGroups[0].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.cascudos.subGroups[0].name} />
-                                    </CheckBoxRow>
-                                    <CheckBoxRow>
-
-                                        <Checkbox
-                                            value={isChecked.cascudos.subGroups[1].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.cascudos.subGroups[1].activate = !newState.cascudos.subGroups[1].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.cascudos.subGroups[1].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.cascudos.subGroups[1].name} />
-                                    </CheckBoxRow>
-                                    <CheckBoxRow>
-                                        <Checkbox
-                                            value={isChecked.cascudos.subGroups[2].activate}
-                                            onValueChange={() => {
-                                                const newState = { ...isChecked };
-                                                newState.cascudos.subGroups[2].activate = !newState.cascudos.subGroups[2].activate;
-                                                setIsChecked(newState);
-                                            }}
-                                            color={isChecked.cascudos.subGroups[2].activate ? '#4630EB' : undefined} />
-                                        <RegularText text={isChecked.cascudos.subGroups[2].name} />
-                                    </CheckBoxRow>
-
-                                </>) : null} */}
                         </GroupOptionsContainer>
                     </GroupContainer>
 
@@ -394,10 +335,10 @@ export const WikiFilter = ({ navigation }: any) => {
                         <BoldText>Peso(kg)</BoldText>
                         <InputRow>
                             <InputView>
-                                <Input keyboardType="numeric" placeholder="Mín" onChangeText={(value) => setMinWeight(parseInt(value))} />
+                                <Input keyboardType="numeric" placeholder="min" onChangeText={(value) => setMinWeight(parseInt(value))} />
                             </InputView>
                             <InputView>
-                                <Input keyboardType="numeric" placeholder="Máx" onChangeText={(value) => setMaxWeight(parseInt(value))} />
+                                <Input keyboardType="numeric" placeholder="máx" onChangeText={(value) => setMaxWeight(parseInt(value))} />
                             </InputView>
                         </InputRow>
                     </TextInputContainer>
@@ -406,10 +347,13 @@ export const WikiFilter = ({ navigation }: any) => {
                         <BoldText>Tamanho(cm)</BoldText>
                         <InputRow>
                             <InputView>
-                                <Input keyboardType="numeric" placeholder="Mín" onChangeText={(value) => setMinLength(parseInt(value))} />
+                                <Input keyboardType="numeric" placeholder="min" onChangeText={(value) => {
+                                    setMinLength(parseInt(value))
+                                    console.log(minLength)
+                                }} />
                             </InputView>
                             <InputView>
-                                <Input keyboardType="numeric" placeholder="Máx" onChangeText={(value) => setMaxLength(parseInt(value))} />
+                                <Input keyboardType="numeric" placeholder="máx" onChangeText={(value) => setMaxLength(parseInt(value))} />
                             </InputView>
                         </InputRow>
                     </TextInputContainer>
@@ -417,50 +361,74 @@ export const WikiFilter = ({ navigation }: any) => {
                     <SwitchContainer>
                         <SwitchColumn>
                             <TextContainer>
-                                <BoldText>Endémico</BoldText>
+                                <BoldText style={{opacity: checkForEndemic ? 1 : 0.4}} >Endémico</BoldText>
                             </TextContainer>
                             <Switch
-                                trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
-                                thumbColor={"#00BBD4"}
+                                trackColor={{ false: "#e0dfdf", true: (checkForEndemic ? "#62EEFF" : "#e0dfdf") }}
+                                thumbColor={checkForEndemic ? "#00BBD4" : "#e0dfdf"}
                                 ios_backgroundColor="#e0dfdf"
                                 onValueChange={setIsEndemic}
                                 value={isEndemic}
+                                disabled={!checkForEndemic}
+                            />
+                            <Checkbox
+                                value={checkForEndemic}
+                                onValueChange={setCheckForEndemic}
+                                color={checkForEndemic ? '#00BBD4' : undefined}
                             />
                         </SwitchColumn>
                         <SwitchColumn>
                             <TextContainer>
-                                <BoldText>Ameaçado</BoldText>
+                                <BoldText style={{opacity: checkForThreatened ? 1 : 0.4}}>Ameaçado</BoldText>
                             </TextContainer>
                             <Switch
-                                trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
-                                thumbColor={"#00BBD4"}
+                                trackColor={{ false: "#e0dfdf", true: (checkForThreatened ? "#62EEFF" : "#e0dfdf") }}
+                                thumbColor={checkForThreatened ? "#00BBD4" : "#e0dfdf"}
                                 ios_backgroundColor="#e0dfdf"
                                 onValueChange={setIsThreatened}
                                 value={isThreatened}
+                                disabled={!checkForThreatened}
+                            />
+                            <Checkbox
+                                value={checkForThreatened}
+                                onValueChange={setCheckForThreatened}
+                                color={checkForThreatened ? '#00BBD4' : undefined}
                             />
                         </SwitchColumn>
                         <SwitchColumn>
                             <TextContainer>
-                                <BoldText>Piracema</BoldText>
+                                <BoldText style={{opacity: checkForSpawningSeason ? 1 : 0.4}}>Piracema</BoldText>
                             </TextContainer>
                             <Switch
-                                trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
-                                thumbColor={"#00BBD4"}
+                                trackColor={{ false: "#e0dfdf", true: (checkForSpawningSeason ? "#62EEFF" : "#e0dfdf") }}
+                                thumbColor={checkForSpawningSeason ? "#00BBD4" : "#e0dfdf"}
                                 ios_backgroundColor="#e0dfdf"
                                 onValueChange={setHasSpawningSeason}
                                 value={hasSpawningSeason}
+                                disabled={!checkForSpawningSeason}
+                            />
+                            <Checkbox
+                                value={checkForSpawningSeason}
+                                onValueChange={setCheckForSpawningSeason}
+                                color={checkForSpawningSeason ? '#00BBD4' : undefined}
                             />
                         </SwitchColumn>
                         <SwitchColumn>
                             <TextContainer>
-                                <BoldText>Introduzido</BoldText>
+                                <BoldText style={{opacity: checkForIntroduced ? 1 : 0.4}}>Introduzido</BoldText>
                             </TextContainer>
                             <Switch
-                                trackColor={{ false: "#e0dfdf", true: "#62EEFF" }}
-                                thumbColor={"#00BBD4"}
+                                trackColor={{ false: "#e0dfdf", true: (checkForIntroduced ? "#62EEFF" : "#e0dfdf") }}
+                                thumbColor={checkForIntroduced ? "#00BBD4" : "#e0dfdf"}
                                 ios_backgroundColor="#e0dfdf"
                                 onValueChange={setWasIntroduced}
                                 value={wasIntroduced}
+                                disabled={!checkForIntroduced}
+                            />
+                            <Checkbox
+                                value={checkForIntroduced}
+                                onValueChange={setCheckForIntroduced}
+                                color={checkForIntroduced ? '#00BBD4' : undefined}
                             />
                         </SwitchColumn>
                     </SwitchContainer>
