@@ -29,7 +29,6 @@ async function UpdateFishLog(
         latitude: latitude ? parseFloat(latitude) : null,
         longitude: longitude ? parseFloat(longitude) : null
     }
-
     if (photoString) {
         photo = Buffer.from(photoString, "base64");
     }

@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import { LocationUsageInfoContainer, LocationUsageInfoText, LocationUsageInfoTitle, LocationUsageInfoView, Map, MapButtonsView, MapContainer, MapInfoView, MapInstructions, MapInstructionsText } from './styles';
-import { Marker, MapEvent } from 'react-native-maps';
+import { Marker, MapEvent, LatLng } from 'react-native-maps';
 import { DefaultButton } from '../../components/Button';
 
 export const MyMap = ({ navigation, route }: any) => {
-    const [mark, setMark] = useState<any>({ latitude: route.params.fishLatitude, longitude: route.params.fishLongitude });
+    const [mark, setMark] = useState<LatLng>({ latitude: route.params.fishLatitude, longitude: route.params.fishLongitude });
 
     const handleDrag = (e: MapEvent) => {
         setMark(e.nativeEvent.coordinate);
-        route.params.fishLatitude = e.nativeEvent.coordinate.latitude;
-        route.params.fishLongitude = e.nativeEvent.coordinate.longitude;
     }
-
+    const handleConfirm = (latitude: number, longitude: number) => {
+        route.params.fishLatitude = latitude;
+        route.params.fishLongitude = longitude;
+        const params = {
+            data: route.params,
+            isNewRegister: route.params.isNew,
+            log_id: route.params.log_id,
+            name: route.params.name
+        };
+        navigation.navigate("NewFishLog", { ...params })
+    }
     return (
         <MapContainer >
             <Map
@@ -36,7 +44,7 @@ export const MyMap = ({ navigation, route }: any) => {
                     </LocationUsageInfoContainer>
                     <MapButtonsView>
                         <DefaultButton type="secondary" text="Cancelar" buttonFunction={() => { navigation.goBack() }} />
-                        <DefaultButton text="Confirmar" buttonFunction={() => { navigation.navigate("NewFishLog", { data: route.params, isNewRegister: route.params.isNew }) }} />
+                        <DefaultButton text="Confirmar" buttonFunction={() => handleConfirm(mark.latitude, mark.longitude)} />
                     </MapButtonsView>
                 </LocationUsageInfoView>
             </MapInfoView>

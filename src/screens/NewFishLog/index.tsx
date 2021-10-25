@@ -117,14 +117,14 @@ export function NewFishLog({ navigation, route }: any) {
         const log64 = Buffer.from(log.photo).toString('base64');
         setFishPhoto(log64);
       }
-      setFishName(log.name);
-      setFishSpecies(log.species);
-      setFishLargeGroup(log.largeGroup);
-      setFishGroup(log.group);
-      setFishWeight(log.weight.toString());
-      setFishLength(log.length.toString());
-      setFishLongitude(log.coordenates.longitude.toString());
-      setFishLatitude(log.coordenates.latitude.toString());
+      setFishName(log?.name || undefined);
+      setFishSpecies(log?.species || undefined);
+      setFishLargeGroup(log?.largeGroup || undefined);
+      setFishGroup(log?.group || undefined);
+      setFishWeight(log?.weight?.toString() || undefined);
+      setFishLength(log?.length?.toString() || undefined);
+      setFishLongitude(log?.coordenates?.longitude?.toString() || undefined);
+      setFishLatitude(log?.coordenates?.latitude?.toString() || undefined);
     } catch (error) {
       console.log(error);
     }
@@ -257,6 +257,7 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   const handleOpenMap = async () => {
+    const { log_id, name } = route.params;
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
       Alert.alert(
@@ -286,6 +287,8 @@ export function NewFishLog({ navigation, route }: any) {
       fishLength,
       fishLatitude: latitude,
       fishLongitude: longitude,
+      log_id,
+      name
     })
   }
 
@@ -410,24 +413,6 @@ export function NewFishLog({ navigation, route }: any) {
               <RowView>
                 <HalfInputView>
                   <Input
-                    placeholder="Latitude"
-                    value={fishLatitude}
-                    keyboardType="numeric"
-                    onChangeText={setFishLatitude}
-                  />
-                </HalfInputView>
-                <HalfInputView>
-                  <Input
-                    placeholder="Longitude"
-                    value={fishLongitude}
-                    keyboardType="numeric"
-                    onChangeText={setFishLongitude}
-                  />
-                </HalfInputView>
-              </RowView>
-              <RowView>
-                <HalfInputView>
-                  <Input
                     placeholder="Peso (kg)"
                     value={fishWeight}
                     keyboardType="numeric"
@@ -447,7 +432,7 @@ export function NewFishLog({ navigation, route }: any) {
           </InputContainer>
           <AddLocaleButton onPress={handleOpenMap}>
             <AddLocaleButtonIcon name="map" />
-            <AddLocaleButtonLabel> Adicionar Localização </AddLocaleButtonLabel>
+            <AddLocaleButtonLabel> {fishLatitude && fishLongitude ? "Alterar" : "Adicionar"} Localização </AddLocaleButtonLabel>
           </AddLocaleButton >
           <SendButtonView>
             <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
