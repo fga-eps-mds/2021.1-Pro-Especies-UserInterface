@@ -74,7 +74,7 @@ export const TitleText = styled.Text<{ wiki: boolean }>`
 
 export const NoResultContainer = styled.View`
     align-self: center;
-    align-items: center
+    align-items: center;
     width: 100%;
     justify-content: center;
 `;

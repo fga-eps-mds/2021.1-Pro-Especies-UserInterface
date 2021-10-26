@@ -13,7 +13,7 @@ import {
     TextInputContainer,
     InputRow,
     SwitchContainer,
-    SwitchColumn,
+    SwitchRow,
     Switch,
     InputView,
     Input,
@@ -32,11 +32,6 @@ interface IGroup {
             activate: boolean,
         }[],
     }[],
-}
-
-interface ISubGroup {
-    name: string,
-    activate: boolean,
 }
 
 const initialState: IGroup = {
@@ -240,7 +235,7 @@ export const WikiFilter = ({ navigation }: any) => {
         const resetAction = CommonActions.reset({
             index: 0,
             routes: [{
-                name: 'Wiki',
+                name: 'WikiFishlogs',
                 params: {
                     filterQuery: new_url,
                     fishMaxSize: maxLength,
@@ -252,10 +247,6 @@ export const WikiFilter = ({ navigation }: any) => {
         });
         navigation.dispatch(resetAction);
     }
-
-    useEffect(() => {
-
-    }, [])
 
     const subGroupList = (group: IGroup, g_index: number) => {
         return group.groups[g_index].subGroups.map((item, index) => {
@@ -297,7 +288,7 @@ export const WikiFilter = ({ navigation }: any) => {
 
     return (
         <PageContainer>
-            <TopBar title='Filtros' />
+            <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={()=>{}}/>
             <ScrollView>
                 <FishBodyContainer>
 
@@ -359,7 +350,7 @@ export const WikiFilter = ({ navigation }: any) => {
                     </TextInputContainer>
 
                     <SwitchContainer>
-                        <SwitchColumn>
+                        <SwitchRow>
                             <TextContainer>
                                 <BoldText style={{opacity: checkForEndemic ? 1 : 0.4}} >Endémico</BoldText>
                             </TextContainer>
@@ -376,8 +367,8 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setCheckForEndemic}
                                 color={checkForEndemic ? '#00BBD4' : undefined}
                             />
-                        </SwitchColumn>
-                        <SwitchColumn>
+                        </SwitchRow>
+                        <SwitchRow>
                             <TextContainer>
                                 <BoldText style={{opacity: checkForThreatened ? 1 : 0.4}}>Ameaçado</BoldText>
                             </TextContainer>
@@ -394,8 +385,8 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setCheckForThreatened}
                                 color={checkForThreatened ? '#00BBD4' : undefined}
                             />
-                        </SwitchColumn>
-                        <SwitchColumn>
+                        </SwitchRow>
+                        <SwitchRow>
                             <TextContainer>
                                 <BoldText style={{opacity: checkForSpawningSeason ? 1 : 0.4}}>Piracema</BoldText>
                             </TextContainer>
@@ -412,8 +403,8 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setCheckForSpawningSeason}
                                 color={checkForSpawningSeason ? '#00BBD4' : undefined}
                             />
-                        </SwitchColumn>
-                        <SwitchColumn>
+                        </SwitchRow>
+                        <SwitchRow>
                             <TextContainer>
                                 <BoldText style={{opacity: checkForIntroduced ? 1 : 0.4}}>Introduzido</BoldText>
                             </TextContainer>
@@ -430,7 +421,7 @@ export const WikiFilter = ({ navigation }: any) => {
                                 onValueChange={setCheckForIntroduced}
                                 color={checkForIntroduced ? '#00BBD4' : undefined}
                             />
-                        </SwitchColumn>
+                        </SwitchRow>
                     </SwitchContainer>
 
                     <GreenButton

@@ -16,7 +16,14 @@ import {
   FishBodyContainer,
 } from './styles';
 
-export const Wiki = () => {
+export const Wiki = (
+  { navigation,
+    filterQuery,
+    fishMaxSize,
+    fishMinSize,
+    fishMaxWeight,
+    fishMinWeight }: any
+) => {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [wiki, setWiki] = useState(false);
   const [filter, setFilter] = useState(false);
@@ -25,7 +32,7 @@ export const Wiki = () => {
 
   const updateFishes = async () => {
     try {
-      const data = await GetWikiFishes();
+      const data = await GetWikiFishes(filterQuery);
       setFishes(data);
     } catch (error: any) {
       console.log(error);
@@ -35,6 +42,48 @@ export const Wiki = () => {
   useEffect(() => {
     updateFishes();
   }, []);
+
+  const checkSizes = (maxSize: any, minSize: any, fishSize: any) => {
+    if (typeof maxSize != undefined && typeof minSize != undefined) {
+      if (fishSize >= minSize && fishSize <= maxSize) {
+        return true;
+      }
+      return false;
+    } else if (typeof minSize != undefined) {
+      if (fishSize >= minSize) {
+        return true;
+      }
+      return false;
+    } else if (typeof maxSize != undefined) {
+      if (fishSize <= maxSize) {
+        return true;
+      }
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const checkWeights = (maxWeight: number, minWeight: number, fishWeight: number) => {
+    if (typeof maxWeight != undefined && typeof minWeight != undefined) {
+      if (fishWeight >= minWeight && fishWeight <= maxWeight) {
+        return true;
+      }
+      return false;
+    } else if (typeof minWeight != undefined) {
+      if (fishWeight >= minWeight) {
+        return true;
+      }
+      return false;
+    } else if (typeof maxWeight != undefined) {
+      if (fishWeight <= maxWeight) {
+        return true;
+      }
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   return (
     <FishBodyContainer>
@@ -51,13 +100,11 @@ export const Wiki = () => {
               iconColor="#202E35"
             />
             <TouchableFilter
-              onPress={() => {
-                setFilter(false);
-              }}
+              onPress={() => navigation.navigate('WikiFilter')}
             >
               <TextFilter filter={filter}>Filtro</TextFilter>
+              <IconFilter name="filter-list" />
             </TouchableFilter>
-            <IconFilter name="filter-list" />
           </RowContainer>
           {fishes.filter(fish => {
             if (
@@ -70,6 +117,22 @@ export const Wiki = () => {
                 .includes(searchQuery.toLowerCase().trim())
             ) {
               return fish;
+            }
+          }).filter((item) => {
+            if (typeof fishMaxSize != "undefined" && typeof fishMinSize != "undefined") {
+              if (item.maxSize >= fishMinSize && item.maxSize <= fishMaxSize) {
+                return item;
+              }
+            } else if (typeof fishMinSize != "undefined") {
+              if (item.maxSize >= fishMinSize) {
+                return item;
+              }
+            } else if (typeof fishMaxSize != "undefined") {
+              if (item.maxSize <= fishMaxSize) {
+                return item;
+              }
+            } else {
+              return item;
             }
           }).length ? (
             <FishCardList
@@ -85,21 +148,50 @@ export const Wiki = () => {
                 ) {
                   return item;
                 }
+              }).filter((item) => {
+                if (typeof fishMaxSize != "undefined" && typeof fishMinSize != "undefined") {
+                  if (item.maxSize >= fishMinSize && item.maxSize <= fishMaxSize) {
+                    return item;
+                  }
+                } else if (typeof fishMinSize != "undefined") {
+                  if (item.maxSize >= fishMinSize) {
+                    return item;
+                  }
+                } else if (typeof fishMaxSize != "undefined") {
+                  if (item.maxSize <= fishMaxSize) {
+                    return item;
+                  }
+                } else {
+                  return item;
+                }
               })}
               renderItem={({ item }) => (
-                <FishCard fishWiki={item} cardFunction={() => {}} />
+                <FishCard fishWiki={item} cardFunction={() => { }} />
               )}
               keyExtractor={item => item._id}
             />
           ) : (
             <NoResultContainer>
               <SearchImage source={require('../../assets/search.png')} />
-              <BoldText>Não encontramos nada com o termo digitado</BoldText>
-              <RegularText>
-                Por favor, verifique sua pesquisa e tente novamente para obter
-                resultados.
-              </RegularText>
+              {searchQuery ? (
+                <>
+                  <BoldText>Não encontramos nada com o termo digitado</BoldText>
+                  <RegularText>
+                    Por favor, verifique sua pesquisa e tente novamente para obter
+                    resultados.
+                  </RegularText>
+                </>
+              ) : (
+                <>
+                  <BoldText>Não encontramos nada com os filtros utilizados</BoldText>
+                  <RegularText>
+                    Por favor, verifique sua pesquisa e tente novamente para obter
+                    resultados.
+                  </RegularText>
+                </>
+              )}
             </NoResultContainer>
+
           )}
         </>
       )}

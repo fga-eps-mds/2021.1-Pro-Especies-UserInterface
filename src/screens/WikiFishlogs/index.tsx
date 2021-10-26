@@ -14,7 +14,19 @@ import {
 } from './styles';
 import { useAuth } from '../../contexts/authContext';
 
-export const WikiFishlogs = ({ navigation }: any) => {
+export const WikiFishlogs = ({ navigation, route }: any) => {
+
+  const {
+    filterQuery,
+    fishMaxSize,
+    fishMinSize,
+    fishMaxWeight,
+    fishMinWeight
+  } = route.params;
+
+  console.log(route.params);
+  console.log(fishMinSize, typeof fishMaxSize != "undefined", fishMaxSize >= 5);
+
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
@@ -34,7 +46,7 @@ export const WikiFishlogs = ({ navigation }: any) => {
     Alert.alert('Sair da conta', 'Tem certeza que deseja sair da conta?', [
       {
         text: 'Não',
-        onPress: () => {},
+        onPress: () => { },
         style: 'cancel',
       },
       {
@@ -64,8 +76,8 @@ export const WikiFishlogs = ({ navigation }: any) => {
         buttonFunction={
           isLogged
             ? () => {
-                handleSignOut();
-              }
+              handleSignOut();
+            }
             : () => navigation.navigate('Login')
         }
       />
@@ -89,7 +101,16 @@ export const WikiFishlogs = ({ navigation }: any) => {
           </TouchableTitle>
         </TitleContainer>
       ) : null}
-      {wiki ? <Wiki /> : <FishLogs token={token} />}
+      {wiki ?
+        (<Wiki
+          navigation={navigation}
+          filterQuery={filterQuery}
+          fishMaxSize={fishMaxSize}
+          fishMinSize={fishMinSize}
+          fishMaxWeight={fishMaxWeight}
+          fishMinWeight={fishMinWeight}
+        />) :
+        (<FishLogs token={token} />)}
     </PageContainer>
   );
 };

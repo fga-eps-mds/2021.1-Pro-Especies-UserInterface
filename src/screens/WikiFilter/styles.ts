@@ -70,7 +70,7 @@ export const SwitchContainer = styled.View`
     width: 85%;
 `
 
-export const SwitchColumn = styled.View`
+export const SwitchRow = styled.View`
     width: 100%;
     flex-direction: row;
     align-self: center;
