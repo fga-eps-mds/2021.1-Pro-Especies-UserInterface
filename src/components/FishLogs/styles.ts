@@ -74,6 +74,16 @@ export const FilterIcon = styled(MaterialIcons)`
   color: black;
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
+
+export const ExportAllView = styled.View`
+  background-color: red;
+`;
+
+export const ExportAllText = styled.Text`
+  font-size: ${RFValue(12, 640)}px;
+  font-family: ${({ theme }) => theme.fonts.regular};
+`;
+
 export const AddIcon = styled(MaterialIcons)`
   font-size: ${RFValue(36, 640)}px;
   color: white;

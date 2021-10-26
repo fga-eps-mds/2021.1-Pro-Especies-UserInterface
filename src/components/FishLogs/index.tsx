@@ -19,9 +19,12 @@ import {
   OptionsView,
   NotLoggedText,
   FishCardList,
+  ExportAllView,
+  ExportAllText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { FishCard, IFishLog } from '../FishCard';
+import Checkbox from 'expo-checkbox';
 
 interface Props {
   token: string;
@@ -59,7 +62,15 @@ export const FishLogs = ({ token }: Props) => {
       isNewRegister: true,
       name: "Novo Registro",
     } as never);
-  }
+  };
+
+  const addExportList = (logId: string) => {
+    setExportList( arr => [...arr, logId]);
+  };
+
+  const removeExportList = (logId: string) => {
+    setExportList(exportList.filter(item => item !== logId));
+  };
 
   useEffect(() => {
     getFishLogs();
@@ -83,6 +94,10 @@ export const FishLogs = ({ token }: Props) => {
               </ExportButton>
             </ButtonView>
           </OptionsView>
+            <ExportAllView>
+              <Checkbox />
+              <ExportAllText>Selecionar todos os registros</ExportAllText>
+            </ExportAllView>
           <FishCardList
             data={fishLog}
             renderItem={({ item }) => (
@@ -90,6 +105,12 @@ export const FishLogs = ({ token }: Props) => {
                 fishLog={item}
                 cardFunction={() => {
                   handleNavigation(item._id);
+                }}
+                selectFunction={()=>{
+                  addExportList(item._id);
+                }}
+                deselectFunction={()=>{
+                  removeExportList(item._id);
                 }}
               />
             )}
