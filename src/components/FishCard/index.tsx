@@ -1,11 +1,13 @@
 import React, { FC } from 'react';
 import { TouchableOpacity } from 'react-native';
+import Checkbox from 'expo-checkbox';
 import {
   FishCardContainer,
   FishImage,
   CommonNameText,
   ScientificName,
   TextView,
+  CheckBoxView,
 } from './styles';
 
 export interface IFish {
@@ -59,7 +61,10 @@ export const FishCard: FC<IFishCardProps> = ({
   cardFunction,
 }) => {
   return (
-    <FishCardContainer onPress={() => {}}>
+    <FishCardContainer>
+      <CheckBoxView>
+        <Checkbox />
+      </CheckBoxView>
       <TouchableOpacity onPress={cardFunction}>
         <FishImage
           source={{

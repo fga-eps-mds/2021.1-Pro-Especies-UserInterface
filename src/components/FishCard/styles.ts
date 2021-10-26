@@ -11,6 +11,11 @@ export const FishCardContainer = styled.TouchableOpacity`
   margin-bottom: 14px;
 `;
 
+export const CheckBoxView = styled.View`
+  position: absolute;
+  right: 0;
+`;
+
 export const FishImage = styled.Image`
   width: ${RFValue(156, 640)}px;
   height: ${RFValue(100, 640)}px;
