@@ -34,6 +34,7 @@ export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [exportList , setExportList] = useState(['']);
+  const [isCheck, setIsCheck] = useState(false);
   const navigation = useNavigation();
 
   const getFishLogs = async () => {
@@ -70,6 +71,7 @@ export const FishLogs = ({ token }: Props) => {
 
   const removeExportList = (logId: string) => {
     setExportList(exportList.filter(item => item !== logId));
+    setIsCheck(false);
   };
 
   useEffect(() => {
@@ -95,13 +97,14 @@ export const FishLogs = ({ token }: Props) => {
             </ButtonView>
           </OptionsView>
             <ExportAllView>
-              <Checkbox />
+              <Checkbox value={isCheck} onValueChange={setIsCheck}/>
               <ExportAllText>Selecionar todos os registros</ExportAllText>
             </ExportAllView>
           <FishCardList
             data={fishLog}
             renderItem={({ item }) => (
               <FishCard
+                selectAll={isCheck}
                 fishLog={item}
                 cardFunction={() => {
                   handleNavigation(item._id);

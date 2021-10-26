@@ -27,7 +27,7 @@ export const OptionsView = styled.View`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${RFValue(21, 640)}px;
+  margin-bottom: ${RFValue(12, 640)}px;
 `;
 
 export const TouchableTitle = styled.TouchableOpacity`
@@ -76,7 +76,10 @@ export const FilterIcon = styled(MaterialIcons)`
 `;
 
 export const ExportAllView = styled.View`
-  background-color: red;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: ${RFValue(8, 640)}px;
+  margin-left: ${RFValue(8, 640)}px;
 `;
 
 export const ExportAllText = styled.Text`
