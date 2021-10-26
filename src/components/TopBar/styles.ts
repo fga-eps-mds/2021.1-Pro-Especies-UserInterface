@@ -8,7 +8,7 @@ export const Box = styled.View`
   background-color: ${({ theme }) => theme.colors.primary_light};
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-top: ${RFValue(30)}px;
 `;
 export const IconContainer = styled.View`
@@ -27,7 +27,9 @@ export const IconText = styled.Text`
 `;
 
 export const HeaderText = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.medium};
-  margin-left: 38%;
+  width: 100%;
+  text-align: center;
   font-size: ${RFValue(18)}px;
+  padding-left: ${RFValue(180)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
 `;
