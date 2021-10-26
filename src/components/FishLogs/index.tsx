@@ -30,6 +30,7 @@ interface Props {
 export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [exportList , setExportList] = useState(['']);
   const navigation = useNavigation();
 
   const getFishLogs = async () => {

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC , useState} from 'react';
 import { TouchableOpacity } from 'react-native';
 import Checkbox from 'expo-checkbox';
 import {
@@ -9,6 +9,7 @@ import {
   TextView,
   CheckBoxView,
 } from './styles';
+import { red100 } from 'react-native-paper/lib/typescript/styles/colors';
 
 export interface IFish {
   _id: string;
@@ -53,18 +54,22 @@ interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
   cardFunction: VoidFunction;
+  checkBoxFunction: VoidFunction;
 }
 
 export const FishCard: FC<IFishCardProps> = ({
   fishWiki,
   fishLog,
   cardFunction,
+  checkBoxFunction,
 }) => {
+  const [ isCheck , setIsCheck ] = useState(false);
   return (
     <FishCardContainer>
-      <CheckBoxView>
-        <Checkbox />
-      </CheckBoxView>
+      <CheckBoxView value={isCheck} onValueChange={() => {
+        setIsCheck(!isCheck);
+        checkBoxFunction();
+      }}/>
       <TouchableOpacity onPress={cardFunction}>
         <FishImage
           source={{
