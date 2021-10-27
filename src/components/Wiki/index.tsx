@@ -15,6 +15,7 @@ import {
   FishCardList,
   FishBodyContainer,
 } from './styles';
+import { FilterButton } from '../FilterButton';
 
 export const Wiki = (
   { navigation,
@@ -99,12 +100,14 @@ export const Wiki = (
               value={searchQuery}
               iconColor="#202E35"
             />
-            <TouchableFilter
-              onPress={() => navigation.navigate('WikiFilter')}
-            >
-              <TextFilter filter={filter}>Filtro</TextFilter>
-              <IconFilter name="filter-list" />
-            </TouchableFilter>
+            <FilterButton  
+              url={filterQuery}
+              maxSize={fishMaxSize}
+              maxWeight={fishMaxWeight}
+              minSize={fishMinSize}
+              minWeight={fishMinWeight}
+              navigation={navigation}
+            />
           </RowContainer>
           {fishes.filter(fish => {
             if (
