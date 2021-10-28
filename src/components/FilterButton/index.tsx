@@ -1,5 +1,11 @@
 import React,{ useState } from 'react';
-import { TouchableFilter, TextFilter, IconFilter, NumberContainer, NumberText } from './styles';
+import { 
+  TouchableFilter,
+  TextFilter,
+  IconFilter,
+  NumberContainer,
+  NumberText
+ } from './styles';
 
 
 interface Props {
@@ -17,7 +23,6 @@ const hasFilter = (url: string) => {
 }
 
 export function FilterButton({ url,navigation }: Props) {
-  const [filterNumber,setFilterNumber]= useState(5);
   return (
 
     <TouchableFilter

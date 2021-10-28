@@ -170,27 +170,15 @@ const initialState: IGroup = {
 
 
 export const WikiFilter = ({ navigation }: any) => {
-    const [isEndemic, setIsEndemic] = useState<boolean>(true);
-    const [isThreatened, setIsThreatened] = useState<boolean>(true);
-    const [hasSpawningSeason, setHasSpawningSeason] = useState<boolean>(true);
-    const [wasIntroduced, setWasIntroduced] = useState<boolean>(true);
-    const [checkForEndemic, setCheckForEndemic] = useState<boolean>(false);
-    const [checkForThreatened, setCheckForThreatened] = useState<boolean>(false);
-    const [checkForSpawningSeason, setCheckForSpawningSeason] = useState<boolean>(false);
-    const [checkForIntroduced, setCheckForIntroduced] = useState<boolean>(false);
-    const [maxWeight, setMaxWeight] = useState<number | null>();
-    const [minWeight, setMinWeight] = useState<number | null>();
-    const [maxLength, setMaxLength] = useState<number | null>();
-    const [minLength, setMinLength] = useState<number | null>();
     const [isChecked, setIsChecked] = useState(initialState);
 
     const createURLQuery = () => {
         // ?largeGroup=escama&group=Silva&group=famosos&commonName=salmao%20%20albino
-        let new_url: string = "?";
+        let new_url: string = "";
 
         for (let i = 0; i < isChecked.groups.length; i++) {
             if (isChecked.groups[i].activate) {
-                if (new_url != "?")
+                if (new_url)
                     new_url += "&"
                 new_url += "largeGroup=" + isChecked.groups[i].name;
                 for (let j = 0; j < isChecked.groups[i].subGroups.length; j++) {
@@ -199,32 +187,8 @@ export const WikiFilter = ({ navigation }: any) => {
                 }
             }
         }
-
-        if (checkForEndemic) {
-            if (new_url != "?")
-                new_url += "&"
-            new_url += "isEndemic=" + JSON.stringify(isEndemic);
-        }
-
-        if (checkForThreatened) {
-            if (new_url != "?")
-                new_url += "&"
-            new_url += "isThreatened=" + JSON.stringify(isThreatened);
-        }
-
-        if (checkForSpawningSeason) {
-            if (new_url != "?")
-                new_url += "&"
-            new_url += "hasSpawningSeason=" + JSON.stringify(hasSpawningSeason);
-        }
-
-        if (checkForIntroduced) {
-            if (new_url != "?")
-                new_url += "&"
-            new_url += "wasIntroduced=" + JSON.stringify(wasIntroduced);
-        }
-
-        console.log(new_url);
+        if (new_url)
+            new_url = '?' + new_url;
 
         const resetAction = CommonActions.reset({
             index: 0,
@@ -232,16 +196,24 @@ export const WikiFilter = ({ navigation }: any) => {
                 name: 'WikiFishlogs',
                 params: {
                     filterQuery: new_url,
-                    fishMaxSize: maxLength,
-                    fishMinSize: minLength,
-                    fishMaxWeight: maxWeight,
-                    fishMinWeight: minWeight,
                 },
             }],
         });
         navigation.dispatch(resetAction);
     }
 
+    const clearFilter = () => {
+        const newState = { ...isChecked };
+        for (let i = 0; i < newState.groups.length; i++) {
+            newState.groups[i].activate = false;
+            for (let j = 0; j < newState.groups[i].subGroups.length; j++) {
+                newState.groups[i].subGroups[j].activate = false;
+            }
+        }
+        setIsChecked(newState);
+
+    }
+    
     const subGroupList = (group: IGroup, g_index: number) => {
         return group.groups[g_index].subGroups.map((item, index) => {
             return (
@@ -282,7 +254,7 @@ export const WikiFilter = ({ navigation }: any) => {
 
     return (
         <PageContainer>
-            <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={() => { }} />
+            <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={clearFilter} />
             <ScrollView>
                 <FishBodyContainer>
                     <FilterContainer>

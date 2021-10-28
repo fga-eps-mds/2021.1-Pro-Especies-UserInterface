@@ -5,8 +5,6 @@ async function GetWikiFishes(query:string) {
   if(query)
     route += query;
 
-  console.log(route);
-
   const res = await wikiService.get(route);
 
   return res.data;

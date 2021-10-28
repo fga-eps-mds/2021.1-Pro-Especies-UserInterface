@@ -1,7 +1,6 @@
 import styled from 'styled-components/native';
 import { Searchbar } from 'react-native-paper';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { MaterialIcons } from '@expo/vector-icons';
 import { FlatList } from 'react-native';
 import { IFish } from '../FishCard';
 
@@ -28,24 +27,7 @@ export const RowContainer = styled.View`
   justify-content: space-around;
   margin-bottom: ${RFValue(16, 640)}px;
   background-color: ${({ theme }) => theme.colors.background};
-`;
-
-export const TextFilter = styled.Text<{ filter: boolean }>`
-  font-family: ${({ theme }) =>
-    p =>
-      p.filter ? theme.fonts.regular : theme.fonts.bold};
-  font-size: ${RFValue(16, 640)}px;
-`;
-
-export const IconFilter = styled(MaterialIcons)`
-  font-size: ${RFValue(24, 640)}px;
-`;
-
-export const TouchableFilter = styled.TouchableOpacity`
-  text-align: center;
-  flex-direction: row;
-`;
-
+`
 export const TitleContainer = styled.View`
   width: 100%;
   padding-left: ${RFValue(16, 640)}px;

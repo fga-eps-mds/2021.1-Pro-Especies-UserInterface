@@ -18,14 +18,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
 
   const {
     filterQuery,
-    fishMaxSize,
-    fishMinSize,
-    fishMaxWeight,
-    fishMinWeight
   } = route.params;
-
-  console.log(route.params);
-  console.log(fishMinSize, typeof fishMaxSize != "undefined", fishMaxSize >= 5);
 
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
@@ -105,10 +98,6 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
         (<Wiki
           navigation={navigation}
           filterQuery={filterQuery}
-          fishMaxSize={fishMaxSize}
-          fishMinSize={fishMinSize}
-          fishMaxWeight={fishMaxWeight}
-          fishMinWeight={fishMinWeight}
         />) :
         (<FishLogs token={token} />)}
     </PageContainer>
