@@ -4,18 +4,11 @@ import { TouchableFilter, TextFilter, IconFilter, NumberContainer, NumberText } 
 
 interface Props {
   url: string;
-  maxSize: any;
-  maxWeight: any;
-  minSize: any;
-  minWeight: any;
   navigation: any;
 }
-const hasFilter = ({ url, maxSize, maxWeight, minSize, minWeight }: any) => {
-  if (!url && typeof maxSize == 'undefined'
-    && typeof maxWeight == 'undefined'
-    && typeof minSize == 'undefined'
-    && typeof minWeight == 'undefined'
-  ) {
+const hasFilter = (url: string) => {
+  console.log(url)
+  if (!url) {
     return false;
   }
   else {
@@ -23,20 +16,20 @@ const hasFilter = ({ url, maxSize, maxWeight, minSize, minWeight }: any) => {
   }
 }
 
-export function FilterButton({ url, maxSize, maxWeight, minSize, minWeight, navigation }: Props) {
+export function FilterButton({ url,navigation }: Props) {
   const [filterNumber,setFilterNumber]= useState(5);
   return (
 
     <TouchableFilter
       onPress={() => navigation.navigate('WikiFilter')}
-      hasFilter={hasFilter({ url, maxSize, maxWeight, minSize, minWeight })}
+      hasFilter={hasFilter(url)}
     >
       <TextFilter
-        hasFilter={hasFilter({ url, maxSize, maxWeight, minSize, minWeight })}
+        hasFilter={hasFilter(url)}
       >Filtros</TextFilter>
-      {hasFilter({ url, maxSize, maxWeight, minSize, minWeight }) ? (
+      {hasFilter(url) ? (
         <NumberContainer>
-              <NumberText>{filterNumber}</NumberText>
+              <NumberText>{(url.split('=').length-1)}</NumberText>
         </NumberContainer>
       )
 
