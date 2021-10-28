@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import {
   FishCardContainer,
@@ -51,7 +51,7 @@ export interface IFishLog {
 interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
-  selectAll: Boolean;
+  selectAll: boolean;
   cardFunction: VoidFunction;
   selectFunction: VoidFunction;
   deselectFunction: VoidFunction;
@@ -64,7 +64,6 @@ export const FishCard: FC<IFishCardProps> = ({
   cardFunction,
   selectFunction,
   deselectFunction,
-
 }) => {
   const [isCheck, setIsCheck] = useState(false);
 
@@ -77,9 +76,17 @@ export const FishCard: FC<IFishCardProps> = ({
     }
   };
 
+  useEffect(() => {
+    if (selectAll) {
+      setIsCheck(true);
+    } else {
+      setIsCheck(false);
+    }
+  }, [selectAll]);
+
   return (
     <FishCardContainer>
-      <CheckBoxView value={selectAll ? true : isCheck} onValueChange={checkBoxFunction} />
+      <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
       <TouchableOpacity onPress={cardFunction}>
         <FishImage
           source={{

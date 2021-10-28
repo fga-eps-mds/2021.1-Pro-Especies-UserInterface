@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CheckBox from '@react-native-community/checkbox';
 import {
   ButtonView,
   Container,
@@ -24,7 +25,6 @@ import {
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { FishCard, IFishLog } from '../FishCard';
-import Checkbox from 'expo-checkbox';
 
 interface Props {
   token: string;
@@ -56,7 +56,22 @@ export const FishLogs = ({ token }: Props) => {
     );
   };
 
-  const handleExport = async () => {};
+  const selectAllFunction = (value: boolean) => {
+    setIsCheck(value);
+    if (value) {
+      fishLog.forEach((item) => {
+        if (!exportList.includes(item._id)) {
+          setExportList( arr => [...arr, item._id]);
+        }
+      });
+    } else {
+      setExportList([""]);
+    }
+  };
+
+  const handleExport = async () => {
+    console.log(exportList);
+  };
 
   const handleAddLog = async () => {
     navigation.navigate("NewFishLog" as never, {
@@ -71,7 +86,6 @@ export const FishLogs = ({ token }: Props) => {
 
   const removeExportList = (logId: string) => {
     setExportList(exportList.filter(item => item !== logId));
-    setIsCheck(false);
   };
 
   useEffect(() => {
@@ -97,7 +111,7 @@ export const FishLogs = ({ token }: Props) => {
             </ButtonView>
           </OptionsView>
             <ExportAllView>
-              <Checkbox value={isCheck} onValueChange={setIsCheck}/>
+              <CheckBox value={isCheck} onValueChange={selectAllFunction}/>
               <ExportAllText>Selecionar todos os registros</ExportAllText>
             </ExportAllView>
           <FishCardList

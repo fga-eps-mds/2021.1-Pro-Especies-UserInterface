@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import Checkbox from 'expo-checkbox';
+import CheckBox from '@react-native-community/checkbox';
 
 export const FishCardContainer = styled.View`
   align-items: flex-start;
@@ -12,7 +12,7 @@ export const FishCardContainer = styled.View`
   margin-bottom: 14px;
 `;
 
-export const CheckBoxView = styled(Checkbox)`
+export const CheckBoxView = styled(CheckBox)`
   position: absolute;
   z-index: 10;
   right: 0;
