@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Buffer } from "buffer";
 import { Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Network from 'expo-network';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
@@ -68,8 +69,7 @@ export function NewFishLog({ navigation, route }: any) {
   const [fishLatitude, setFishLatitude] = useState<string | undefined>();
   const [fishLongitude, setFishLongitude] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const [userToken, setUserToken] = useState("");
-  const [userId, setUserId] = useState("");
+  const [isConnected, setIsConnected] = useState(true);
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -98,11 +98,8 @@ export function NewFishLog({ navigation, route }: any) {
     const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
     const token = await AsyncStorage.getItem("@eupescador/token");
     if (token) {
-      setUserToken(token);
       getFishLogProperties(token);
     }
-    if (id)
-      setUserId(id);
     if (userAdmin === "true")
       setIsAdmin(true);
     else
@@ -291,34 +288,29 @@ export function NewFishLog({ navigation, route }: any) {
       name
     })
   }
-
-  useEffect(() => {
-    getFishOptions();
-    const { data, isNewRegister } = route.params;
-    setIsNew(isNewRegister);
-    if (data != null) {
-      setIsAdmin(data.isAdmin);
-      setFishPhoto(data.fishPhoto);
-      setFishName(data.fishName);
-      setFishLargeGroup(data.fishLargeGroup);
-      setFishGroup(data.fishGroup);
-      setFishSpecies(data.fishSpecies)
-      setFishWeight(data.fishWeight);
-      setFishLength(data.fishLength);
-      setFishLatitude(data.fishLatitude.toString());
-      setFishLongitude(data.fishLongitude.toString());
-      if (data.photo) {
-        const log64 = Buffer.from(data.photo).toString('base64');
-        setFishPhoto(log64);
-      }
+  const saveDraft = async () => {
+    let drafts = await AsyncStorage.getItem('drafts');
+    const newDraft = {
+      photoString: fishPhoto,
+      name: fishName,
+      largeGroup: fishLargeGroup,
+      group: fishGroup,
+      species: fishSpecies,
+      weight: fishWeight,
+      length: fishLength,
+      latitude: fishLatitude,
+      longitude: fishLongitude,
+    };
+    let newDrafts;
+    if (drafts != null) {
+      let oldDrafts = JSON.parse(drafts);
+      newDrafts = [...oldDrafts, newDraft];
     }
     else {
-      if (!isNewRegister) {
-        getData();
-      }
+      newDrafts = [newDraft];
     }
-  }, [route.params]);
-
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+  }
   const list = () => {
     return fishes.filter((item) => {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
@@ -332,6 +324,60 @@ export function NewFishLog({ navigation, route }: any) {
       );
     });
   };
+  const text = isNew || !isAdmin ? "Enviar" : "Revisar";
+  let handleButton: () => void;
+  if (isNew) {
+    if (isConnected) {
+      handleButton = handleCreateFishLog;
+    }
+    else {
+      handleButton = saveDraft;
+    }
+  }
+  else {
+    handleButton = handleEditFishLog;
+  }
+  const getSendButton = () => {
+    return (
+      <SendButton onPress={handleButton}>
+        <SendButtonText>{text}</SendButtonText>
+      </SendButton>
+    )
+  }
+  const loadData = async () => {
+    const connection = await Network.getNetworkStateAsync();
+    setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
+    if (connection.isConnected && connection.isInternetReachable) {
+      getFishOptions();
+      const { data, isNewRegister } = route.params;
+      setIsNew(isNewRegister);
+      if (data != null) {
+        setIsAdmin(data.isAdmin);
+        setFishPhoto(data.fishPhoto);
+        setFishName(data.fishName);
+        setFishLargeGroup(data.fishLargeGroup);
+        setFishGroup(data.fishGroup);
+        setFishSpecies(data.fishSpecies)
+        setFishWeight(data.fishWeight);
+        setFishLength(data.fishLength);
+        setFishLatitude(data.fishLatitude.toString());
+        setFishLongitude(data.fishLongitude.toString());
+        if (data.photo) {
+          const log64 = Buffer.from(data.photo).toString('base64');
+          setFishPhoto(log64);
+        }
+      }
+      else {
+        if (!isNewRegister) {
+          getData();
+        }
+      }
+    }
+  }
+  useEffect(() => {
+    loadData();
+  }, [route.params]);
+
 
   return (
     <NewFishLogContainer>
@@ -394,8 +440,6 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Grande Grupo"
-                value={fishLargeGroup}
-                onChangeText={setFishLargeGroup}
               />
               <InputBox />
             </InputView>
@@ -435,15 +479,7 @@ export function NewFishLog({ navigation, route }: any) {
             <AddLocaleButtonLabel> {fishLatitude && fishLongitude ? "Alterar" : "Adicionar"} Localização </AddLocaleButtonLabel>
           </AddLocaleButton >
           <SendButtonView>
-            <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
-              {
-                (isNew || !isAdmin) ? (
-                  <SendButtonText>Enviar</SendButtonText>
-                ) : (
-                  <SendButtonText>Revisar</SendButtonText>
-                )
-              }
-            </SendButton>
+            {getSendButton()}
           </SendButtonView>
         </ScrollView >)
       }
