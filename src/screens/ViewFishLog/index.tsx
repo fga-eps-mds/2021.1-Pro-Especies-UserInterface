@@ -10,11 +10,11 @@ import {
 } from "./styles";
 
 import { Property } from '../../components/Property';
-import { Title } from "../../components/Title";
-import { HalfToneText } from "../../components/HalfToneText";
-import { ProfileImage } from "../../components/ProfileImage";
-import { MapViewImage } from "../../components/MapViewImage";
-import { GreenButton } from "../../components/GreenButton";
+import { Title } from '../../components/Title';
+import { HalfToneText } from '../../components/HalfToneText';
+import { ProfileImage } from '../../components/ProfileImage';
+import { MapViewImage } from '../../components/MapViewImage';
+import { DefaultButton } from '../../components/Button';
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { DeleteFishLog } from "../../services/fishLogService/deleteFishLog";
@@ -38,7 +38,7 @@ export const FishLog = ({ navigation, route }: any) => {
     const getData = async () => {
         const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
         const token = await AsyncStorage.getItem("@eupescador/token");
-        if (token){
+        if (token) {
             getFishLogProperties(token);
             setUserToken(token);
         }
@@ -53,7 +53,7 @@ export const FishLog = ({ navigation, route }: any) => {
             await DeleteFishLog(userToken, logId);
             const resetAction = CommonActions.reset({
                 index: 0,
-                routes: [{ name: 'WikiFishlogs'}],
+                routes: [{ name: 'WikiFishlogs' }],
             });
             navigation.dispatch(resetAction);
         } catch (error) {
@@ -63,14 +63,14 @@ export const FishLog = ({ navigation, route }: any) => {
 
     const getFishLogProperties = async (token: string) => {
         try {
-            const {log_id} = route.params;
+            const { log_id } = route.params;
             setLogId(log_id);
             const log = await GetOneFishLog(log_id, token);
-            if(log.photo){
+            if (log.photo) {
                 const log64 = Buffer.from(log.photo).toString('base64');
                 const base64Img = `data:image/png;base64,${log64}`;
                 setFishPhoto(base64Img);
-              }
+            }
             setFishName(log.name);
             setFishSpecies(log.species);
             setFishLargeGroup(log.largeGroup);
@@ -93,7 +93,7 @@ export const FishLog = ({ navigation, route }: any) => {
             {
                 isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
                     <ScrollView>
-                        <ProfileImage source={fishPhoto ? {uri: fishPhoto} : require('../../assets/fishIcon.png')} />
+                        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
 
                         <DescriptionContainer>
                             <Title text={
@@ -111,7 +111,7 @@ export const FishLog = ({ navigation, route }: any) => {
 
                             <Property property="Grupo" value={
                                 fishGroup ? JSON.stringify(fishGroup) : "Não informado"
-                            }/>
+                            } />
                         </PropertyRow>
 
                         <PropertyRow>
@@ -121,7 +121,7 @@ export const FishLog = ({ navigation, route }: any) => {
 
                             <Property property="Peso(kg)" value={
                                 fishWeight ? JSON.stringify(fishWeight) : "Não informado"
-                            }/>
+                            } />
                         </PropertyRow>
 
                         <MapViewImage source={require('../../assets/map.png')} />
@@ -130,23 +130,23 @@ export const FishLog = ({ navigation, route }: any) => {
                             {
                                 isAdmin ? (
                                     <>
-                                        <GreenButton text="Revisar" buttonFunction={() => {
-                                        navigation.navigate("NewFishLog" as never, {
-                                            isNewRegister: false,
-                                            log_id: logId,
-                                            name: "Revisar Registro",
-                                        } as never);
-                                    }} />
-                                        <GreenButton text="Exportar" buttonFunction={() => { }} />
+                                        <DefaultButton text="Revisar" buttonFunction={() => {
+                                            navigation.navigate("NewFishLog" as never, {
+                                                isNewRegister: false,
+                                                log_id: logId,
+                                                name: "Revisar Registro",
+                                            } as never);
+                                        }} />
+                                        <DefaultButton text="Exportar" buttonFunction={() => { }} />
                                     </>
                                 ) : (
-                                    <GreenButton text="Editar" buttonFunction={() => {
-                                        if(isReviewed){
+                                    <DefaultButton text="Editar" buttonFunction={() => {
+                                        if (isReviewed) {
                                             Alert.alert("Registro", "Não é possível editar esse registro pois ele já foi revisado por um pesquisador.", [
                                                 {
-                                                  text: "Ok",
+                                                    text: "Ok",
                                                 },
-                                              ]);
+                                            ]);
                                         } else {
                                             navigation.navigate("NewFishLog" as never, {
                                                 isNewRegister: false,
@@ -158,24 +158,24 @@ export const FishLog = ({ navigation, route }: any) => {
                                 )
                             }
 
-                            <GreenButton text="Excluir" buttonFunction={() => {
-                                if(isReviewed){
+                            <DefaultButton text="Excluir" buttonFunction={() => {
+                                if (isReviewed) {
                                     Alert.alert("Excluir Registro", "Não é possível deletar esse registro pois ele já foi revisado por um pesquisador.", [
                                         {
-                                          text: "Ok",
+                                            text: "Ok",
                                         },
-                                      ]);
+                                    ]);
                                 } else {
                                     Alert.alert("Excluir Registro", "Você tem certeza que deseja excluir este registro?", [
                                         {
-                                          text: "Cancelar",
-                                          style: "cancel"
+                                            text: "Cancelar",
+                                            style: "cancel"
                                         },
                                         {
                                             text: "Ok",
                                             onPress: () => handleDelete()
                                         }
-                                      ]);
+                                    ]);
                                 }
                             }} />
                         </RegisterButtonView>
