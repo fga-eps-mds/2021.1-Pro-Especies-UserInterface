@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CommonActions } from '@react-navigation/native';
 import Checkbox from 'expo-checkbox';
-import { GreenButton } from "../../components/GreenButton";
+import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
 import { TopBar } from "../../components/TopBar";
 import {
@@ -288,7 +288,7 @@ export const WikiFilter = ({ navigation }: any) => {
                             </GroupOptionsContainer>
                         </GroupContainer>
                     </FilterContainer>
-                    <GreenButton
+                    <DefaultButton
                         text="Filtrar"
                         buttonFunction={createURLQuery}
                     />

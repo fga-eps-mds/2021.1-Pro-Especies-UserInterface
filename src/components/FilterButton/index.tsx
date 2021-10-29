@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React from 'react';
 import { 
   TouchableFilter,
   TextFilter,
@@ -12,27 +12,18 @@ interface Props {
   url: string;
   navigation: any;
 }
-const hasFilter = (url: string) => {
-  console.log(url)
-  if (!url) {
-    return false;
-  }
-  else {
-    return true;
-  }
-}
 
 export function FilterButton({ url,navigation }: Props) {
   return (
 
     <TouchableFilter
       onPress={() => navigation.navigate('WikiFilter')}
-      hasFilter={hasFilter(url)}
+      hasFilter={url ? true : false}
     >
       <TextFilter
-        hasFilter={hasFilter(url)}
+        hasFilter={url ? true : false}
       >Filtros</TextFilter>
-      {hasFilter(url) ? (
+      {url ? (
         <NumberContainer>
               <NumberText>{(url.split('=').length-1)}</NumberText>
         </NumberContainer>
