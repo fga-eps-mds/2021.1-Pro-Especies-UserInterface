@@ -30,6 +30,7 @@ import {
   ExportSelectedText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
+import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
 import { FishCard, IFishLog } from '../FishCard';
 
 interface Props {
@@ -89,7 +90,19 @@ export const FishLogs = ({ token }: Props) => {
 
   const handleExportSelected = async () => {
     //pass
+    // file = ExportFishLogs();
 
+
+  };
+
+  const getFishLogs = async () => {
+    try {
+      const data = await GetAllFishLogs(token);
+      setFishLog(data);
+    } catch (error: any) {
+      console.log(error);
+    }
+    setIsLoading(false);
   };
 
   const addExportList = (logId: string) => {
