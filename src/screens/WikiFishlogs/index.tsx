@@ -16,10 +16,6 @@ import { useAuth } from '../../contexts/authContext';
 
 export const WikiFishlogs = ({ navigation, route }: any) => {
 
-  const {
-    filterQuery,
-  } = route.params;
-
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
@@ -97,7 +93,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
       {wiki ?
         (<Wiki
           navigation={navigation}
-          filterQuery={filterQuery}
+          filterQuery={route.params ? route.params.filterQuery : null}
         />) :
         (<FishLogs token={token} />)}
     </PageContainer>

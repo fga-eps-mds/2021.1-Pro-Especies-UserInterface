@@ -25,6 +25,7 @@ export const RowContainer = styled.View`
   width: ${RFValue(328, 640)}px;
   flex-direction: row;
   justify-content: space-around;
+  align-items: center;
   margin-bottom: ${RFValue(16, 640)}px;
   background-color: ${({ theme }) => theme.colors.background};
 `
