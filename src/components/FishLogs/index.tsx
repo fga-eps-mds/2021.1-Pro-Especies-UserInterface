@@ -22,6 +22,12 @@ import {
   FishCardList,
   ExportAllView,
   ExportAllText,
+  CancelButtonText,
+  ExportSelectedView,
+  ExportSelectedButton,
+  ExportSelectedButtonView,
+  DownloadIconBottom,
+  ExportSelectedText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { FishCard, IFishLog } from '../FishCard';
@@ -35,6 +41,7 @@ export const FishLogs = ({ token }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [exportList , setExportList] = useState(['']);
   const [isCheck, setIsCheck] = useState(false);
+  const [isExportMode, setIsExportMode] = useState(false);
   const navigation = useNavigation();
 
   const getFishLogs = async () => {
@@ -70,7 +77,7 @@ export const FishLogs = ({ token }: Props) => {
   };
 
   const handleExport = async () => {
-    console.log(exportList);
+    setIsExportMode(!isExportMode);
   };
 
   const handleAddLog = async () => {
@@ -78,6 +85,11 @@ export const FishLogs = ({ token }: Props) => {
       isNewRegister: true,
       name: "Novo Registro",
     } as never);
+  };
+
+  const handleExportSelected = async () => {
+    //pass
+
   };
 
   const addExportList = (logId: string) => {
@@ -105,14 +117,31 @@ export const FishLogs = ({ token }: Props) => {
             </TouchableTitle>
             <ButtonView>
               <ExportButton onPress={handleExport}>
-                <DownloadIcon name="file-download" />
-                <ExportButtonText>Exportar Registros</ExportButtonText>
+                {
+                  isExportMode ? <>
+                  <DownloadIcon name="cancel" />
+                  <CancelButtonText >Cancelar</CancelButtonText>
+                </>
+                  
+                  : 
+                  <>
+                    <DownloadIcon name="file-download" />
+                    <ExportButtonText>Exportar Registros</ExportButtonText>
+                  </>
+                    
+                }
               </ExportButton>
             </ButtonView>
           </OptionsView>
             <ExportAllView>
-              <CheckBox value={isCheck} onValueChange={selectAllFunction}/>
-              <ExportAllText>Selecionar todos os registros</ExportAllText>
+              
+              {
+                isExportMode ? <>
+                  <CheckBox value={isCheck} onValueChange={selectAllFunction}/>
+                  <ExportAllText>Selecionar todos os registros</ExportAllText>
+                  </>
+                : null
+              }
             </ExportAllView>
           <FishCardList
             data={fishLog}
@@ -120,6 +149,7 @@ export const FishLogs = ({ token }: Props) => {
               <FishCard
                 selectAll={isCheck}
                 fishLog={item}
+                isHidden={!isExportMode}
                 cardFunction={() => {
                   handleNavigation(item._id);
                 }}
@@ -133,13 +163,23 @@ export const FishLogs = ({ token }: Props) => {
             )}
             keyExtractor={item => item._id}
           />
-          <AddButtonView>
+          {isExportMode ? 
+          <ExportSelectedView>
+            <ExportSelectedButton onPress={handleExportSelected}>
+              <ExportSelectedButtonView>
+                <ExportSelectedText>Exportar Selecionados</ExportSelectedText>
+                <DownloadIconBottom name="file-download"/>
+              </ExportSelectedButtonView>
+            </ExportSelectedButton>
+          </ExportSelectedView>
+         :<AddButtonView>
             <AddLogButton onPress={handleAddLog}>
               <AddLogView>
                 <AddIcon name="add" />
               </AddLogView>
             </AddLogButton>
           </AddButtonView>
+          }
         </>
       )}
     </Container>

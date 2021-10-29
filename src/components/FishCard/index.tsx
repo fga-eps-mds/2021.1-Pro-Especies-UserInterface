@@ -51,6 +51,7 @@ export interface IFishLog {
 interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
+  isHidden: boolean;
   selectAll: boolean;
   cardFunction: VoidFunction;
   selectFunction: VoidFunction;
@@ -61,9 +62,11 @@ export const FishCard: FC<IFishCardProps> = ({
   fishWiki,
   fishLog,
   selectAll,
+  isHidden,
   cardFunction,
   selectFunction,
   deselectFunction,
+
 }) => {
   const [isCheck, setIsCheck] = useState(false);
 
@@ -86,7 +89,10 @@ export const FishCard: FC<IFishCardProps> = ({
 
   return (
     <FishCardContainer>
-      <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
+      {
+        isHidden ? null
+        : <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
+      }
       <TouchableOpacity onPress={cardFunction}>
         <FishImage
           source={{

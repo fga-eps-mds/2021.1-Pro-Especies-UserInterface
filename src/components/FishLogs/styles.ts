@@ -63,8 +63,20 @@ export const ExportButtonText = styled.Text`
   font-size: ${RFValue(12, 640)}px;
 `;
 
+export const CancelButtonText = styled.Text`
+  color: white;
+  font-family: ${({ theme }) => theme.fonts.bold};
+  font-size: ${RFValue(12, 640)}px;
+`;
+
 export const DownloadIcon = styled(MaterialIcons)`
   font-size: ${RFValue(16, 640)}px;
+  color: white;
+  font-family: ${({ theme }) => theme.fonts.bold};
+`;
+
+export const DownloadIconBottom = styled(MaterialIcons)`
+  font-size: ${RFValue(24, 640)}px;
   color: white;
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
@@ -84,7 +96,7 @@ export const ExportAllView = styled.View`
 
 export const ExportAllText = styled.Text`
   font-size: ${RFValue(12, 640)}px;
-  font-family: ${({ theme }) => theme.fonts.regular};
+  font-family: ${({ theme }) => theme.fonts.bold};
 `;
 
 export const AddIcon = styled(MaterialIcons)`
@@ -114,6 +126,36 @@ export const AddLogView = styled.View`
   background-color: ${({ theme }) => theme.colors.secondary_dark};
   align-items: center;
   justify-content: space-around;
+`;
+
+export const ExportSelectedView = styled.View`
+  flex: 1;
+  position: absolute;
+  bottom: 3%;
+  right: 3%;
+  justify-content: flex-end;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+
+export const ExportSelectedButton = styled.TouchableOpacity`
+  position: absolute;
+  align-items: center;
+`
+export const ExportSelectedText = styled.Text`
+  color: white;
+  font-size: ${RFValue(11, 640)}px;
+  font-family: ${({ theme }) => theme.fonts.bold};
+`;
+export const ExportSelectedButtonView = styled.View`
+  flex-direction: row;
+  width: ${RFValue(165, 640)}px;
+  height: ${RFValue(32, 640)}px;
+  border-radius: ${RFValue(50, 640)}px;
+  background-color: ${({ theme }) => theme.colors.secondary_dark};
+  align-items: center;
+  justify-content: space-evenly;
+  padding-left: ${RFValue(5, 640)}px;
 `;
 
 export const NotLoggedText = styled.Text`
