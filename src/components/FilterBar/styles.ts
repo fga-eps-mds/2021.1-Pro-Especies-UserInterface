@@ -23,6 +23,7 @@ export const HeaderIcon = styled(MaterialIcons)`
 
 export const ArrowIcon = styled.Image`
   height: ${RFValue(24, 640)}px;
+  width: ${RFValue(24, 640)}px;
 `;
 
 export const IconText = styled.Text`
