@@ -11,22 +11,11 @@ export const Container = styled.View`
   padding-left: ${RFValue(16, 640)}px;
 `;
 
-export const LeftContainer = styled.View`
-  flex: 0.12;
-  width: 100%;
-  justify-content: flex-start;
-`;
 
-export const FilterContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
+
 
 export const OptionsView = styled.View`
   flex-direction: row;
-  /* background-color: black; */
-  /* width: 100%; */
   align-items: center;
   justify-content: space-between;
   margin-bottom: ${RFValue(8, 640)}px;
@@ -104,17 +93,3 @@ export const AddLogView = styled.View`
   justify-content: space-around;
 `;
 
-export const NotLoggedText = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.bold};
-  font-size: ${RFValue(20, 640)}px;
-`;
-export const FishCardList = styled(
-  FlatList as new () => FlatList<IFishLog>,
-).attrs({
-  numColumns: 2,
-  columnWrapperStyle: { justifyContent: 'space-around' },
-  contentContainerStyle: {
-    alignItems: 'stretch',
-    paddingBottom: RFValue(156),
-  },
-})``;

@@ -6,8 +6,6 @@ import {
   Container,
   ExportButton,
   ExportButtonText,
-  LeftContainer,
-  FilterContainer,
   DownloadIcon,
   FilterIcon,
   AddLogButton,
@@ -17,12 +15,11 @@ import {
   TouchableTitle,
   TitleText,
   OptionsView,
-  NotLoggedText,
-  FishCardList,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
-import { FishCard, IFishLog } from '../FishCard';
+import { IFishLog } from '../FishCard';
 import { DraftButton } from '../DraftButton';
+import { FishList } from '../FishList';
 
 interface Props {
   token: string;
@@ -84,17 +81,10 @@ export const FishLogs = ({ token }: Props) => {
             </ButtonView>
           </OptionsView>
           <DraftButton />
-          <FishCardList
-            data={fishLog}
-            renderItem={({ item }) => (
-              <FishCard
-                fishLog={item}
-                cardFunction={() => {
-                  handleNavigation(item._id);
-                }}
-              />
-            )}
-            keyExtractor={item => item._id}
+          <FishList
+            fishData={fishLog}
+            type="fishLog"
+            handleNavigation={handleNavigation}
           />
           <AddButtonView>
             <AddLogButton onPress={handleAddLog}>
