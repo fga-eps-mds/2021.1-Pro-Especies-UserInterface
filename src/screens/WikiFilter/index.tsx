@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { CommonActions } from '@react-navigation/native';
 import Checkbox from 'expo-checkbox';
 import { DefaultButton } from "../../components/Button";
@@ -225,7 +225,7 @@ export const WikiFilter = ({ navigation }: any) => {
                             newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#00BBD4' : undefined}
+                        color={item.activate ? '#00BBD4' : "black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
@@ -244,7 +244,7 @@ export const WikiFilter = ({ navigation }: any) => {
                             newState.groups[index].activate = !newState.groups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#00BBD4' : undefined}
+                        color={item.activate ? '#00BBD4' : "black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>

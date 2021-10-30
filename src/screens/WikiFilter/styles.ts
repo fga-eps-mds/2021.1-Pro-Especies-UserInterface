@@ -7,13 +7,13 @@ export const PageContainer = styled.View`
 `;
 
 export const FishBodyContainer = styled.View`
-  margin: 0px ${RFValue(32, 640)}px;
   margin-top: ${RFValue(19, 640)}px;
   justify-content: flex-start;
   align-items: flex-start;
 `;
 
-export const GroupContainer = styled.View``;
+export const GroupContainer = styled.View`
+`;
 
 export const BoldText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};
@@ -21,11 +21,10 @@ export const BoldText = styled.Text`
   line-height: ${RFValue(18, 640)}px;
   color: ${({ theme }) => theme.colors.on_background};
   margin: ${RFValue(8, 640)}px 0;
+  margin-left: ${RFValue(32, 640)}px;
 `;
 export const GroupOptionsContainer = styled.View`
   background-color: rgba(32, 46, 53, 0.05);
-  width: ${RFValue(360, 640)}px;
-  margin-left: ${RFValue(-32, 640)}px;
 `;
 
 export const CheckBoxRow = styled.View`
@@ -35,5 +34,6 @@ export const CheckBoxRow = styled.View`
 `;
 
 export const FilterContainer = styled.View`
-    margin-bottom: ${RFValue(54, 640)}px;;
+  margin-bottom: ${RFValue(54, 640)}px;
+  width: 100%;
 `
