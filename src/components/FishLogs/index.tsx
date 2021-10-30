@@ -22,6 +22,7 @@ import {
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { FishCard, IFishLog } from '../FishCard';
+import { DraftButton } from '../DraftButton';
 
 interface Props {
   token: string;
@@ -51,7 +52,7 @@ export const FishLogs = ({ token }: Props) => {
     );
   };
 
-  const handleExport = async () => {};
+  const handleExport = async () => { };
 
   const handleAddLog = async () => {
     navigation.navigate("NewFishLog" as never, {
@@ -71,7 +72,7 @@ export const FishLogs = ({ token }: Props) => {
       ) : (
         <>
           <OptionsView>
-            <TouchableTitle onPress={() => {}}>
+            <TouchableTitle onPress={() => { }}>
               <TitleText>Filtros</TitleText>
               <FilterIcon name="filter-list" />
             </TouchableTitle>
@@ -82,6 +83,7 @@ export const FishLogs = ({ token }: Props) => {
               </ExportButton>
             </ButtonView>
           </OptionsView>
+          <DraftButton />
           <FishCardList
             data={fishLog}
             renderItem={({ item }) => (

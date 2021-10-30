@@ -8,6 +8,7 @@ export const Container = styled.View`
   flex: 1;
   width: 100%;
   justify-content: center;
+  padding-left: ${RFValue(16, 640)}px;
 `;
 
 export const LeftContainer = styled.View`
@@ -24,15 +25,15 @@ export const FilterContainer = styled.View`
 
 export const OptionsView = styled.View`
   flex-direction: row;
-  width: 100%;
+  /* background-color: black; */
+  /* width: 100%; */
   align-items: center;
   justify-content: space-between;
-  margin-bottom: ${RFValue(21, 640)}px;
+  margin-bottom: ${RFValue(8, 640)}px;
 `;
 
 export const TouchableTitle = styled.TouchableOpacity`
   text-align: center;
-  margin-left: ${RFValue(16, 640)}px;
   flex-direction: row;
 `;
 

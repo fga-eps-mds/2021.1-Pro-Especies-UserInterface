@@ -70,6 +70,7 @@ export function NewFishLog({ navigation, route }: any) {
   const [fishLongitude, setFishLongitude] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
+  const [isDraft, setIsDraft] = useState(false);
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -288,6 +289,7 @@ export function NewFishLog({ navigation, route }: any) {
       name
     })
   }
+
   const saveDraft = async () => {
     let drafts = await AsyncStorage.getItem('drafts');
     const newDraft = {
@@ -310,40 +312,35 @@ export function NewFishLog({ navigation, route }: any) {
       newDrafts = [newDraft];
     }
     await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
-  }
-  const list = () => {
-    return fishes.filter((item) => {
-      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
-        return item;
-      }
-    }).map((item, index) => {
-      return (
-        <OptionListItem key={index} onPress={() => setFishProps(item)}>
-          <RegularText text={item.commonName} />
-        </OptionListItem>
-      );
+    const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'WikiFishlogs' }],
     });
-  };
-  const text = isNew || !isAdmin ? "Enviar" : "Revisar";
-  let handleButton: () => void;
-  if (isNew) {
-    if (isConnected) {
-      handleButton = handleCreateFishLog;
+    navigation.dispatch(resetAction);
+
+  }
+
+  const getSendButton = () => {
+    const text = isNew || !isAdmin ? "Enviar" : "Revisar";
+    let handleButton: () => void;
+    if (isNew) {
+      if (isConnected) {
+        handleButton = handleCreateFishLog;
+      }
+      else {
+        handleButton = saveDraft;
+      }
     }
     else {
-      handleButton = saveDraft;
+      handleButton = handleEditFishLog;
     }
-  }
-  else {
-    handleButton = handleEditFishLog;
-  }
-  const getSendButton = () => {
     return (
       <SendButton onPress={handleButton}>
         <SendButtonText>{text}</SendButtonText>
       </SendButton>
     )
   }
+
   const loadData = async () => {
     const connection = await Network.getNetworkStateAsync();
     setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
@@ -374,6 +371,20 @@ export function NewFishLog({ navigation, route }: any) {
       }
     }
   }
+
+  const list = () => {
+    return fishes.filter((item) => {
+      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+        return item;
+      }
+    }).map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => setFishProps(item)}>
+          <RegularText text={item.commonName} />
+        </OptionListItem>
+      );
+    });
+  };
   useEffect(() => {
     loadData();
   }, [route.params]);
