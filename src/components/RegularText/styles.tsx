@@ -6,5 +6,4 @@ export const Text = styled.Text`
   font-size: ${RFValue(12, 640)}px;
   line-height: ${RFValue(18, 640)}px;
   color: ${({ theme }) => theme.colors.on_primary};
-  margin-bottom: ${RFValue(4, 640)}px;
 `;

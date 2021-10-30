@@ -9,6 +9,8 @@ import theme from '../global/styles/theme';
 import { NewFishLog } from '../screens/NewFishLog';
 import { useAuth } from '../contexts/authContext';
 import { MyMap } from '../screens/Maps';
+import { WikiFilter } from '../screens/WikiFilter';
+import { TopBar } from '../components/FilterBar';
 
 const AuthenticateStack = createNativeStackNavigator();
 
@@ -30,6 +32,7 @@ const AuthRoutes = () => {
       }}
     >
       <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
+      <AuthenticateStack.Screen name="WikiFilter" component={WikiFilter} />
       <AuthenticateStack.Screen
         name="FishLog"
         component={FishLog}
@@ -73,6 +76,7 @@ const AppRoutes = () => {
         options={{ title: 'Cadastro', headerShown: true }}
       />
       <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
+      <Stack.Screen name="WikiFilter" component={WikiFilter} />
     </Stack.Navigator>
   );
 };

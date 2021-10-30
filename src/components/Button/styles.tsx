@@ -13,6 +13,7 @@ export const Button = styled.TouchableOpacity<ButtonTypes>`
   align-items: center;
   justify-content: center;
   margin-bottom: ${RFValue(8, 640)}px;
+  align-self: center;
 `;
 
 export const ButtonText = styled.Text`
