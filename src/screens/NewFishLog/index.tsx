@@ -366,37 +366,40 @@ export function NewFishLog({ navigation, route }: any) {
 
   const loadData = async () => {
     const connection = await Network.getNetworkStateAsync();
-    setIsConnected((!!connection.isConnected && !!connection.isInternetReachable));
-    if (connection.isConnected && connection.isInternetReachable) {
+    const hasConnection = !!connection.isConnected && !!connection.isInternetReachable;
+    setIsConnected(hasConnection);
+    if (hasConnection) {
       getFishOptions();
-      const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
-      setIsNew(isNewRegister);
-      console.log(data);
-      if (data != null) {
-        setIsAdmin(data?.isAdmin);
-        setFishName(data?.name);
-        setFishLargeGroup(data?.largeGroup);
-        setFishGroup(data?.group);
-        setFishSpecies(data?.species)
-        setFishWeight(data?.weight);
-        setFishLength(data?.length);
-        setFishLatitude(data?.latitude?.toString());
-        setFishLongitude(data?.longitude?.toString());
-        if (data.photo) {
-          const log64 = Buffer.from(data.photo).toString('base64');
-          setFishPhoto(log64);
-        }
-      }
-      if (isFishLogDraft) {
-        setIsDraft(true);
-        setDraftId(fishLogDraftId);
-      }
-      else {
-        if (!isNewRegister) {
-          getData();
-        }
+    }
+    const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
+    setIsNew(isNewRegister);
+    console.log(data);
+    if (data != null) {
+      setIsAdmin(data?.isAdmin);
+      setFishName(data?.name);
+      setFishLargeGroup(data?.largeGroup);
+      setFishGroup(data?.group);
+      setFishSpecies(data?.species)
+      setFishWeight(data?.weight);
+      setFishLength(data?.length);
+      setFishLatitude(data?.latitude?.toString());
+      setFishLongitude(data?.longitude?.toString());
+      if (data.photo) {
+        const log64 = Buffer.from(data.photo).toString('base64');
+        setFishPhoto(log64);
       }
     }
+    if (isFishLogDraft) {
+      setIsDraft(true);
+      setDraftId(fishLogDraftId);
+    }
+    else {
+      if (!isNewRegister && hasConnection) {
+        getData();
+      }
+    }
+    if (!hasConnection)
+      Alert.alert("Sem conexão", "Você está conexão, logo algumas ações dentro de criação e edição serão limitadas.")
   }
 
   const list = () => {
