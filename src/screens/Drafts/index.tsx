@@ -7,8 +7,7 @@ export const Drafts = ({ navigation, route }: any) => {
     const [draftList, setDraftList] = useState<IFishLog[]>([]);
     const getDrafts = async () => {
         const draftsData = await AsyncStorage.getItem('drafts');
-        console.log(draftsData);
-        if (draftsData)
+        if (draftsData && draftsData != '[]')
             setDraftList(JSON.parse(draftsData) as IFishLog[]);
     }
 

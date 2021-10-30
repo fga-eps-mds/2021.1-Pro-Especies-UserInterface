@@ -20,6 +20,7 @@ import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { IFishLog } from '../FishCard';
 import { DraftButton } from '../DraftButton';
 import { FishList } from '../FishList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   token: string;
@@ -28,6 +29,7 @@ interface Props {
 export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasDraft, setHasDraft] = useState(false);
   const navigation = useNavigation();
 
   const getFishLogs = async () => {
@@ -40,6 +42,11 @@ export const FishLogs = ({ token }: Props) => {
     setIsLoading(false);
   };
 
+  const getDrafts = async () => {
+    const drafts = await AsyncStorage.getItem('drafts');
+    if (drafts)
+      setHasDraft(drafts != '[]');
+  }
   const handleNavigation = (id: string) => {
     navigation.navigate(
       'FishLog' as never,
@@ -60,6 +67,7 @@ export const FishLogs = ({ token }: Props) => {
 
   useEffect(() => {
     getFishLogs();
+    getDrafts();
   }, []);
 
   return (
@@ -80,7 +88,10 @@ export const FishLogs = ({ token }: Props) => {
               </ExportButton>
             </ButtonView>
           </OptionsView>
-          <DraftButton />
+          {hasDraft ?
+            <DraftButton /> :
+            null
+          }
           <FishList
             fishData={fishLog}
             type="fishLog"

@@ -277,30 +277,37 @@ export function NewFishLog({ navigation, route }: any) {
       );
       return;
     }
-    setIsLoading(true);
-    let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-    setIsLoading(false);
-    if (!fishLatitude && !fishLongitude) {
-      setFishLatitude(loc.coords.latitude.toString());
-      setFishLongitude(loc.coords.longitude.toString());
+    const connection = await Network.getNetworkStateAsync();
+    setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
+    if (!(connection.isConnected && connection.isInternetReachable)) {
+      setIsLoading(true);
+      let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+      setIsLoading(false);
+      if (!fishLatitude && !fishLongitude) {
+        setFishLatitude(loc.coords.latitude.toString());
+        setFishLongitude(loc.coords.longitude.toString());
+      }
+      const latitude = fishLatitude ? parseFloat(fishLatitude) : loc.coords.latitude;
+      const longitude = fishLongitude ? parseFloat(fishLongitude) : loc.coords.longitude;
+      navigation.navigate("Maps", {
+        isNew,
+        isAdmin,
+        photoString: fishPhoto,
+        name: fishName,
+        largeGroup: fishLargeGroup,
+        group: fishGroup,
+        species: fishSpecies,
+        weight: fishWeight,
+        length: fishLength,
+        latitude,
+        longitude,
+        log_id,
+        screenName: name
+      })
     }
-    const latitude = fishLatitude ? parseFloat(fishLatitude) : loc.coords.latitude;
-    const longitude = fishLongitude ? parseFloat(fishLongitude) : loc.coords.longitude;
-    navigation.navigate("Maps", {
-      isNew,
-      isAdmin,
-      photoString: fishPhoto,
-      name: fishName,
-      largeGroup: fishLargeGroup,
-      group: fishGroup,
-      species: fishSpecies,
-      weight: fishWeight,
-      length: fishLength,
-      latitude,
-      longitude,
-      log_id,
-      screenName: name
-    })
+    else {
+      Alert.alert("Sem conexão", "Você não possui conexão atualmente e por conta disso não poderá abrir o mapa, mas não se preocupe você pode inserir as outras informações e salvar o registro como rascunho para adicionar a localização posteriormente");
+    }
   }
 
   const saveDraft = async () => {
@@ -334,13 +341,14 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   const getSendButton = () => {
-    const text = isNew || !isAdmin ? "Enviar" : "Revisar";
+    let text = isNew || !isAdmin ? "Enviar" : "Revisar";
     let handleButton: () => void;
     if (isNew) {
       if (isConnected) {
         handleButton = handleCreateFishLog;
       }
       else {
+        text = "Salvar rascunho";
         handleButton = saveDraft;
       }
     }
