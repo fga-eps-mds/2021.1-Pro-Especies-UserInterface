@@ -322,6 +322,16 @@ export function NewFishLog({ navigation, route }: any) {
   const nameList = () => {
     return fishes.filter((item) => {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+        if(fishGroup){
+          if(item.group.toLowerCase().includes(fishGroup.toLowerCase())){
+            return item;
+          }
+        }
+        else if(fishLargeGroup){
+          if(item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase())){
+            return item;
+          }
+        }else
         return item;
       }
     }).map((item, index) => {
@@ -334,22 +344,25 @@ export function NewFishLog({ navigation, route }: any) {
   };
 
   const largeGroupList = () => {
-    return fishes.filter((item) => {
+    const filteredFishes = fishes.filter((item) => {
       if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
         return item;
       }
-    }).map((item, index) => {
+    })
+    let fishesLargeGroup = filteredFishes.map((item)=>item.largeGroup);
+    fishesLargeGroup = [...new Set(fishesLargeGroup)];
+    return fishesLargeGroup.map((item, index) => {
       return (
-        <OptionListItem key={index} onPress={() => setFishLargeGroup(item.largeGroup)}>
-          <RegularText text={item.largeGroup} />
+        <OptionListItem key={index} onPress={() => setFishLargeGroup(item)}>
+          <RegularText text={item} />
         </OptionListItem>
       );
     });
   };
 
   const groupList = () => {
-    return fishes.filter((item) => {
-      if (item.group.toLowerCase().includes(fishGroup.toLowerCase().trim())) {
+    const filteredGroupFishes = fishes.filter((item) => {
+            if (item.group.toLowerCase().includes(fishGroup.toLowerCase().trim())) {
         if(fishLargeGroup){
           if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())){
             return item;
@@ -358,10 +371,13 @@ export function NewFishLog({ navigation, route }: any) {
           return item;
         }
       }
-    }).map((item, index) => {
+    })  
+   let fishesGroup = filteredGroupFishes.map((item)=>item.group);
+   fishesGroup = [...new Set(fishesGroup)];
+    return fishesGroup.map((item, index) => {
       return (
-        <OptionListItem key={index} onPress={() => setFishGroup(item.group)}>
-          <RegularText text={item.group} />
+        <OptionListItem key={index} onPress={() => setFishGroup(item)}>
+          <RegularText text={item} />
         </OptionListItem>
       );
     });
