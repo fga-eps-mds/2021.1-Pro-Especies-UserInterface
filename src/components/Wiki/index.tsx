@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { FishCard, IFish } from '../FishCard';
-import { useNavigation } from '@react-navigation/native';
+import { IFish } from '../FishCard';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
+import { FilterButton } from '../FilterButton';
 import {
-  IconFilter,
   SearchBarContainer,
   RowContainer,
-  TouchableFilter,
-  TextFilter,
   NoResultContainer,
   BoldText,
   RegularText,
@@ -17,17 +14,19 @@ import {
 } from './styles';
 import { FishList } from '../FishList';
 
-export const Wiki = () => {
-  const navigation = useNavigation();
+
+export const Wiki = (
+  { navigation,
+    filterQuery,
+  }: any
+) => {
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [wiki, setWiki] = useState(false);
-  const [filter, setFilter] = useState(false);
   const [fishes, setFishes] = useState<IFish[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const updateFishes = async () => {
     try {
-      const data = await GetWikiFishes();
+      const data = await GetWikiFishes(filterQuery);
       setFishes(data);
     } catch (error: any) {
       console.log(error);
@@ -62,14 +61,10 @@ export const Wiki = () => {
               value={searchQuery}
               iconColor="#202E35"
             />
-            <TouchableFilter
-              onPress={() => {
-                setFilter(false);
-              }}
-            >
-              <TextFilter filter={filter}>Filtro</TextFilter>
-            </TouchableFilter>
-            <IconFilter name="filter-list" />
+            <FilterButton
+              url={filterQuery}
+              navigation={navigation}
+            />
           </RowContainer>
           {fishes.filter(fish => {
             if (
@@ -104,15 +99,42 @@ export const Wiki = () => {
           ) : (
             <NoResultContainer>
               <SearchImage source={require('../../assets/search.png')} />
-              <BoldText>Não encontramos nada com o termo digitado</BoldText>
-              <RegularText>
-                Por favor, verifique sua pesquisa e tente novamente para obter
-                resultados.
-              </RegularText>
+              {searchQuery ? (
+                <>
+                  <BoldText>Não encontramos nada com o termo digitado</BoldText>
+                  <RegularText>
+                    Por favor, verifique sua pesquisa e tente novamente para obter
+                    resultados.
+                  </RegularText>
+                </>
+              ) : (
+
+                filterQuery ? (
+
+                  <>
+                    <BoldText>Não encontramos nada com os filtros utilizados</BoldText>
+                    <RegularText>
+                      Por favor, verifique sua pesquisa e tente novamente para obter
+                      resultados.
+                    </RegularText>
+                  </>
+
+                ) : (
+                  <>
+                    <BoldText>Não encontramos nada na biblioteca</BoldText>
+                    <RegularText>
+                      Por favor, verifique sua conexão e tente novamente para obter
+                      resultados.
+                    </RegularText>
+                  </>
+                )
+              )}
             </NoResultContainer>
+
           )}
         </>
-      )}
-    </FishBodyContainer>
+      )
+      }
+    </FishBodyContainer >
   );
 };

@@ -20,7 +20,9 @@ export default function Home({ navigation }: any) {
   const { authenticated } = useAuth();
   useEffect(() => {
     if (authenticated) {
-      navigation.navigate('WikiFishlogs');
+      navigation.navigate('WikiFishlogs', {
+        filterQuery: null,
+      });
     }
   }, [authenticated]);
   return (
@@ -36,7 +38,9 @@ export default function Home({ navigation }: any) {
         Descubra os peixes da sua região e colabore com seus registros.
       </HomeWelcomeText>
 
-      <HomeWikiButton onPress={() => navigation.navigate('WikiFishlogs')}>
+      <HomeWikiButton onPress={() => navigation.navigate('WikiFishlogs', {
+        filterQuery: null,
+      })}>
         <HomeWikiText>Visualizar Biblioteca de Peixes</HomeWikiText>
       </HomeWikiButton>
 

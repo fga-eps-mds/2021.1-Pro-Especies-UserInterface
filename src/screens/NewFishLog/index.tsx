@@ -327,7 +327,15 @@ export function NewFishLog({ navigation, route }: any) {
     let newDrafts;
     if (drafts != null) {
       let oldDrafts = JSON.parse(drafts);
-      newDrafts = [...oldDrafts, newDraft];
+      if (isDraft) {
+        if (draftId) {
+          oldDrafts[parseInt(draftId)] = newDraft;
+          newDrafts = oldDrafts;
+        }
+      }
+      else {
+        newDrafts = [...oldDrafts, newDraft];
+      }
     }
     else {
       newDrafts = [newDraft];
@@ -346,7 +354,7 @@ export function NewFishLog({ navigation, route }: any) {
     let text = isNew || !isAdmin ? "Enviar" : "Revisar";
     let handleButton: () => void;
     if (isNew) {
-      if (!isConnected) {
+      if (isConnected) {
         handleButton = handleCreateFishLog;
       }
       else {
@@ -373,7 +381,6 @@ export function NewFishLog({ navigation, route }: any) {
     }
     const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
     setIsNew(isNewRegister);
-    console.log(data);
     if (data != null) {
       setIsAdmin(data?.isAdmin);
       setFishName(data?.name);
@@ -481,6 +488,8 @@ export function NewFishLog({ navigation, route }: any) {
             <InputView>
               <Input
                 placeholder="Grande Grupo"
+                value={fishLargeGroup}
+                onChangeText={setFishLargeGroup}
               />
               <InputBox />
             </InputView>
