@@ -319,7 +319,7 @@ export function NewFishLog({ navigation, route }: any) {
     }
   }, [route.params]);
 
-  const list = () => {
+  const nameList = () => {
     return fishes.filter((item) => {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
         return item;
@@ -328,6 +328,40 @@ export function NewFishLog({ navigation, route }: any) {
       return (
         <OptionListItem key={index} onPress={() => setFishProps(item)}>
           <RegularText text={item.commonName} />
+        </OptionListItem>
+      );
+    });
+  };
+
+  const largeGroupList = () => {
+    return fishes.filter((item) => {
+      if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
+        return item;
+      }
+    }).map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => setFishLargeGroup(item.largeGroup)}>
+          <RegularText text={item.largeGroup} />
+        </OptionListItem>
+      );
+    });
+  };
+
+  const groupList = () => {
+    return fishes.filter((item) => {
+      if (item.group.toLowerCase().includes(fishGroup.toLowerCase().trim())) {
+        if(fishLargeGroup){
+          if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())){
+            return item;
+          }
+        } else{
+          return item;
+        }
+      }
+    }).map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => setFishGroup(item.group)}>
+          <RegularText text={item.group} />
         </OptionListItem>
       );
     });
@@ -377,7 +411,7 @@ export function NewFishLog({ navigation, route }: any) {
                 }
               }).length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{list()}</OptionList>
+                  <OptionList showsVerticalScrollIndicator>{nameList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
@@ -399,6 +433,20 @@ export function NewFishLog({ navigation, route }: any) {
               />
               <InputBox />
             </InputView>
+            {
+              (fishLargeGroup && fishes.filter((item) => {
+                if (
+                  item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())
+                  && item.largeGroup.toLowerCase() != fishLargeGroup.toLowerCase().trim()
+                ) {
+                  return item;
+                }
+              }).length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{largeGroupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
             <InputView>
               <Input
@@ -408,6 +456,20 @@ export function NewFishLog({ navigation, route }: any) {
               />
               <InputBox />
             </InputView>
+            {
+              (fishGroup && fishes.filter((item) => {
+                if (
+                  item.group.toLowerCase().includes(fishGroup.toLowerCase().trim())
+                  && item.group.toLowerCase() != fishGroup.toLowerCase().trim()
+                ) {
+                  return item;
+                }
+              }).length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{groupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
             <BoxView>
               <RowView>
