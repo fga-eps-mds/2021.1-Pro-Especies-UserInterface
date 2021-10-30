@@ -279,7 +279,7 @@ export function NewFishLog({ navigation, route }: any) {
     }
     const connection = await Network.getNetworkStateAsync();
     setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
-    if (!(connection.isConnected && connection.isInternetReachable)) {
+    if ((connection.isConnected && connection.isInternetReachable)) {
       setIsLoading(true);
       let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
       setIsLoading(false);
@@ -311,6 +311,7 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   const saveDraft = async () => {
+    setIsLoading(true);
     let drafts = await AsyncStorage.getItem('drafts');
     const newDraft = {
       photoString: fishPhoto,
@@ -332,19 +333,20 @@ export function NewFishLog({ navigation, route }: any) {
       newDrafts = [newDraft];
     }
     await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setIsLoading(false);
     const resetAction = CommonActions.reset({
       index: 0,
       routes: [{ name: 'WikiFishlogs' }],
     });
     navigation.dispatch(resetAction);
-
+    Alert.alert("Rascunho salvo", "Seu rascunho foi salvo com sucesso, quando você tiver acesso a internet pode editar as informações que quiser e enviar para nosso servidor.");
   }
 
   const getSendButton = () => {
     let text = isNew || !isAdmin ? "Enviar" : "Revisar";
     let handleButton: () => void;
     if (isNew) {
-      if (isConnected) {
+      if (!isConnected) {
         handleButton = handleCreateFishLog;
       }
       else {
@@ -364,7 +366,7 @@ export function NewFishLog({ navigation, route }: any) {
 
   const loadData = async () => {
     const connection = await Network.getNetworkStateAsync();
-    setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
+    setIsConnected((!!connection.isConnected && !!connection.isInternetReachable));
     if (connection.isConnected && connection.isInternetReachable) {
       getFishOptions();
       const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
