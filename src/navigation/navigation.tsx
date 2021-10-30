@@ -32,9 +32,7 @@ const AuthRoutes = () => {
       }}
     >
       <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
-      <AuthenticateStack.Screen name="WikiFilter" component={WikiFilter} 
-        // options={{ headerTitle: () => <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={()=>{}} />, headerShown: true }}
-      />
+      <AuthenticateStack.Screen name="WikiFilter" component={WikiFilter} />
       <AuthenticateStack.Screen
         name="FishLog"
         component={FishLog}
@@ -78,9 +76,7 @@ const AppRoutes = () => {
         options={{ title: 'Cadastro', headerShown: true }}
       />
       <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
-      <Stack.Screen name="WikiFilter" component={WikiFilter} 
-        // options={{ headerTitle: () => <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={()=>{}} />, headerShown: true }}
-      />
+      <Stack.Screen name="WikiFilter" component={WikiFilter} />
     </Stack.Navigator>
   );
 };

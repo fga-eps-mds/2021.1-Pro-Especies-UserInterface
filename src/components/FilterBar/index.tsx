@@ -1,18 +1,26 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, HeaderIcon, HeaderText, IconContainer, IconText } from './styles';
+import { ArrowButton, ArrowIcon, Box, HeaderIcon, HeaderText, IconContainer, IconText } from './styles';
 
 interface Props {
   title: string;
   icon: string;
   iconText: string;
   buttonFunction: VoidFunction;
+  navigation: any;
 }
 
-export function TopBar({ title, icon, iconText, buttonFunction }: Props) {
+export function FilterBar({ navigation, title, icon, iconText, buttonFunction }: Props) {
   return (
     <Box>
+      <ArrowButton onPress={() => navigation.goBack()}>
+        <IconContainer>
+          <ArrowIcon source={require('../../assets/arrow_back.png')} />
+        </IconContainer>
+      </ArrowButton>
+
       <HeaderText>{title}</HeaderText>
+
       <TouchableOpacity onPress={buttonFunction}>
         <IconContainer>
           <HeaderIcon name={icon} />

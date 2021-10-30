@@ -3,7 +3,7 @@ import { CommonActions } from '@react-navigation/native';
 import Checkbox from 'expo-checkbox';
 import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
-import { TopBar } from "../../components/TopBar";
+import { FilterBar } from "../../components/FilterBar";
 import {
     PageContainer,
     FishBodyContainer,
@@ -254,7 +254,13 @@ export const WikiFilter = ({ navigation }: any) => {
 
     return (
         <PageContainer>
-            <TopBar title='Filtros' icon="delete" iconText="Limpar" buttonFunction={clearFilter} />
+            <FilterBar
+                title='Filtros'
+                icon="delete"
+                iconText="Limpar"
+                buttonFunction={clearFilter}
+                navigation={navigation}
+            />
             <ScrollView>
                 <FishBodyContainer>
                     <FilterContainer>
