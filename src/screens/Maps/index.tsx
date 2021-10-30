@@ -4,19 +4,19 @@ import { Marker, MapEvent, LatLng } from 'react-native-maps';
 import { DefaultButton } from '../../components/Button';
 
 export const MyMap = ({ navigation, route }: any) => {
-    const [mark, setMark] = useState<LatLng>({ latitude: route.params.fishLatitude, longitude: route.params.fishLongitude });
+    const [mark, setMark] = useState<LatLng>({ latitude: route.params.latitude, longitude: route.params.longitude });
 
     const handleDrag = (e: MapEvent) => {
         setMark(e.nativeEvent.coordinate);
     }
     const handleConfirm = (latitude: number, longitude: number) => {
-        route.params.fishLatitude = latitude;
-        route.params.fishLongitude = longitude;
+        route.params.latitude = latitude;
+        route.params.longitude = longitude;
         const params = {
             data: route.params,
             isNewRegister: route.params.isNew,
             log_id: route.params.log_id,
-            name: route.params.name
+            name: route.params.screenName
         };
         navigation.navigate("NewFishLog", { ...params })
     }
@@ -24,8 +24,8 @@ export const MyMap = ({ navigation, route }: any) => {
         <MapContainer >
             <Map
                 initialRegion={{
-                    latitude: route.params.fishLatitude,
-                    longitude: route.params.fishLongitude,
+                    latitude: route.params.latitude,
+                    longitude: route.params.longitude,
                     latitudeDelta: 0.0322,
                     longitudeDelta: 0.0121,
                 }}

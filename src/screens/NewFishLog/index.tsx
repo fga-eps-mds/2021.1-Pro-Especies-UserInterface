@@ -71,6 +71,7 @@ export function NewFishLog({ navigation, route }: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(true);
   const [isDraft, setIsDraft] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -212,7 +213,19 @@ export function NewFishLog({ navigation, route }: any) {
     }
   }
 
-  async function handleCreateFishLog() {
+  const deleteDraft = async () => {
+    if (isDraft) {
+      const drafts = await AsyncStorage.getItem('drafts');
+      if (drafts) {
+        let draftList: [] = JSON.parse(drafts);
+        if (draftId)
+          draftList.splice(parseInt(draftId), 1);
+        await AsyncStorage.setItem('drafts', JSON.stringify(draftList));
+      }
+    }
+  }
+
+  const handleCreateFishLog = async () => {
     let alertMessage = '';
     try {
       setIsLoading(true);
@@ -227,9 +240,9 @@ export function NewFishLog({ navigation, route }: any) {
         fishLatitude,
         fishLongitude,
       );
-
       setIsLoading(false);
       alertMessage = 'Registro criado com sucesso!';
+      await deleteDraft();
       const resetAction = CommonActions.reset({
         index: 0,
         routes: [{ name: 'WikiFishlogs' }],
@@ -276,17 +289,17 @@ export function NewFishLog({ navigation, route }: any) {
     navigation.navigate("Maps", {
       isNew,
       isAdmin,
-      fishPhoto,
-      fishName,
-      fishLargeGroup,
-      fishGroup,
-      fishSpecies,
-      fishWeight,
-      fishLength,
-      fishLatitude: latitude,
-      fishLongitude: longitude,
+      photoString: fishPhoto,
+      name: fishName,
+      largeGroup: fishLargeGroup,
+      group: fishGroup,
+      species: fishSpecies,
+      weight: fishWeight,
+      length: fishLength,
+      latitude,
+      longitude,
       log_id,
-      name
+      screenName: name
     })
   }
 
@@ -346,23 +359,27 @@ export function NewFishLog({ navigation, route }: any) {
     setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
     if (connection.isConnected && connection.isInternetReachable) {
       getFishOptions();
-      const { data, isNewRegister } = route.params;
+      const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
       setIsNew(isNewRegister);
+      console.log(data);
       if (data != null) {
-        setIsAdmin(data.isAdmin);
-        setFishPhoto(data.fishPhoto);
-        setFishName(data.fishName);
-        setFishLargeGroup(data.fishLargeGroup);
-        setFishGroup(data.fishGroup);
-        setFishSpecies(data.fishSpecies)
-        setFishWeight(data.fishWeight);
-        setFishLength(data.fishLength);
-        setFishLatitude(data.fishLatitude.toString());
-        setFishLongitude(data.fishLongitude.toString());
+        setIsAdmin(data?.isAdmin);
+        setFishName(data?.name);
+        setFishLargeGroup(data?.largeGroup);
+        setFishGroup(data?.group);
+        setFishSpecies(data?.species)
+        setFishWeight(data?.weight);
+        setFishLength(data?.length);
+        setFishLatitude(data?.latitude?.toString());
+        setFishLongitude(data?.longitude?.toString());
         if (data.photo) {
           const log64 = Buffer.from(data.photo).toString('base64');
           setFishPhoto(log64);
         }
+      }
+      if (isFishLogDraft) {
+        setIsDraft(true);
+        setDraftId(fishLogDraftId);
       }
       else {
         if (!isNewRegister) {

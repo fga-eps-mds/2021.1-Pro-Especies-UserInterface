@@ -9,7 +9,7 @@ export const DraftButtonTouchable = styled.TouchableOpacity`
     padding: 8px 4px;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: ${RFValue(8, 640)}px;
+    margin-bottom: ${RFValue(16, 640)}px;
 `
 
 export const DraftButtonLabel = styled.Text`

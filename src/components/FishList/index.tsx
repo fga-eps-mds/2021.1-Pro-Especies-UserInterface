@@ -13,12 +13,12 @@ export const FishList = ({ fishData, type, handleNavigation }: FishListProps) =>
     return (
         <FishCardList
             data={fishData}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
                 <>
                     {type === "fishLog" ?
                         (<FishCard
                             fishLog={item as IFishLog}
-                            cardFunction={() => { handleNavigation(item._id) }}
+                            cardFunction={() => { item._id ? handleNavigation(item._id) : handleNavigation(index.toString()) }}
                         />) :
                         (<FishCard
                             fishWiki={item as IFish}

@@ -12,6 +12,16 @@ export const Drafts = ({ navigation, route }: any) => {
             setDraftList(JSON.parse(draftsData) as IFishLog[]);
     }
 
+    const handleNavigation = (id: string) => {
+        navigation.navigate("NewFishLog", {
+            data: { ...draftList[parseInt(id)] },
+            isNewRegister: true,
+            isFishLogDraft: true,
+            name: "Novo Registro",
+            fishLogDraftId: id,
+        });
+    }
+
     useEffect(() => {
         getDrafts()
     }, []);
@@ -20,7 +30,7 @@ export const Drafts = ({ navigation, route }: any) => {
             <FishList
                 fishData={draftList}
                 type="fishLog"
-                handleNavigation={(id) => { }}
+                handleNavigation={handleNavigation}
             />
         </DraftsContainer>
     )
