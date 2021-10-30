@@ -10,6 +10,7 @@ import { NewFishLog } from '../screens/NewFishLog';
 import { useAuth } from '../contexts/authContext';
 import { MyMap } from '../screens/Maps';
 import { WikiFish } from '../screens/WikiFish';
+import { Drafts } from '../screens/Drafts';
 
 const AuthenticateStack = createNativeStackNavigator();
 
@@ -48,7 +49,13 @@ const AuthRoutes = () => {
         name="Maps"
         component={MyMap}
       />
-      <AuthenticateStack.Screen name="WikiFish" component={WikiFish} />
+      <AuthenticateStack.Screen
+        name="WikiFish"
+        component={WikiFish} />
+      <AuthenticateStack.Screen
+        name="Drafts" component={Drafts}
+        options={{ title: 'Rascunhos', headerShown: true }}
+      />
     </AuthenticateStack.Navigator>
   );
 };
