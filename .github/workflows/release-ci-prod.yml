@@ -2,7 +2,7 @@ name: Set Release
 on:
   push:
     branches:
-      - devel
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
