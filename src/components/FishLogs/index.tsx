@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
 import CheckBox from '@react-native-community/checkbox';
 import {
   ButtonView,
@@ -88,22 +89,24 @@ export const FishLogs = ({ token }: Props) => {
     } as never);
   };
 
+  const requestFileSystemPermission = async ()=> {
+    // const fileUri: string = `$(FileSystem.documentDirectory)$(filename)`;
+    // const downloadedFile: FileSystem.FileSystemDownloadResult = await
+  }
+
   const handleExportSelected = async () => {
     //pass
-    // file = ExportFishLogs();
-
-
-  };
-
-  const getFishLogs = async () => {
-    try {
-      const data = await GetAllFishLogs(token);
-      setFishLog(data);
-    } catch (error: any) {
+    try{
+      const file = await ExportFishLogs(token, exportList);
+      console.log(typeof file);
+    }catch(error: any){
       console.log(error);
     }
-    setIsLoading(false);
+    
+
+
   };
+
 
   const addExportList = (logId: string) => {
     setExportList( arr => [...arr, logId]);
