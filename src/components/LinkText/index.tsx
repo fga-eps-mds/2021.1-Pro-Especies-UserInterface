@@ -1,5 +1,5 @@
-import React from "react";
-import { Text } from "./styles";
+import React from 'react';
+import { Text } from './styles';
 
 interface Props {
   text: string;

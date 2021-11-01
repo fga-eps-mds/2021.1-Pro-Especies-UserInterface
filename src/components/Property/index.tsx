@@ -1,7 +1,7 @@
-import React from "react";
-import { HalfToneText } from "../HalfToneText";
-import { RegularText } from "../RegularText";
-import { PropertyContainer } from "./styles";
+import React from 'react';
+import { HalfToneText } from '../HalfToneText';
+import { RegularText } from '../RegularText';
+import { PropertyContainer } from './styles';
 
 interface Props {
   property: string;
