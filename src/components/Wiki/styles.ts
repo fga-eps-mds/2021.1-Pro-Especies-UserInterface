@@ -3,7 +3,7 @@ import { Searchbar } from "react-native-paper";
 import { RFValue } from "react-native-responsive-fontsize";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FlatList } from "react-native";
-import { IFish } from "../../components/FishCard";
+import { IFish } from "../FishCard";
 
 export const PageContainer = styled.View`
   align-items: center;
