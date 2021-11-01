@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Buffer } from "buffer";
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 import { RegularText } from '../../components/RegularText';
-import { createFishLog } from '../../services/fishLogService/createFishLog';
+import { HalfToneText } from '../../components/HalfToneText';
 import { ActivityIndicator } from 'react-native-paper';
+import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
 import {
@@ -35,6 +36,8 @@ import {
   AddLocaleButtonIcon,
   NewFishlogScroll,
 } from './styles';
+
+
 export interface IFish {
   _id: string;
   largeGroup: string;
@@ -60,13 +63,15 @@ export function NewFishLog({ navigation, route }: any) {
   const [fishes, setFishes] = useState<IFish[]>([]);
   const [fishPhoto, setFishPhoto] = useState<string | undefined | undefined>();
   const [fishName, setFishName] = useState<string | undefined>();
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | undefined>();
+  const [fishLargeGroup, setFishLargeGroup] = useState<string | undefined>("");
   const [fishGroup, setFishGroup] = useState<string | undefined>();
   const [fishSpecies, setFishSpecies] = useState<string | undefined>();
   const [fishWeight, setFishWeight] = useState<string | undefined>();
   const [fishLength, setFishLength] = useState<string | undefined>();
   const [fishLatitude, setFishLatitude] = useState<string | undefined>();
   const [fishLongitude, setFishLongitude] = useState<string | undefined>();
+  const [dropLargeGroup, setDropLargeGroup] = useState(false);
+  const [dropGroup, setDropGroup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [userToken, setUserToken] = useState("");
   const [userId, setUserId] = useState("");
@@ -319,15 +324,66 @@ export function NewFishLog({ navigation, route }: any) {
     }
   }, [route.params]);
 
-  const list = () => {
+  const nameList = () => {
     return fishes.filter((item) => {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
-        return item;
+        if (fishGroup) {
+          if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
+            return item;
+          }
+        }
+        else if (fishLargeGroup) {
+          if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase())) {
+            return item;
+          }
+        } else
+          return item;
       }
     }).map((item, index) => {
       return (
         <OptionListItem key={index} onPress={() => setFishProps(item)}>
           <RegularText text={item.commonName} />
+        </OptionListItem>
+      );
+    });
+  };
+
+  const largeGroupList = () => {
+    let fishesLargeGroup = fishes.map((item) => item.largeGroup);
+    fishesLargeGroup = [...new Set(fishesLargeGroup)];
+    return fishesLargeGroup.map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => {
+          setFishLargeGroup(item)
+          setDropLargeGroup(false)
+        }
+        }>
+          <RegularText text={item} />
+        </OptionListItem>
+      );
+    });
+  };
+
+  const groupList = () => {
+    const filteredGroupFishes = fishes.filter((item) => {
+      if (fishLargeGroup) {
+        if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
+          return item;
+        }
+      } else {
+        return item;
+      }
+    })
+    let fishesGroup = filteredGroupFishes.map((item) => item.group);
+    fishesGroup = [...new Set(fishesGroup)];
+    return fishesGroup.map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => {
+          setFishGroup(item)
+          setDropGroup(false)
+        }
+        }>
+          <RegularText text={item} />
         </OptionListItem>
       );
     });
@@ -369,15 +425,22 @@ export function NewFishLog({ navigation, route }: any) {
             </InputView>
             {
               (fishName && fishes.filter((item) => {
-                if (
-                  item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
-                  && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
-                ) {
-                  return item;
+                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+                  if (fishGroup) {
+                    if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
+                      return item;
+                    }
+                  }
+                  else if (fishLargeGroup) {
+                    if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase())) {
+                      return item;
+                    }
+                  } else
+                    return item;
                 }
               }).length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{list()}</OptionList>
+                  <OptionList showsVerticalScrollIndicator>{nameList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
@@ -391,23 +454,55 @@ export function NewFishLog({ navigation, route }: any) {
               <InputBox />
             </InputView>
 
-            <InputView>
-              <Input
-                placeholder="Grande Grupo"
-                value={fishLargeGroup}
-                onChangeText={setFishLargeGroup}
-              />
-              <InputBox />
-            </InputView>
+            <TouchableOpacity onPress={() => setDropLargeGroup(!dropLargeGroup)}>
+              <InputView>
+                <View style={{ marginLeft: 4, width: "95%" }}>
+                  {
+                    fishLargeGroup ? (
+                      <RegularText text={fishLargeGroup ? fishLargeGroup : ""} />
+                    ) :
+                      (<HalfToneText text="Grande Grupo" />)
+                  }
+                </View>
+                <InputBox />
+              </InputView>
+            </TouchableOpacity>
+            {
+              (dropLargeGroup && fishes.length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{largeGroupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
-            <InputView>
-              <Input
-                placeholder="Grupo"
-                value={fishGroup}
-                onChangeText={setFishGroup}
-              />
-              <InputBox />
-            </InputView>
+            <TouchableOpacity onPress={() => setDropGroup(!dropGroup)}>
+              <InputView>
+                <View style={{ marginLeft: 4, width: "95%" }}>
+                  {
+                    fishGroup ? (
+                      <RegularText text={fishGroup ? fishGroup : ""} />
+                    ) :
+                      (<HalfToneText text="Grupo" />)
+                  }
+                </View>
+                <InputBox />
+              </InputView>
+            </TouchableOpacity>
+            {
+              (dropGroup && fishes.filter((item) => {
+                if (fishLargeGroup) {
+                  if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
+                    return item;
+                  }
+                } else {
+                  return item;
+                }
+              }).length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{groupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
             <BoxView>
               <RowView>
