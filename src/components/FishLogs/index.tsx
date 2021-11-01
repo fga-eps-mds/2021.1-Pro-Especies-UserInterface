@@ -6,8 +6,6 @@ import {
   Container,
   ExportButton,
   ExportButtonText,
-  LeftContainer,
-  FilterContainer,
   DownloadIcon,
   FilterIcon,
   AddLogButton,
@@ -17,11 +15,12 @@ import {
   TouchableTitle,
   TitleText,
   OptionsView,
-  NotLoggedText,
-  FishCardList,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
-import { FishCard, IFishLog } from '../FishCard';
+import { IFishLog } from '../FishCard';
+import { DraftButton } from '../DraftButton';
+import { FishList } from '../FishList';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   token: string;
@@ -30,6 +29,7 @@ interface Props {
 export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasDraft, setHasDraft] = useState(false);
   const navigation = useNavigation();
 
   const getFishLogs = async () => {
@@ -42,6 +42,11 @@ export const FishLogs = ({ token }: Props) => {
     setIsLoading(false);
   };
 
+  const getDrafts = async () => {
+    const drafts = await AsyncStorage.getItem('drafts');
+    if (drafts)
+      setHasDraft(drafts != '[]');
+  }
   const handleNavigation = (id: string) => {
     navigation.navigate(
       'FishLog' as never,
@@ -51,7 +56,7 @@ export const FishLogs = ({ token }: Props) => {
     );
   };
 
-  const handleExport = async () => {};
+  const handleExport = async () => { };
 
   const handleAddLog = async () => {
     navigation.navigate("NewFishLog" as never, {
@@ -62,6 +67,7 @@ export const FishLogs = ({ token }: Props) => {
 
   useEffect(() => {
     getFishLogs();
+    getDrafts();
   }, []);
 
   return (
@@ -71,7 +77,7 @@ export const FishLogs = ({ token }: Props) => {
       ) : (
         <>
           <OptionsView>
-            <TouchableTitle onPress={() => {}}>
+            <TouchableTitle onPress={() => { }}>
               <TitleText>Filtros</TitleText>
               <FilterIcon name="filter-list" />
             </TouchableTitle>
@@ -82,17 +88,14 @@ export const FishLogs = ({ token }: Props) => {
               </ExportButton>
             </ButtonView>
           </OptionsView>
-          <FishCardList
-            data={fishLog}
-            renderItem={({ item }) => (
-              <FishCard
-                fishLog={item}
-                cardFunction={() => {
-                  handleNavigation(item._id);
-                }}
-              />
-            )}
-            keyExtractor={item => item._id}
+          {hasDraft ?
+            <DraftButton /> :
+            null
+          }
+          <FishList
+            fishData={fishLog}
+            type="fishLog"
+            handleNavigation={handleNavigation}
           />
           <AddButtonView>
             <AddLogButton onPress={handleAddLog}>

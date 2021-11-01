@@ -85,17 +85,6 @@ export const SearchImage = styled.Image`
   margin-top: ${RFValue(55, 640)}px;
 `;
 
-export const FishCardList = styled(FlatList as new () => FlatList<IFish>).attrs(
-  {
-    numColumns: 2,
-    columnWrapperStyle: { justifyContent: 'space-around' },
-    contentContainerStyle: {
-      alignItems: 'stretch',
-      paddingBottom: RFValue(156),
-    },
-  },
-)``;
-
 export const Spacer = styled.View`
   width: 16px;
 `;

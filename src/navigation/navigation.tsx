@@ -9,6 +9,8 @@ import theme from '../global/styles/theme';
 import { NewFishLog } from '../screens/NewFishLog';
 import { useAuth } from '../contexts/authContext';
 import { MyMap } from '../screens/Maps';
+import { WikiFish } from '../screens/WikiFish';
+import { Drafts } from '../screens/Drafts';
 import { WikiFilter } from '../screens/WikiFilter';
 import { TopBar } from '../components/FilterBar';
 
@@ -50,6 +52,13 @@ const AuthRoutes = () => {
         name="Maps"
         component={MyMap}
       />
+      <AuthenticateStack.Screen
+        name="WikiFish"
+        component={WikiFish} />
+      <AuthenticateStack.Screen
+        name="Drafts" component={Drafts}
+        options={{ title: 'Rascunhos', headerShown: true }}
+      />
     </AuthenticateStack.Navigator>
   );
 };
@@ -76,6 +85,7 @@ const AppRoutes = () => {
         options={{ title: 'Cadastro', headerShown: true }}
       />
       <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
+      <Stack.Screen name="WikiFish" component={WikiFish} />
       <Stack.Screen name="WikiFilter" component={WikiFilter} />
     </Stack.Navigator>
   );

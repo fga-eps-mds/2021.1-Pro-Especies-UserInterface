@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { FishCard, IFish } from '../FishCard';
+import { IFish } from '../FishCard';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
+import { FilterButton } from '../FilterButton';
 import {
   SearchBarContainer,
   RowContainer,
@@ -9,10 +10,10 @@ import {
   BoldText,
   RegularText,
   SearchImage,
-  FishCardList,
   FishBodyContainer,
 } from './styles';
-import { FilterButton } from '../FilterButton';
+import { FishList } from '../FishList';
+
 
 export const Wiki = (
   { navigation,
@@ -32,9 +33,19 @@ export const Wiki = (
     }
     setIsLoading(false);
   };
+
+  const handleNavigation = (id: string) => {
+    navigation.navigate(
+      'WikiFish' as never,
+      {
+        fish_id: id,
+      } as never,
+    );
+  };
+
   useEffect(() => {
     updateFishes();
-  }, []);  
+  }, []);
 
   return (
     <FishBodyContainer>
@@ -68,8 +79,8 @@ export const Wiki = (
               return fish;
             }
           }).length ? (
-            <FishCardList
-              data={fishes.filter(item => {
+            <FishList
+              fishData={fishes.filter(item => {
                 if (
                   !searchQuery ||
                   item.commonName
@@ -82,10 +93,8 @@ export const Wiki = (
                   return item;
                 }
               })}
-              renderItem={({ item }) => (
-                <FishCard fishWiki={item} cardFunction={() => { }} />
-              )}
-              keyExtractor={item => item._id}
+              type="fishWiki"
+              handleNavigation={handleNavigation}
             />
           ) : (
             <NoResultContainer>
