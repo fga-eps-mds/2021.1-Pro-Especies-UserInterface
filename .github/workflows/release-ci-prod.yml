@@ -1,4 +1,5 @@
 name: Set Release
+
 on:
   push:
     branches:
