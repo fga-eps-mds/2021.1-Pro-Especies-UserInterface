@@ -1,6 +1,9 @@
 name: Generate Pre-Release
 
-on: [pull_request]
+on:
+  push:
+    branches:
+      - devel
 
 jobs:
   build:
