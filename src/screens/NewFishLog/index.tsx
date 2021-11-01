@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Buffer } from "buffer";
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import * as Network from 'expo-network';
 import * as Location from 'expo-location';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 import { RegularText } from '../../components/RegularText';
-import { createFishLog } from '../../services/fishLogService/createFishLog';
+import { HalfToneText } from '../../components/HalfToneText';
 import { ActivityIndicator } from 'react-native-paper';
+import { createFishLog } from '../../services/fishLogService/createFishLog';
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { UpdateFishLog } from '../../services/fishLogService/updateFishLog';
 import {
@@ -35,6 +37,8 @@ import {
   AddLocaleButtonIcon,
   NewFishlogScroll,
 } from './styles';
+
+
 export interface IFish {
   _id: string;
   largeGroup: string;
@@ -60,16 +64,19 @@ export function NewFishLog({ navigation, route }: any) {
   const [fishes, setFishes] = useState<IFish[]>([]);
   const [fishPhoto, setFishPhoto] = useState<string | undefined | undefined>();
   const [fishName, setFishName] = useState<string | undefined>();
-  const [fishLargeGroup, setFishLargeGroup] = useState<string | undefined>();
+  const [fishLargeGroup, setFishLargeGroup] = useState<string | undefined>("");
   const [fishGroup, setFishGroup] = useState<string | undefined>();
   const [fishSpecies, setFishSpecies] = useState<string | undefined>();
   const [fishWeight, setFishWeight] = useState<string | undefined>();
   const [fishLength, setFishLength] = useState<string | undefined>();
   const [fishLatitude, setFishLatitude] = useState<string | undefined>();
   const [fishLongitude, setFishLongitude] = useState<string | undefined>();
+  const [dropLargeGroup, setDropLargeGroup] = useState(false);
+  const [dropGroup, setDropGroup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [userToken, setUserToken] = useState("");
-  const [userId, setUserId] = useState("");
+  const [isConnected, setIsConnected] = useState(true);
+  const [isDraft, setIsDraft] = useState(false);
+  const [draftId, setDraftId] = useState<string | null>(null);
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -98,11 +105,8 @@ export function NewFishLog({ navigation, route }: any) {
     const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
     const token = await AsyncStorage.getItem("@eupescador/token");
     if (token) {
-      setUserToken(token);
       getFishLogProperties(token);
     }
-    if (id)
-      setUserId(id);
     if (userAdmin === "true")
       setIsAdmin(true);
     else
@@ -214,7 +218,19 @@ export function NewFishLog({ navigation, route }: any) {
     }
   }
 
-  async function handleCreateFishLog() {
+  const deleteDraft = async () => {
+    if (isDraft) {
+      const drafts = await AsyncStorage.getItem('drafts');
+      if (drafts) {
+        let draftList: [] = JSON.parse(drafts);
+        if (draftId)
+          draftList.splice(parseInt(draftId), 1);
+        await AsyncStorage.setItem('drafts', JSON.stringify(draftList));
+      }
+    }
+  }
+
+  const handleCreateFishLog = async () => {
     let alertMessage = '';
     try {
       setIsLoading(true);
@@ -229,9 +245,9 @@ export function NewFishLog({ navigation, route }: any) {
         fishLatitude,
         fishLongitude,
       );
-
       setIsLoading(false);
       alertMessage = 'Registro criado com sucesso!';
+      await deleteDraft();
       const resetAction = CommonActions.reset({
         index: 0,
         routes: [{ name: 'WikiFishlogs' }],
@@ -266,68 +282,202 @@ export function NewFishLog({ navigation, route }: any) {
       );
       return;
     }
-    setIsLoading(true);
-    let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-    setIsLoading(false);
-    if (!fishLatitude && !fishLongitude) {
-      setFishLatitude(loc.coords.latitude.toString());
-      setFishLongitude(loc.coords.longitude.toString());
+    const connection = await Network.getNetworkStateAsync();
+    setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
+    if ((connection.isConnected && connection.isInternetReachable)) {
+      setIsLoading(true);
+      let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+      setIsLoading(false);
+      if (!fishLatitude && !fishLongitude) {
+        setFishLatitude(loc.coords.latitude.toString());
+        setFishLongitude(loc.coords.longitude.toString());
+      }
+      const latitude = fishLatitude ? parseFloat(fishLatitude) : loc.coords.latitude;
+      const longitude = fishLongitude ? parseFloat(fishLongitude) : loc.coords.longitude;
+      navigation.navigate("Maps", {
+        isNew,
+        isAdmin,
+        photoString: fishPhoto,
+        name: fishName,
+        largeGroup: fishLargeGroup,
+        group: fishGroup,
+        species: fishSpecies,
+        weight: fishWeight,
+        length: fishLength,
+        latitude,
+        longitude,
+        log_id,
+        screenName: name
+      })
     }
-    const latitude = fishLatitude ? parseFloat(fishLatitude) : loc.coords.latitude;
-    const longitude = fishLongitude ? parseFloat(fishLongitude) : loc.coords.longitude;
-    navigation.navigate("Maps", {
-      isNew,
-      isAdmin,
-      fishPhoto,
-      fishName,
-      fishLargeGroup,
-      fishGroup,
-      fishSpecies,
-      fishWeight,
-      fishLength,
-      fishLatitude: latitude,
-      fishLongitude: longitude,
-      log_id,
-      name
-    })
+    else {
+      Alert.alert("Sem conexão", "Você não possui conexão atualmente e por conta disso não poderá abrir o mapa, mas não se preocupe você pode inserir as outras informações e salvar o registro como rascunho para adicionar a localização posteriormente");
+    }
   }
 
-  useEffect(() => {
-    getFishOptions();
-    const { data, isNewRegister } = route.params;
+  const saveDraft = async () => {
+    setIsLoading(true);
+    let drafts = await AsyncStorage.getItem('drafts');
+    const newDraft = {
+      photoString: fishPhoto,
+      name: fishName,
+      largeGroup: fishLargeGroup,
+      group: fishGroup,
+      species: fishSpecies,
+      weight: fishWeight,
+      length: fishLength,
+      latitude: fishLatitude,
+      longitude: fishLongitude,
+    };
+    let newDrafts;
+    if (drafts != null) {
+      let oldDrafts = JSON.parse(drafts);
+      if (isDraft) {
+        if (draftId) {
+          oldDrafts[parseInt(draftId)] = newDraft;
+          newDrafts = oldDrafts;
+        }
+      }
+      else {
+        newDrafts = [...oldDrafts, newDraft];
+      }
+    }
+    else {
+      newDrafts = [newDraft];
+    }
+    await AsyncStorage.setItem('drafts', JSON.stringify(newDrafts));
+    setIsLoading(false);
+    const resetAction = CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'WikiFishlogs' }],
+    });
+    navigation.dispatch(resetAction);
+    Alert.alert("Rascunho salvo", "Seu rascunho foi salvo com sucesso, quando você tiver acesso a internet pode editar as informações que quiser e enviar para nosso servidor.");
+  }
+
+  const getSendButton = () => {
+    let text = isNew || !isAdmin ? "Enviar" : "Revisar";
+    let handleButton: () => void;
+    if (isNew) {
+      if (isConnected) {
+        handleButton = handleCreateFishLog;
+      }
+      else {
+        text = "Salvar rascunho";
+        handleButton = saveDraft;
+      }
+    }
+    else {
+      handleButton = handleEditFishLog;
+    }
+    return (
+      <SendButton onPress={handleButton}>
+        <SendButtonText>{text}</SendButtonText>
+      </SendButton>
+    )
+  }
+
+  const loadData = async () => {
+    const connection = await Network.getNetworkStateAsync();
+    const hasConnection = !!connection.isConnected && !!connection.isInternetReachable;
+    setIsConnected(hasConnection);
+    if (hasConnection) {
+      getFishOptions();
+    }
+    const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
     setIsNew(isNewRegister);
     if (data != null) {
-      setIsAdmin(data.isAdmin);
-      setFishPhoto(data.fishPhoto);
-      setFishName(data.fishName);
-      setFishLargeGroup(data.fishLargeGroup);
-      setFishGroup(data.fishGroup);
-      setFishSpecies(data.fishSpecies)
-      setFishWeight(data.fishWeight);
-      setFishLength(data.fishLength);
-      setFishLatitude(data.fishLatitude.toString());
-      setFishLongitude(data.fishLongitude.toString());
+      setIsAdmin(data?.isAdmin);
+      setFishName(data?.name);
+      setFishLargeGroup(data?.largeGroup);
+      setFishGroup(data?.group);
+      setFishSpecies(data?.species)
+      setFishWeight(data?.weight);
+      setFishLength(data?.length);
+      setFishLatitude(data?.latitude?.toString());
+      setFishLongitude(data?.longitude?.toString());
       if (data.photo) {
         const log64 = Buffer.from(data.photo).toString('base64');
         setFishPhoto(log64);
       }
     }
+    if (isFishLogDraft) {
+      setIsDraft(true);
+      setDraftId(fishLogDraftId);
+    }
     else {
-      if (!isNewRegister) {
+      if (!isNewRegister && hasConnection) {
         getData();
       }
     }
-  }, [route.params]);
+    if (!hasConnection)
+      Alert.alert("Sem conexão", "Você está conexão, logo algumas ações dentro de criação e edição serão limitadas.")
+  }
 
-  const list = () => {
+  const nameList = () => {
     return fishes.filter((item) => {
       if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
-        return item;
+        if (fishGroup) {
+          if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
+            return item;
+          }
+        }
+        else if (fishLargeGroup) {
+          if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase())) {
+            return item;
+          }
+        } else
+          return item;
       }
     }).map((item, index) => {
       return (
         <OptionListItem key={index} onPress={() => setFishProps(item)}>
           <RegularText text={item.commonName} />
+        </OptionListItem>
+      );
+    });
+  };
+  useEffect(() => {
+    loadData();
+  }, [route.params]);
+
+
+  const largeGroupList = () => {
+    let fishesLargeGroup = fishes.map((item) => item.largeGroup);
+    fishesLargeGroup = [...new Set(fishesLargeGroup)];
+    return fishesLargeGroup.map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => {
+          setFishLargeGroup(item)
+          setDropLargeGroup(false)
+        }
+        }>
+          <RegularText text={item} />
+        </OptionListItem>
+      );
+    });
+  };
+
+  const groupList = () => {
+    const filteredGroupFishes = fishes.filter((item) => {
+      if (fishLargeGroup) {
+        if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
+          return item;
+        }
+      } else {
+        return item;
+      }
+    })
+    let fishesGroup = filteredGroupFishes.map((item) => item.group);
+    fishesGroup = [...new Set(fishesGroup)];
+    return fishesGroup.map((item, index) => {
+      return (
+        <OptionListItem key={index} onPress={() => {
+          setFishGroup(item)
+          setDropGroup(false)
+        }
+        }>
+          <RegularText text={item} />
         </OptionListItem>
       );
     });
@@ -369,15 +519,22 @@ export function NewFishLog({ navigation, route }: any) {
             </InputView>
             {
               (fishName && fishes.filter((item) => {
-                if (
-                  item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
-                  && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
-                ) {
-                  return item;
+                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+                  if (fishGroup) {
+                    if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
+                      return item;
+                    }
+                  }
+                  else if (fishLargeGroup) {
+                    if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase())) {
+                      return item;
+                    }
+                  } else
+                    return item;
                 }
               }).length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{list()}</OptionList>
+                  <OptionList showsVerticalScrollIndicator>{nameList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
@@ -391,23 +548,55 @@ export function NewFishLog({ navigation, route }: any) {
               <InputBox />
             </InputView>
 
-            <InputView>
-              <Input
-                placeholder="Grande Grupo"
-                value={fishLargeGroup}
-                onChangeText={setFishLargeGroup}
-              />
-              <InputBox />
-            </InputView>
+            <TouchableOpacity onPress={() => setDropLargeGroup(!dropLargeGroup)}>
+              <InputView>
+                <View style={{ marginLeft: 4, width: "95%" }}>
+                  {
+                    fishLargeGroup ? (
+                      <RegularText text={fishLargeGroup ? fishLargeGroup : ""} />
+                    ) :
+                      (<HalfToneText text="Grande Grupo" />)
+                  }
+                </View>
+                <InputBox />
+              </InputView>
+            </TouchableOpacity>
+            {
+              (dropLargeGroup && fishes.length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{largeGroupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
-            <InputView>
-              <Input
-                placeholder="Grupo"
-                value={fishGroup}
-                onChangeText={setFishGroup}
-              />
-              <InputBox />
-            </InputView>
+            <TouchableOpacity onPress={() => setDropGroup(!dropGroup)}>
+              <InputView>
+                <View style={{ marginLeft: 4, width: "95%" }}>
+                  {
+                    fishGroup ? (
+                      <RegularText text={fishGroup ? fishGroup : ""} />
+                    ) :
+                      (<HalfToneText text="Grupo" />)
+                  }
+                </View>
+                <InputBox />
+              </InputView>
+            </TouchableOpacity>
+            {
+              (dropGroup && fishes.filter((item) => {
+                if (fishLargeGroup) {
+                  if (item.largeGroup.toLowerCase().includes(fishLargeGroup.toLowerCase().trim())) {
+                    return item;
+                  }
+                } else {
+                  return item;
+                }
+              }).length) ? (
+                <OptionsContainer>
+                  <OptionList showsVerticalScrollIndicator>{groupList()}</OptionList>
+                </OptionsContainer>
+              ) : (null)
+            }
 
             <BoxView>
               <RowView>
@@ -435,15 +624,7 @@ export function NewFishLog({ navigation, route }: any) {
             <AddLocaleButtonLabel> {fishLatitude && fishLongitude ? "Alterar" : "Adicionar"} Localização </AddLocaleButtonLabel>
           </AddLocaleButton >
           <SendButtonView>
-            <SendButton onPress={isNew ? handleCreateFishLog : handleEditFishLog}>
-              {
-                (isNew || !isAdmin) ? (
-                  <SendButtonText>Enviar</SendButtonText>
-                ) : (
-                  <SendButtonText>Revisar</SendButtonText>
-                )
-              }
-            </SendButton>
+            {getSendButton()}
           </SendButtonView>
         </ScrollView >)
       }
