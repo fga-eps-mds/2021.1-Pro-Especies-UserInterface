@@ -1,0 +1,5 @@
+<testExecutions version="1">
+<file path="src/__tests__/components/defaultButton.spec.tsx">
+<testCase name="HomeScreen Should Render HomeScreen" duration="34" />
+</file>
+</testExecutions>
