@@ -1,5 +1,5 @@
 <testExecutions version="1">
 <file path="src/__tests__/components/defaultButton.spec.tsx">
-<testCase name="HomeScreen Should Render HomeScreen" duration="34" />
+<testCase name="Default Button Should Render Default Button if props are correct" duration="26" />
 </file>
 </testExecutions>

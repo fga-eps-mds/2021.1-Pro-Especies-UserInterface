@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from '@testing-library/react-native';
 
-import { DefaultButton } from "../../components/Button";
+import { FilterBar } from "../../components/FilterBar";
 import { ThemeProvider } from 'styled-components/native';
 import theme from '../../global/styles/theme';
 
@@ -13,7 +13,13 @@ const Providers: React.FC = ({ children }) => (
 
 describe('Default Button', () => {
     it('Should Render Default Button if props are correct', () => {
-        const result = render(<DefaultButton text="oi" buttonFunction={()=>{}} />, {
+        const result = render(
+            <FilterBar 
+            title="Filter Bar" 
+            icon="filter" 
+            iconText="icon" 
+            buttonFunction={()=>{}} 
+            />, {
             wrapper: Providers
         });
         expect(result).toBeTruthy();
