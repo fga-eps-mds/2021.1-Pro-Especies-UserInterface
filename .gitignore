@@ -11,5 +11,7 @@ web-build/
 **/.env
 .env
 config.js
+coverage/
+**/coverage/**
 # macOS
 .DS_Store
