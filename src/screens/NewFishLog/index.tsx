@@ -416,7 +416,9 @@ export function NewFishLog({ navigation, route }: any) {
 
   const nameList = () => {
     return fishes.filter((item) => {
-      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+        && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
+      ) {
         if (fishGroup) {
           if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
             return item;
@@ -519,7 +521,9 @@ export function NewFishLog({ navigation, route }: any) {
             </InputView>
             {
               (fishName && fishes.filter((item) => {
-                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+                  && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
+                ) {
                   if (fishGroup) {
                     if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
                       return item;
