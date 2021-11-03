@@ -41,7 +41,7 @@ interface Props {
 export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [exportList , setExportList] = useState(['']);
+  const [exportList, setExportList] = useState<string[]>([]);
   const [isCheck, setIsCheck] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
   const navigation = useNavigation();
@@ -49,6 +49,7 @@ export const FishLogs = ({ token }: Props) => {
   const getFishLogs = async () => {
     try {
       const data = await GetAllFishLogs(token);
+
       setFishLog(data);
     } catch (error: any) {
       console.log(error);
@@ -70,7 +71,7 @@ export const FishLogs = ({ token }: Props) => {
     if (value) {
       fishLog.forEach((item) => {
         if (!exportList.includes(item._id)) {
-          setExportList( arr => [...arr, item._id]);
+          setExportList(arr => [...arr, item._id]);
         }
       });
     } else {
@@ -89,27 +90,53 @@ export const FishLogs = ({ token }: Props) => {
     } as never);
   };
 
-  const requestFileSystemPermission = async ()=> {
+  
+  // const saveFile = async (fileUri: string) => {
+  //   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+  //   if (status === "granted") {
+  //     const asset = await MediaLibrary.createAssetAsync(fileUri)
+  //     await MediaLibrary.createAlbumAsync("Download", asset, false)
+  //   }
+  // }
+  // const downloadFile = () => {
+  //   const uri = "http://techslides.com/demos/sample-videos/small.mp4"
+  //   let fileUri = FileSystem.documentDirectory + "small.mp4";
+  //   FileSystem.downloadAsync(uri, fileUri)
+  //     .then(({ uri }) => {
+  //       saveFile(uri);
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     })
+  // }
+
+
+
+
+  const requestFileSystemPermission = async () => {
     // const fileUri: string = `$(FileSystem.documentDirectory)$(filename)`;
     // const downloadedFile: FileSystem.FileSystemDownloadResult = await
   }
 
   const handleExportSelected = async () => {
     //pass
-    try{
+    try {
+      // console.log(token, exportList);
+
       const file = await ExportFishLogs(token, exportList);
-      console.log(typeof file);
-    }catch(error: any){
+      console.log(file);
+    } catch (error: any) {
       console.log(error);
     }
-    
 
-
+    // console.log(exportList);
+    // console.log(exportList.toString());
+    // console.log(exportList.join());
   };
 
 
   const addExportList = (logId: string) => {
-    setExportList( arr => [...arr, logId]);
+    setExportList(arr => [...arr, logId]);
   };
 
   const removeExportList = (logId: string) => {
@@ -127,7 +154,7 @@ export const FishLogs = ({ token }: Props) => {
       ) : (
         <>
           <OptionsView>
-            <TouchableTitle onPress={() => {}}>
+            <TouchableTitle onPress={() => { }}>
               <TitleText>Filtros</TitleText>
               <FilterIcon name="filter-list" />
             </TouchableTitle>
@@ -135,30 +162,30 @@ export const FishLogs = ({ token }: Props) => {
               <ExportButton onPress={handleExport}>
                 {
                   isExportMode ? <>
-                  <DownloadIcon name="cancel" />
-                  <CancelButtonText >Cancelar</CancelButtonText>
-                </>
-                  
-                  : 
-                  <>
-                    <DownloadIcon name="file-download" />
-                    <ExportButtonText>Exportar Registros</ExportButtonText>
+                    <DownloadIcon name="cancel" />
+                    <CancelButtonText >Cancelar</CancelButtonText>
                   </>
-                    
+
+                    :
+                    <>
+                      <DownloadIcon name="file-download" />
+                      <ExportButtonText>Exportar Registros</ExportButtonText>
+                    </>
+
                 }
               </ExportButton>
             </ButtonView>
           </OptionsView>
-            <ExportAllView>
-              
-              {
-                isExportMode ? <>
-                  <CheckBox value={isCheck} onValueChange={selectAllFunction}/>
-                  <ExportAllText>Selecionar todos os registros</ExportAllText>
-                  </>
+          <ExportAllView>
+
+            {
+              isExportMode ? <>
+                <CheckBox value={isCheck} onValueChange={selectAllFunction} />
+                <ExportAllText>Selecionar todos os registros</ExportAllText>
+              </>
                 : null
-              }
-            </ExportAllView>
+            }
+          </ExportAllView>
           <FishCardList
             data={fishLog}
             renderItem={({ item }) => (
@@ -169,32 +196,32 @@ export const FishLogs = ({ token }: Props) => {
                 cardFunction={() => {
                   handleNavigation(item._id);
                 }}
-                selectFunction={()=>{
+                selectFunction={() => {
                   addExportList(item._id);
                 }}
-                deselectFunction={()=>{
+                deselectFunction={() => {
                   removeExportList(item._id);
                 }}
               />
             )}
             keyExtractor={item => item._id}
           />
-          {isExportMode ? 
-          <ExportSelectedView>
-            <ExportSelectedButton onPress={handleExportSelected}>
-              <ExportSelectedButtonView>
-                <ExportSelectedText>Exportar Selecionados</ExportSelectedText>
-                <DownloadIconBottom name="file-download"/>
-              </ExportSelectedButtonView>
-            </ExportSelectedButton>
-          </ExportSelectedView>
-         :<AddButtonView>
-            <AddLogButton onPress={handleAddLog}>
-              <AddLogView>
-                <AddIcon name="add" />
-              </AddLogView>
-            </AddLogButton>
-          </AddButtonView>
+          {isExportMode ?
+            <ExportSelectedView>
+              <ExportSelectedButton onPress={handleExportSelected}>
+                <ExportSelectedButtonView>
+                  <ExportSelectedText>Exportar Selecionados</ExportSelectedText>
+                  <DownloadIconBottom name="file-download" />
+                </ExportSelectedButtonView>
+              </ExportSelectedButton>
+            </ExportSelectedView>
+            : <AddButtonView>
+              <AddLogButton onPress={handleAddLog}>
+                <AddLogView>
+                  <AddIcon name="add" />
+                </AddLogView>
+              </AddLogButton>
+            </AddButtonView>
           }
         </>
       )}

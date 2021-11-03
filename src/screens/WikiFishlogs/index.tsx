@@ -22,6 +22,7 @@ export const WikiFishlogs = ({ navigation }: any) => {
 
   const getData = async () => {
     const token = await AsyncStorage.getItem('@eupescador/token');
+    console.log(token);
     if (token) {
       setToken(token);
       setIsLogged(true);
