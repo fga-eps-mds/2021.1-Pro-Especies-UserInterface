@@ -95,7 +95,11 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
           navigation={navigation}
           filterQuery={route.params ? route.params.filterQuery : null}
         />) :
-        (<FishLogs token={token} />)}
+        (<FishLogs token={token} 
+          navigation={navigation}
+          filterQuery={route.params ? route.params.filterQuery : null}
+        />)
+      }
     </PageContainer>
   );
 };

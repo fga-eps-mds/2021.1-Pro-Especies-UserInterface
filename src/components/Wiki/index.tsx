@@ -64,6 +64,7 @@ export const Wiki = (
             <FilterButton
               url={filterQuery}
               navigation={navigation}
+              screen='WikiFilter'
             />
           </RowContainer>
           {fishes.filter(fish => {

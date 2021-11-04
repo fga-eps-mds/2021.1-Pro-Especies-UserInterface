@@ -21,16 +21,24 @@ import { IFishLog } from '../FishCard';
 import { DraftButton } from '../DraftButton';
 import { FishList } from '../FishList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FilterButton } from '../FilterButton';
 
 interface Props {
   token: string;
+  navigation: any;
+  filterQuery: any;
 }
 
-export const FishLogs = ({ token }: Props) => {
+export const FishLogs = (
+  { token,
+    navigation,
+    filterQuery,
+  }: Props
+) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasDraft, setHasDraft] = useState(false);
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   const getFishLogs = async () => {
     try {
@@ -77,10 +85,11 @@ export const FishLogs = ({ token }: Props) => {
       ) : (
         <>
           <OptionsView>
-            <TouchableTitle onPress={() => { }}>
-              <TitleText>Filtros</TitleText>
-              <FilterIcon name="filter-list" />
-            </TouchableTitle>
+          <FilterButton
+              url={filterQuery}
+              navigation={navigation}
+              screen='LogFilter'
+            />
             <ButtonView>
               <ExportButton onPress={handleExport}>
                 <DownloadIcon name="file-download" />

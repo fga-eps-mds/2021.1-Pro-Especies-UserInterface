@@ -11,13 +11,14 @@ import {
 interface Props {
   url: string;
   navigation: any;
+  screen: string;
 }
 
-export function FilterButton({ url,navigation }: Props) {
+export function FilterButton({ url,navigation, screen }: Props) {
   return (
 
     <TouchableFilter
-      onPress={() => navigation.navigate('WikiFilter')}
+      onPress={() => navigation.navigate(screen)}
       hasFilter={url ? true : false}
     >
       <TextFilter
