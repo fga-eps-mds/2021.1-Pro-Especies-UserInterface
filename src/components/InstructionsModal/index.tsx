@@ -5,6 +5,7 @@ import { CloseButton, CloseButtonIcon, ModalArrowButton, ModalArrowIcon, ModalCo
 import { getImage } from "../../utils/getInstructionImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { DisableIconButton } from "../DisableIconButton";
+import { DefaultButton } from "../Button";
 interface ModalProps {
     modalVisible: boolean,
     dismissModal: () => void,
@@ -58,6 +59,11 @@ export const InstructionModal = ({ modalVisible, dismissModal }: ModalProps) => 
                     <ModalDescripton>
                         {modalDescriptions[currentPosition - 1]}
                     </ModalDescripton>
+                    {currentPosition === 3 ?
+                        <DefaultButton text="Ir para o aplicativo" buttonFunction={dismissModal} /> :
+                        <>
+                        </>
+                    }
                 </ModalView>
             </ModalContainer>
         </Modal>

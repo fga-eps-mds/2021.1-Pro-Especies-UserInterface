@@ -2,10 +2,6 @@ import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 import { MaterialIcons } from '@expo/vector-icons';
 
-interface Props {
-    isActivated: boolean
-};
-
 export const ModalContainer = styled.View`
     align-items: center;
     justify-content: center;
@@ -16,13 +12,13 @@ export const ModalContainer = styled.View`
 export const ModalView = styled.View`
     width: ${RFValue(300, 640)}px;
     background-color: ${({ theme }) => theme.colors.background};
-    height: ${RFValue(420, 640)}px;
+    height: ${RFValue(440, 640)}px;
     border-radius: ${RFValue(20, 640)}px;
     padding: 0px ${RFValue(16, 640)}px;
 `;
 
 export const CloseButton = styled.TouchableOpacity`
-    align-self: flex-end
+    align-self: flex-end;
 `;
 
 export const CloseButtonIcon = styled(MaterialIcons)`
@@ -48,15 +44,10 @@ export const ModalImage = styled.Image`
     margin: ${RFValue(8, 640)}px 0px;
 `;
 
-export const ModalArrowButton = styled.TouchableOpacity``
-
-export const ModalArrowIcon = styled(MaterialIcons) <Props>`
-    font-size: ${RFValue(36, 640)}px;
-    color: ${({ theme }) => theme.colors.on_background};
-`;
 
 export const ModalDescripton = styled.Text`
     font-size: ${RFValue(14, 640)}px;
     text-align: center;
     font-family: ${({ theme }) => theme.fonts.regular};
+    margin-bottom: ${RFValue(8, 640)}px;
 `;
