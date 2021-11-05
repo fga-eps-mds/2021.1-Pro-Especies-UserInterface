@@ -21,7 +21,6 @@ import { IFishLog } from '../FishCard';
 import { DraftButton } from '../DraftButton';
 import { FishList } from '../FishList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InstructionModal } from '../InstructionsModal';
 
 interface Props {
   token: string;
@@ -31,11 +30,6 @@ export const FishLogs = ({ token }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasDraft, setHasDraft] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const modalDescriptions = [
-    "Na tela de biblioteca, você pode visualizar informações sobre os mais diversos peixes.",
-    "Na tela de registro, você pode registrar informações sobre peixes que pescou em sua região, clicando no botão \“+\”, para ajudar o mapeamento das especécies.",
-    "Seus registros serão avaliados por pesquisadores e os dados serão utilizadas no mapeamento e preservação de espécies."];
   const navigation = useNavigation();
 
   const getFishLogs = async () => {
@@ -82,10 +76,6 @@ export const FishLogs = ({ token }: Props) => {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
-          <InstructionModal
-            modalVisible={showModal}
-            dismissModal={() => setShowModal(false)}
-          />
           <OptionsView>
             <TouchableTitle onPress={() => { }}>
               <TitleText>Filtros</TitleText>
@@ -108,9 +98,9 @@ export const FishLogs = ({ token }: Props) => {
             handleNavigation={handleNavigation}
           />
           <AddButtonView>
-            <AddLogButton onPress={() => { setShowModal(true) }}>
+            <AddLogButton onPress={handleAddLog}>
               <AddLogView>
-                <AddIcon name="help" />
+                <AddIcon name="add" />
               </AddLogView>
             </AddLogButton>
           </AddButtonView>

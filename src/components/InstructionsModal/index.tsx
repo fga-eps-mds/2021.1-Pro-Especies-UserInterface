@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Alert } from "react-native";
-import { CloseButton, CloseButtonIcon, ModalArrowButton, ModalArrowIcon, ModalContainer, ModalDescripton, ModalImage, ModalImageIconContainer, ModalTitle, ModalView } from "./styles";
+import { CloseButton, CloseButtonIcon, ModalContainer, ModalDescripton, ModalImage, ModalImageIconContainer, ModalTitle, ModalView } from "./styles";
 
 import { getImage } from "../../utils/getInstructionImage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
