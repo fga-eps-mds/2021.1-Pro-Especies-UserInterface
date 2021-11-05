@@ -67,7 +67,6 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
 
   return (
     <FishContainer>
-      <TopBar title="Informações" />
       <ScrollView>
         <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
 

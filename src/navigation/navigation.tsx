@@ -54,7 +54,8 @@ const AuthRoutes = () => {
       />
       <AuthenticateStack.Screen
         name="WikiFish"
-        component={WikiFish} />
+        component={WikiFish}
+        options={{ title: 'Informações', headerShown: true }} />
       <AuthenticateStack.Screen
         name="Drafts" component={Drafts}
         options={{ title: 'Rascunhos', headerShown: true }}
