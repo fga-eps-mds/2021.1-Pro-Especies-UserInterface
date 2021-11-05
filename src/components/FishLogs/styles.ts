@@ -76,7 +76,7 @@ export const DownloadIcon = styled(MaterialIcons)`
 `;
 
 export const DownloadIconBottom = styled(MaterialIcons)`
-  font-size: ${RFValue(24, 640)}px;
+  font-size: ${RFValue(18, 640)}px;
   color: white;
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
@@ -149,8 +149,8 @@ export const ExportSelectedText = styled.Text`
 `;
 export const ExportSelectedButtonView = styled.View`
   flex-direction: row;
-  width: ${RFValue(165, 640)}px;
-  height: ${RFValue(32, 640)}px;
+  width: ${RFValue(180, 640)}px;
+  height: ${RFValue(35, 640)}px;
   border-radius: ${RFValue(50, 640)}px;
   background-color: ${({ theme }) => theme.colors.secondary_dark};
   align-items: center;

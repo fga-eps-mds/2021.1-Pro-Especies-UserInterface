@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
@@ -91,58 +91,40 @@ export const FishLogs = ({ token }: Props) => {
     } as never);
   };
 
-  
-  // const saveFile = async (fileUri: string) => {
-  //   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-  //   if (status === "granted") {
-  //     const asset = await MediaLibrary.createAssetAsync(fileUri)
-  //     await MediaLibrary.createAlbumAsync("Download", asset, false)
-  //   }
-  // }
-  // const downloadFile = () => {
-  //   const uri = "http://techslides.com/demos/sample-videos/small.mp4"
-  //   let fileUri = FileSystem.documentDirectory + "small.mp4";
-  //   FileSystem.downloadAsync(uri, fileUri)
-  //     .then(({ uri }) => {
-  //       saveFile(uri);
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     })
-  // }
 
-
-
-
-  const requestFileSystemPermission = async () => {
-    // const fileUri: string = `$(FileSystem.documentDirectory)$(filename)`;
-    // const downloadedFile: FileSystem.FileSystemDownloadResult = await
   const saveFile = async (csvFile: string) => {
-    try{
-      let fileUri = FileSystem.documentDirectory + "export.csv";
-      console.log(fileUri);
-      await FileSystem.writeAsStringAsync(fileUri, csvFile,{ encoding: FileSystem.EncodingType.UTF8 });
-      const asset = await MediaLibrary.createAssetAsync(fileUri);
-      await MediaLibrary.createAlbumAsync("ProEspecies", asset, false);
-    }catch(error:any){
+    try {
+      const res = await MediaLibrary.requestPermissionsAsync()
+
+      if (res.granted) {
+        let today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours() + "-" + today.getMinutes();
+
+        let fileUri = FileSystem.documentDirectory + `registros-${date}.csv`;
+        console.log(fileUri);
+        await FileSystem.writeAsStringAsync(fileUri, csvFile, { encoding: FileSystem.EncodingType.UTF8 });
+        const asset = await MediaLibrary.createAssetAsync(fileUri);
+        await MediaLibrary.createAlbumAsync("euPescador", asset, false);
+
+        handleExport();
+        Alert.alert("Exportar Registros", "Registros exportados com sucesso", [
+          {
+            text: "Ok",
+          }
+        ])
+      }
+    } catch (error: any) {
       console.log(error);
     }
-  }
+  };
 
   const handleExportSelected = async () => {
-    //pass
-    
     try {
-      // console.log(token);
       const file = await ExportFishLogs(token, exportList);
       saveFile(file);
     } catch (error: any) {
       console.log(error);
     }
-
-    // console.log(exportList);
-    // console.log(exportList.toString());
-    // console.log(exportList.join());
   };
 
 
@@ -219,7 +201,19 @@ export const FishLogs = ({ token }: Props) => {
           />
           {isExportMode ?
             <ExportSelectedView>
-              <ExportSelectedButton onPress={handleExportSelected}>
+              <ExportSelectedButton onPress={() => {
+                Alert.alert("Exportar Registros", "Você deseja exportar esses registros?", [
+                  {
+                    text: "Cancelar",
+                    style: "cancel"
+                  },
+                  {
+                    text: "Ok",
+                    onPress: () => handleExportSelected()
+                  }
+                ])
+              }
+              }>
                 <ExportSelectedButtonView>
                   <ExportSelectedText>Exportar Selecionados</ExportSelectedText>
                   <DownloadIconBottom name="file-download" />
