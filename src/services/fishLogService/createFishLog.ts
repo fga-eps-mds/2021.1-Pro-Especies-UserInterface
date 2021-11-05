@@ -3,23 +3,23 @@ import { Buffer } from "buffer";
 import { fishLogService } from "./fishService";
 
 export const createFishLog = async (
-  photoString: string | null | undefined,
-  name: string | null,
-  largeGroup: string | null,
-  group: string | null,
-  species: string | null,
-  weight: number | null,
-  length: number | null,
-  latitude: number | null,
-  longitude: number | null,
+  photoString: string | undefined,
+  name: string | undefined,
+  largeGroup: string | undefined,
+  group: string | undefined,
+  species: string | undefined,
+  weight: string | undefined,
+  length: string | undefined,
+  latitude: string | undefined,
+  longitude: string | undefined,
 ) => {
   const userId = await AsyncStorage.getItem('@eupescador/userId');
   const token = await AsyncStorage.getItem('@eupescador/token');
   let photo = null;
 
   const coordenates = {
-    latitude,
-    longitude,
+    latitude: latitude ? parseFloat(latitude) : null,
+    longitude: longitude ? parseFloat(longitude) : null
   };
 
   if (photoString) {
@@ -36,8 +36,8 @@ export const createFishLog = async (
       species,
       coordenates,
       photo,
-      length,
-      weight,
+      length: length ? parseFloat(length) : null,
+      weight: weight ? parseFloat(weight) : null,
     },
     { headers: { Authorization: `Bearer ${token}` } },
   );

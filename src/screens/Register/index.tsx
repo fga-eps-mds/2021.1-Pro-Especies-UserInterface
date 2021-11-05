@@ -20,7 +20,7 @@ import {
   TouchableTitle,
 } from './styles';
 import { CreateUser } from '../../services/userServices/createUser';
-import { GreenButton } from '../../components/GreenButton';
+import { DefaultButton } from '../../components/Button';
 
 export function Register() {
   const [admin, setAdmin] = useState(false);
@@ -255,7 +255,7 @@ export function Register() {
             </>
           ) : null}
           <RegisterButtonView>
-            <GreenButton text="Cadastrar" buttonFunction={handleRegister} />
+            <DefaultButton text="Cadastrar" buttonFunction={handleRegister} />
           </RegisterButtonView>
         </InputContainer>
       </InputScroll>

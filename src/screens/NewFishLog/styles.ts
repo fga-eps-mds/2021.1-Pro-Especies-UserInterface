@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { RFValue } from 'react-native-responsive-fontsize';
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { MaterialIcons } from '@expo/vector-icons';
 
 export const NewFishLogContainer = styled.View`
@@ -72,7 +72,7 @@ export const OptionListItem = styled.TouchableOpacity`
 `
 
 export const OptionsContainer = styled.View`
-    height: auto;
+    height: ${RFPercentage(30)}px;
     width: ${RFValue(258, 640)}px;
     border-radius: 5px;
     background: ${({ theme }) => theme.colors.background};

@@ -50,7 +50,7 @@ export interface IFishLog {
 interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
-  cardFunction: VoidFunction;
+  cardFunction: (VoidFunction);
 }
 
 export const FishCard: FC<IFishCardProps> = ({
@@ -59,13 +59,12 @@ export const FishCard: FC<IFishCardProps> = ({
   cardFunction,
 }) => {
   return (
-    <FishCardContainer onPress={() => {}}>
+    <FishCardContainer onPress={() => { }}>
       <TouchableOpacity onPress={cardFunction}>
         <FishImage
           source={{
-            uri: `data:image/png;base64,${
-              fishLog ? fishLog.photo : fishWiki?.photo
-            }`,
+            uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo
+              }`,
           }}
         />
         <TextView>
