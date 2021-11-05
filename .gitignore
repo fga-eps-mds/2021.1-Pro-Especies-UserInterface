@@ -13,3 +13,4 @@ web-build/
 config.js
 # macOS
 .DS_Store
+coverage/**

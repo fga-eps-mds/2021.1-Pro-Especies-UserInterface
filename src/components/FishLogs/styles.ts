@@ -1,4 +1,4 @@
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { RFValue, RFPercentage } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
@@ -64,8 +64,8 @@ export const FilterIcon = styled(MaterialIcons)`
   color: black;
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
-export const AddIcon = styled(MaterialIcons)`
-  font-size: ${RFValue(36, 640)}px;
+export const AddIcon = styled(MaterialCommunityIcons)`
+  font-size: ${RFValue(24, 640)}px;
   color: white;
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
