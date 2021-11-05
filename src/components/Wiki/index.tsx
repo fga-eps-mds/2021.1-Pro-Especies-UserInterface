@@ -13,8 +13,6 @@ import {
   FishBodyContainer,
 } from './styles';
 import { FishList } from '../FishList';
-import { InstructionModal } from '../InstructionsModal';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const Wiki = (
@@ -25,7 +23,6 @@ export const Wiki = (
   const [searchQuery, setSearchQuery] = React.useState('');
   const [fishes, setFishes] = useState<IFish[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
 
   const updateFishes = async () => {
     try {
@@ -45,16 +42,9 @@ export const Wiki = (
       } as never,
     );
   };
-  const getFirstAcess = async () => {
-    const hasAcessTheApp = await AsyncStorage.getItem('hasAcessTheApp');
-    if (hasAcessTheApp === 'false') {
-      setShowModal(true);
-      await AsyncStorage.setItem('hasAcessTheApp', 'true');
-    }
-  }
+
   useEffect(() => {
     updateFishes();
-    getFirstAcess();
   }, []);
 
   return (
@@ -63,10 +53,7 @@ export const Wiki = (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
-          <InstructionModal
-            modalVisible={showModal}
-            dismissModal={() => setShowModal(false)}
-          />
+
           <RowContainer>
             <SearchBarContainer
               placeholder="Pesquisar"
