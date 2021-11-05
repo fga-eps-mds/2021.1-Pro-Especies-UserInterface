@@ -7,5 +7,5 @@ interface Props {
 }
 
 export function ProfileImage({ source }: Props) {
-  return <Image source={source} />;
+  return <Image source={source} resizeMode="contain" />;
 }

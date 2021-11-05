@@ -56,6 +56,9 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
       setFishIsEndemic(fish.isEndemic);
       setFishIsThreatened(fish.isThreatened);
       setFishHasSpawningSeason(fish.hasSpawingSeason);
+      if (fish.photo) {
+        setFishPhoto(fish.photo);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +71,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
   return (
     <FishContainer>
       <ScrollView>
-        <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
+        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
 
         <DescriptionContainer>
           <Title text={fishName} />
