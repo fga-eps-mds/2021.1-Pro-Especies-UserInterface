@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import CheckBox from '@react-native-community/checkbox';
 import {
   ButtonView,
@@ -116,15 +117,25 @@ export const FishLogs = ({ token }: Props) => {
   const requestFileSystemPermission = async () => {
     // const fileUri: string = `$(FileSystem.documentDirectory)$(filename)`;
     // const downloadedFile: FileSystem.FileSystemDownloadResult = await
+  const saveFile = async (csvFile: string) => {
+    try{
+      let fileUri = FileSystem.documentDirectory + "export.csv";
+      console.log(fileUri);
+      await FileSystem.writeAsStringAsync(fileUri, csvFile,{ encoding: FileSystem.EncodingType.UTF8 });
+      const asset = await MediaLibrary.createAssetAsync(fileUri);
+      await MediaLibrary.createAlbumAsync("ProEspecies", asset, false);
+    }catch(error:any){
+      console.log(error);
+    }
   }
 
   const handleExportSelected = async () => {
     //pass
+    
     try {
-      // console.log(token, exportList);
-
+      // console.log(token);
       const file = await ExportFishLogs(token, exportList);
-      console.log(file);
+      saveFile(file);
     } catch (error: any) {
       console.log(error);
     }
