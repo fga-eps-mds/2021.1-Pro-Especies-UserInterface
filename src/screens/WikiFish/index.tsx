@@ -16,6 +16,7 @@ import { Property } from '../../components/Property';
 import { Title } from '../../components/Title';
 import { HalfToneText } from '../../components/HalfToneText';
 import { RegularText } from '../../components/RegularText';
+import { NoFishImagePhoto } from '../../components/NoFishImagePhoto';
 
 type IFish = {
   fish_id: string;
@@ -71,7 +72,11 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
   return (
     <FishContainer>
       <ScrollView>
-        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
+        {
+          fishPhoto ?
+            <ProfileImage source={{ uri: fishPhoto }} /> :
+            <NoFishImagePhoto />
+        }
 
         <DescriptionContainer>
           <Title text={fishName} />

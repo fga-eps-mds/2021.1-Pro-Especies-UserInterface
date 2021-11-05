@@ -19,10 +19,11 @@ import { DefaultButton } from '../../components/Button';
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { DeleteFishLog } from "../../services/fishLogService/deleteFishLog";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NoFishImagePhoto } from "../../components/NoFishImagePhoto";
 
 export const FishLog = ({ navigation, route }: any) => {
     const [fishName, setFishName] = useState();
-    const [fishPhoto, setFishPhoto] = useState<String>();
+    const [fishPhoto, setFishPhoto] = useState<string>();
     const [fishLargeGroup, setFishLargeGroup] = useState();
     const [fishGroup, setFishGroup] = useState();
     const [fishSpecies, setFishSpecies] = useState();
@@ -93,8 +94,13 @@ export const FishLog = ({ navigation, route }: any) => {
             {
                 isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
                     <ScrollView>
-                        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
 
+
+                        {fishPhoto ?
+                            <ProfileImage source={{ uri: fishPhoto }} />
+                            :
+                            <NoFishImagePhoto />
+                        }
                         <DescriptionContainer>
                             <Title text={
                                 fishName ? fishName : "Nome não informado"
