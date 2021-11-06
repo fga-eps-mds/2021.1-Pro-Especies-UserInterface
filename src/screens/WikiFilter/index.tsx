@@ -28,6 +28,7 @@ interface IGroup {
     }[],
 }
 
+
 const initialState: IGroup = {
     groups: [
         {
