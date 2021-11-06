@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
-import { IFishLog } from "../../components/FishCard";
-import { FishList } from "../../components/FishList";
+import { IFishLog } from "../../components/FishLogCard";
+import { WikiFishList } from "../../components/WikiFishList";
 import { DraftsContainer } from "./styles";
 export const Drafts = ({ navigation, route }: any) => {
     const [draftList, setDraftList] = useState<IFishLog[]>([]);
@@ -26,7 +26,7 @@ export const Drafts = ({ navigation, route }: any) => {
     }, []);
     return (
         <DraftsContainer>
-            <FishList
+            <WikiFishList
                 fishData={draftList}
                 type="fishLog"
                 handleNavigation={handleNavigation}

@@ -23,17 +23,25 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const [showModal, setShowModal] = useState(false);
   const { signOut } = useAuth();
 
   const getData = async () => {
+    const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
     const token = await AsyncStorage.getItem('@eupescador/token');
+    console.log(token);
     if (token) {
       setToken(token);
       setIsLogged(true);
     } else {
       setIsLogged(false);
     }
+    if (userAdmin === "true")
+      setIsAdmin(true);
+    else
+      setIsAdmin(false);
+
   };
 
   const handleSignOut = () => {
@@ -119,7 +127,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
             navigation={navigation}
             filterQuery={route.params ? route.params.filterQuery : null}
           />) :
-          (<FishLogs token={token} />)}
+          (<FishLogs token={token} isAdmin={isAdmin ? isAdmin : false} />)}
       </PageContainer>
     </>
   );

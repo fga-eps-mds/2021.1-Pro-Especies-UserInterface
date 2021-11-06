@@ -53,10 +53,10 @@ export interface IFishLog {
 interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
-  cardFunction: (VoidFunction);
+  cardFunction: VoidFunction;
 }
 
-export const FishCard: FC<IFishCardProps> = ({
+export const WikiFishCard: FC<IFishCardProps> = ({
   fishWiki,
   fishLog,
   cardFunction,

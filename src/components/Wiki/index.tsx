@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import { IFish } from '../FishCard';
+import { IFish } from '../FishLogCard';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
 import { FilterButton } from '../FilterButton';
 import {
@@ -12,7 +12,7 @@ import {
   SearchImage,
   FishBodyContainer,
 } from './styles';
-import { FishList } from '../FishList';
+import { WikiFishList } from '../WikiFishList';
 
 
 export const Wiki = (
@@ -80,7 +80,7 @@ export const Wiki = (
               return fish;
             }
           }).length ? (
-            <FishList
+            <WikiFishList
               fishData={fishes.filter(item => {
                 if (
                   !searchQuery ||

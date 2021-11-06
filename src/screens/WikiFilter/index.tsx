@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CommonActions } from '@react-navigation/native';
-import Checkbox from 'expo-checkbox';
+import Checkbox from '@react-native-community/checkbox';
 import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
 import { FilterBar } from "../../components/FilterBar";

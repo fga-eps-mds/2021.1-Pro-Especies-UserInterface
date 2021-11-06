@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { FlatList } from "react-native";
-import { IFishLog, IFish } from "../FishCard";
+import { IFishLog, IFish } from "../FishLogCard";
 import { RFValue } from "react-native-responsive-fontsize";
 
 export const FishCardList = styled(
