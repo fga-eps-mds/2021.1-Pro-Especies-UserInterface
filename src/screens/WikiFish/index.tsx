@@ -52,10 +52,10 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
       setFishHabitat(fish.habitat);
       setFishMaxSize(fish.sizeMax);
       setFishMaxWeight(fish.maxWeight);
-      setFishWasIntroduced(fish.wasIntroduced);
-      setFishIsEndemic(fish.isEndemic);
-      setFishIsThreatened(fish.isThreatened);
-      setFishHasSpawningSeason(fish.hasSpawingSeason);
+      setFishWasIntroduced(fish.wasIntroducedInfo);
+      setFishIsEndemic(fish.isEndemicInfo);
+      setFishIsThreatened(fish.isThreatenedInfo);
+      setFishHasSpawningSeason(fish.hasSpawingSeasonInfo);
       if (fish.photo) {
         setFishPhoto(fish.photo);
       }
@@ -81,7 +81,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
           <Title text={fishName} />
           <HalfToneText text={fishSpecies} />
           <FishDescription>
-            <RegularText text={`"${fishFunFact}"`} />
+            <RegularText text={fishFunFact ? `"${fishFunFact}"` : ""} />
           </FishDescription>
         </DescriptionContainer>
 
@@ -98,7 +98,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             <PropertyContainer>
               <Property
                 property="Tamanho Máx(cm)"
-                value={JSON.stringify(fishMaxSize)}
+                value={fishMaxSize?.toString() || "-"}
               />
             </PropertyContainer>
 
@@ -107,11 +107,11 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Ameaçado?" value={fishIsThreatened} />
+              <Property property="Ameaçado?" value={fishIsThreatened || "-"} />
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Foi indroduzido?" value={fishWasIntroduced} />
+              <Property property="Foi indroduzido?" value={fishWasIntroduced || "-"} />
             </PropertyContainer>
           </PropertyColumn>
 
@@ -127,18 +127,18 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             <PropertyContainer>
               <Property
                 property="Peso Máx(kg)"
-                value={JSON.stringify(fishMaxWeight)}
+                value={fishMaxWeight?.toString() || "-"}
               />
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Endemíco?" value={fishIsEndemic} />
+              <Property property="Endemíco?" value={fishIsEndemic || "-"} />
             </PropertyContainer>
 
             <PropertyContainer>
               <Property
                 property="Faz piracema?"
-                value={fishHasSpawningSeason}
+                value={fishHasSpawningSeason || "-"}
               />
             </PropertyContainer>
           </PropertyColumn>
