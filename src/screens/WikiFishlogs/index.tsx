@@ -19,7 +19,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
-  const [isAdmin, setIsAdmin] = useState<Boolean>();
+  const [isAdmin, setIsAdmin] = useState<boolean>();
   const { signOut } = useAuth();
 
   const getData = async () => {
@@ -103,7 +103,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
           navigation={navigation}
           filterQuery={route.params ? route.params.filterQuery : null}
         />) :
-        (<FishLogs token={token} isAdmin={isAdmin} />)}
+        (<FishLogs token={token} isAdmin={isAdmin ? isAdmin : false } />)}
     </PageContainer>
   );
 };

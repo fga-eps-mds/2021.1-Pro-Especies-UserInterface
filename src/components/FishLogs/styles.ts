@@ -8,7 +8,7 @@ export const Container = styled.View`
   flex: 1;
   width: 100%;
   justify-content: center;
-  padding-left: ${RFValue(16, 640)}px;
+  padding-left: ${RFValue(8, 640)}px;
 `;
 
 
@@ -156,7 +156,7 @@ export const FishCardList = styled(
   numColumns: 2,
   columnWrapperStyle: { justifyContent: 'space-around' },
   contentContainerStyle: {
-    alignItems: 'stretch',
-    paddingBottom: RFValue(156),
+      alignItems: 'stretch',
+      paddingBottom: RFValue(156),
   },
 })``;

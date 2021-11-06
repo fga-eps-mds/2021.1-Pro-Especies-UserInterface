@@ -255,3 +255,4 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
     </Container>
   );
 };
+
