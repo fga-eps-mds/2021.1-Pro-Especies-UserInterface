@@ -10,12 +10,12 @@ import {
   DescriptionContainer,
 } from './styles';
 import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
-import { TopBar } from '../../components/TopBar';
 import { ProfileImage } from '../../components/ProfileImage';
 import { Property } from '../../components/Property';
 import { Title } from '../../components/Title';
 import { HalfToneText } from '../../components/HalfToneText';
 import { RegularText } from '../../components/RegularText';
+import { NoFishImagePhoto } from '../../components/NoFishImagePhoto';
 
 type IFish = {
   fish_id: string;
@@ -56,6 +56,9 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
       setFishIsEndemic(fish.isEndemic);
       setFishIsThreatened(fish.isThreatened);
       setFishHasSpawningSeason(fish.hasSpawingSeason);
+      if (fish.photo) {
+        setFishPhoto(fish.photo);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -67,9 +70,12 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
 
   return (
     <FishContainer>
-      <TopBar title="Informações" />
       <ScrollView>
-        <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
+        {
+          fishPhoto ?
+            <ProfileImage source={{ uri: fishPhoto }} /> :
+            <NoFishImagePhoto />
+        }
 
         <DescriptionContainer>
           <Title text={fishName} />

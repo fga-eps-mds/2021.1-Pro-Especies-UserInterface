@@ -2,6 +2,8 @@ import React, { useState, useEffect, FC } from "react";
 import { Buffer } from "buffer";
 import { ScrollView, Alert, ActivityIndicator } from "react-native";
 import { CommonActions } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
 import {
     FishContainer,
     PropertyRow,
@@ -18,11 +20,13 @@ import { DefaultButton } from '../../components/Button';
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { DeleteFishLog } from "../../services/fishLogService/deleteFishLog";
+import { ExportFishLogs } from "../../services/fishLogService/exportFishLogs";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { NoFishImagePhoto } from "../../components/NoFishImagePhoto";
 
 export const FishLog = ({ navigation, route }: any) => {
     const [fishName, setFishName] = useState();
-    const [fishPhoto, setFishPhoto] = useState<String>();
+    const [fishPhoto, setFishPhoto] = useState<string>();
     const [fishLargeGroup, setFishLargeGroup] = useState();
     const [fishGroup, setFishGroup] = useState();
     const [fishSpecies, setFishSpecies] = useState();
@@ -61,6 +65,46 @@ export const FishLog = ({ navigation, route }: any) => {
         }
     }
 
+
+    const saveFile = async (csvFile: string) => {
+        try {
+          const res = await MediaLibrary.requestPermissionsAsync()
+    
+          if (res.granted) {
+            let today = new Date();
+            let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours() + "-" + today.getMinutes();
+    
+            let fileUri = FileSystem.documentDirectory + `registros-${date}.csv`;
+            console.log(fileUri);
+            await FileSystem.writeAsStringAsync(fileUri, csvFile, { encoding: FileSystem.EncodingType.UTF8 });
+            const asset = await MediaLibrary.createAssetAsync(fileUri);
+            await MediaLibrary.createAlbumAsync("euPescador", asset, false);
+    
+            Alert.alert("Exportar Registro", "Registro exportado com sucesso. Você pode encontrar o arquivo em /Pictures/euPescador", [
+              {
+                text: "Ok",
+              }
+            ])
+          }
+        } catch (error: any) {
+          console.log(error);
+          Alert.alert("Exportar Registro", "Falha ao exportar registro", [
+            {
+              text: "Ok",
+            }
+          ])
+        }
+      };
+    
+      const handleExportFishlog = async () => {
+        try {
+          const file = await ExportFishLogs(userToken, [logId]);
+          saveFile(file);
+        } catch (error: any) {
+          console.log(error);
+        }
+      };
+
     const getFishLogProperties = async (token: string) => {
         try {
             const { log_id } = route.params;
@@ -93,8 +137,13 @@ export const FishLog = ({ navigation, route }: any) => {
             {
                 isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
                     <ScrollView>
-                        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
 
+
+                        {fishPhoto ?
+                            <ProfileImage source={{ uri: fishPhoto }} />
+                            :
+                            <NoFishImagePhoto />
+                        }
                         <DescriptionContainer>
                             <Title text={
                                 fishName ? fishName : "Nome não informado"
@@ -137,7 +186,18 @@ export const FishLog = ({ navigation, route }: any) => {
                                                 name: "Revisar Registro",
                                             } as never);
                                         }} />
-                                        <DefaultButton text="Exportar" buttonFunction={() => { }} />
+                                        <DefaultButton text="Exportar" buttonFunction={() => {
+                                            Alert.alert("Exportar Registro", "Você deseja exportar este registro?", [
+                                                {
+                                                    text: "Cancelar",
+                                                    style: "cancel"
+                                                },
+                                                {
+                                                    text: "Ok",
+                                                    onPress: () => handleExportFishlog()
+                                                }
+                                            ])
+                                        }} />
                                     </>
                                 ) : (
                                     <DefaultButton text="Editar" buttonFunction={() => {

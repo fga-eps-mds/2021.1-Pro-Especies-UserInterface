@@ -1,7 +1,8 @@
 import styled from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import CheckBox from '@react-native-community/checkbox';
 
-export const FishCardContainer = styled.TouchableOpacity`
+export const FishCardContainer = styled.View`
   align-items: flex-start;
   width: ${RFValue(156, 640)}px;
   height: ${RFValue(180, 640)}px;
@@ -9,6 +10,12 @@ export const FishCardContainer = styled.TouchableOpacity`
   border-radius: ${RFValue(16, 640)}px;
   background-color: ${({ theme }) => theme.colors.background};
   margin-bottom: 14px;
+`;
+
+export const CheckBoxView = styled(CheckBox)`
+  position: absolute;
+  z-index: 10;
+  right: 0;
 `;
 
 export const FishImage = styled.Image`

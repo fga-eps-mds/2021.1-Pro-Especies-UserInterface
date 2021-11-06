@@ -8,7 +8,7 @@ export const Box = styled.View`
   background-color: ${({ theme }) => theme.colors.primary_light};
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-top: ${RFValue(30)}px;
 `;
 export const IconContainer = styled.View`
@@ -36,6 +36,10 @@ export const HeaderText = styled.Text`
   font-size: ${RFValue(18)}px;
   margin-left: ${RFValue(20, 640)}px;
   flex-direction: row;
+`;
+
+export const Spacer = styled.View`
+  flex: 1;
 `;
 
 export const ArrowButton = styled.TouchableOpacity`

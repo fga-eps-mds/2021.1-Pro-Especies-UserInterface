@@ -51,6 +51,10 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
         '@eupescador/userAdmin',
         JSON.stringify(result.data.admin),
       );
+      const hasAcessTheApp = await AsyncStorage.getItem('hasAcessTheApp');
+      if (!!hasAcessTheApp == false) {
+        await AsyncStorage.setItem('hasAcessTheApp', 'false');
+      }
       userService.defaults.headers.Authorization = `Bearer ${result.data.token}`;
       setAuthenticated(true);
       setUserId(result.data.id);
@@ -63,7 +67,10 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   async function signOut() {
     setAuthenticated(false);
     setUserId('');
-    AsyncStorage.clear();
+    await AsyncStorage.removeItem('@eupescador/token');
+    await AsyncStorage.removeItem('@eupescador/userId');
+    await AsyncStorage.removeItem('@eupescador/userAdmin');
+    await AsyncStorage.removeItem('drafts');
     userService.defaults.headers.Authorization = undefined;
   }
 
