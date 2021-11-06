@@ -55,7 +55,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
     try {
       const data = await GetAllFishLogs(token);
 
-      setFishLog(data);
+      setFishLog(data.reverse());
     } catch (error: any) {
       console.log(error);
     }
@@ -201,7 +201,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             null
           }
           <FishCardList
-            data={fishLog.reverse()}
+            data={fishLog}
             renderItem={({ item }) => (
               <FishLogCard
                 selectAll={isCheck}
