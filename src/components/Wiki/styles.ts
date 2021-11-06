@@ -1,12 +1,13 @@
 import styled from 'styled-components/native';
 import { Searchbar } from 'react-native-paper';
 import { RFValue } from 'react-native-responsive-fontsize';
-import { FlatList } from 'react-native';
-import { IFish } from '../FishCard';
 
 export const PageContainer = styled.View`
+  flex: 1;
+  width: 100%;
   align-items: center;
   background-color: ${({ theme }) => theme.colors.background};
+
 `;
 
 export const SearchBarContainer = styled(Searchbar)`
@@ -18,13 +19,16 @@ export const SearchBarContainer = styled(Searchbar)`
 `;
 
 export const FishBodyContainer = styled.View`
-  margin: 0px 16px;
+  margin: 0px ${RFValue(16, 640)}px;
+  flex: 1;
+  width: 100%;
 `;
 
 export const RowContainer = styled.View`
-  width: ${RFValue(328, 640)}px;
+  width: 100%;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 ${RFValue(16, 640)}px;
   align-items: center;
   margin-bottom: ${RFValue(16, 640)}px;
   background-color: ${({ theme }) => theme.colors.background};
@@ -86,5 +90,5 @@ export const SearchImage = styled.Image`
 `;
 
 export const Spacer = styled.View`
-  width: 16px;
+  width: ${RFValue(16, 640)}px;
 `;
