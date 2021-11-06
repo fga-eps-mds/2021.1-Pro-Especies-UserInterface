@@ -132,7 +132,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Endemíco?" value={fishIsEndemic || "-"} />
+              <Property property="Endêmico?" value={fishIsEndemic || "-"} />
             </PropertyContainer>
 
             <PropertyContainer>
