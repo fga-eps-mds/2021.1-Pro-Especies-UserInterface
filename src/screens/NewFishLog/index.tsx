@@ -77,7 +77,6 @@ export function NewFishLog({ navigation, route }: any) {
   const [isConnected, setIsConnected] = useState(true);
   const [isDraft, setIsDraft] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
-  const [fishFamily, setFishFamily] = useState<string | undefined>();
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -97,7 +96,6 @@ export function NewFishLog({ navigation, route }: any) {
   const setFishProps = async (fish: IFish) => {
     setFishName(fish.commonName);
     setFishSpecies(fish.scientificName);
-    setFishFamily(fish.family);
     setFishLargeGroup(fish.largeGroup);
     setFishGroup(fish.group);
   }
@@ -125,7 +123,6 @@ export function NewFishLog({ navigation, route }: any) {
       }
       setFishName(log?.name || undefined);
       setFishSpecies(log?.species || undefined);
-      setFishFamily(log?.family || undefined);
       setFishLargeGroup(log?.largeGroup || undefined);
       setFishGroup(log?.group || undefined);
       setFishWeight(log?.weight?.toString() || undefined);
@@ -390,13 +387,11 @@ export function NewFishLog({ navigation, route }: any) {
     const { data, isNewRegister, isFishLogDraft, fishLogDraftId } = route.params;
     setIsNew(isNewRegister);
     if (data != null) {
-     
       setIsAdmin(data?.isAdmin);
       setFishName(data?.name);
       setFishLargeGroup(data?.largeGroup);
       setFishGroup(data?.group);
-      setFishSpecies(data?.species);
-      setFishFamily(data?.family);
+      setFishSpecies(data?.species)
       setFishWeight(data?.weight);
       setFishLength(data?.length);
       setFishLatitude(data?.latitude?.toString());
@@ -444,14 +439,6 @@ export function NewFishLog({ navigation, route }: any) {
       );
     });
   };
-const handleFishSpeciesInput = (species:string,)=>{
-  setFishSpecies(species);
-  const fish = fishes.find(element=>element.scientificName === species);
-  if(fish){
-    setFishFamily(fish.family);
-  }
-}
-  
   useEffect(() => {
     loadData();
   }, [route.params]);
@@ -560,7 +547,7 @@ const handleFishSpeciesInput = (species:string,)=>{
               <Input
                 placeholder="Espécie"
                 value={fishSpecies}
-                onChangeText={handleFishSpeciesInput}
+                onChangeText={setFishSpecies}
               />
               <InputBox />
             </InputView>
