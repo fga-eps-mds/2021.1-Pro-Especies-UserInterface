@@ -53,6 +53,7 @@ export const Wiki = (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
+
           <RowContainer>
             <SearchBarContainer
               placeholder="Pesquisar"

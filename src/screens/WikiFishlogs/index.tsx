@@ -11,8 +11,12 @@ import {
   TouchableTitle,
   TitleText,
   TitleHighlight,
+  InstructionButton,
+  InstructionButtonIcon,
+  TitleButtonsContainer,
 } from './styles';
 import { useAuth } from '../../contexts/authContext';
+import { InstructionModal } from '../../components/InstructionsModal';
 
 export const WikiFishlogs = ({ navigation, route }: any) => {
 
@@ -20,6 +24,7 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
   const [isAdmin, setIsAdmin] = useState<boolean>();
+  const [showModal, setShowModal] = useState(false);
   const { signOut } = useAuth();
 
   const getData = async () => {
@@ -60,50 +65,70 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
     ]);
   };
 
+  const getFirstAcess = async () => {
+    const hasAcessTheApp = await AsyncStorage.getItem('hasAcessTheApp');
+    if (hasAcessTheApp === 'false') {
+      setShowModal(true);
+      await AsyncStorage.setItem('hasAcessTheApp', 'true');
+    }
+  }
+
   useEffect(() => {
     getData();
+    getFirstAcess();
   }, []);
 
   return (
-    <PageContainer>
-      <TopBar
-        title={wiki ? 'Biblioteca' : 'Registros'}
-        icon={isLogged ? 'logout' : 'login'}
-        iconText={isLogged ? 'Sair' : 'Entrar'}
-        buttonFunction={
-          isLogged
-            ? () => {
-              handleSignOut();
-            }
-            : () => navigation.navigate('Login')
-        }
+    <>
+      <InstructionModal
+        modalVisible={showModal}
+        dismissModal={() => setShowModal(false)}
       />
-      {isLogged ? (
-        <TitleContainer>
-          <TouchableTitle
-            onPress={() => {
-              setWiki(true);
-            }}
-          >
-            <TitleText wiki={wiki}>Biblioteca de Peixes</TitleText>
-            {wiki ? <TitleHighlight /> : null}
-          </TouchableTitle>
-          <TouchableTitle
-            onPress={() => {
-              setWiki(false);
-            }}
-          >
-            <TitleText wiki={!wiki}>Registros</TitleText>
-            {wiki ? null : <TitleHighlight />}
-          </TouchableTitle>
-        </TitleContainer>
-      ) : null}
-      {wiki ?
-        (<Wiki
-          navigation={navigation}
-          filterQuery={route.params ? route.params.filterQuery : null}
-        />) :
-        (<FishLogs token={token} isAdmin={isAdmin ? isAdmin : false } />)}
-    </PageContainer>
+      <PageContainer>
+        <TopBar
+          title={wiki ? 'Biblioteca' : 'Registros'}
+          icon={isLogged ? 'logout' : 'login'}
+          iconText={isLogged ? 'Sair' : 'Entrar'}
+          buttonFunction={
+            isLogged
+              ? () => {
+                handleSignOut();
+              }
+              : () => navigation.navigate('Login')
+          }
+        />
+        {isLogged ? (
+          <TitleContainer>
+            <TitleButtonsContainer>
+              <TouchableTitle
+                onPress={() => {
+                  setWiki(true);
+                }}
+              >
+                <TitleText wiki={wiki}>Biblioteca de Peixes</TitleText>
+                {wiki ? <TitleHighlight /> : null}
+              </TouchableTitle>
+              <TouchableTitle
+                onPress={() => {
+                  setWiki(false);
+                }}
+              >
+                <TitleText wiki={!wiki}>Registros</TitleText>
+                {wiki ? null : <TitleHighlight />}
+              </TouchableTitle>
+            </TitleButtonsContainer>
+            <InstructionButton onPress={() => { setShowModal(true) }}>
+              <InstructionButtonIcon name="info" />
+            </InstructionButton>
+          </TitleContainer>
+        ) : null}
+        {wiki ?
+          (<Wiki
+            navigation={navigation}
+            filterQuery={route.params ? route.params.filterQuery : null}
+          />) :
+          (<FishLogs token={token} isAdmin={isAdmin ? isAdmin : false} />)}
+      </PageContainer>
+    </>
   );
 };
