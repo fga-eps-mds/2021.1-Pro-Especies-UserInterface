@@ -13,20 +13,24 @@
     "@expo-google-fonts/poppins": "^0.2.0",
     "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-native-community/checkbox": "^0.5.9",
+    "@react-native-community/netinfo": "6.0.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "axios": "^0.23.0",
     "buffer": "^6.0.3",
     "expo": "~42.0.1",
     "expo-app-loading": "1.1.2",
+    "expo-checkbox": "~1.0.3",
     "expo-font": "~9.2.1",
     "expo-image-picker": "~10.2.2",
     "expo-location": "~12.1.2",
     "expo-media-library": "^13.0.3",
+    "expo-network": "~3.2.0",
     "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.8.2",
     "global": "^4.4.0",
+    "jest-sonar": "^0.2.12",
     "react": "16.13.1",
     "react-dom": "^17.0.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
@@ -68,6 +72,17 @@
     "preset": "jest-expo",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ],
+    "reporters": [
+      "default",
+      [
+        "jest-sonar",
+        {
+          "outputDirectory": "coverage",
+          "outputName": "test-report.xml",
+          "reportedFilePath": "relative"
+        }
+      ]
     ],
     "testMatch": [
       "**/**/*.spec.ts"

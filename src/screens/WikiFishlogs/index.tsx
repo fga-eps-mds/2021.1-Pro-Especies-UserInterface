@@ -14,7 +14,8 @@ import {
 } from './styles';
 import { useAuth } from '../../contexts/authContext';
 
-export const WikiFishlogs = ({ navigation }: any) => {
+export const WikiFishlogs = ({ navigation, route }: any) => {
+
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
@@ -97,7 +98,12 @@ export const WikiFishlogs = ({ navigation }: any) => {
           </TouchableTitle>
         </TitleContainer>
       ) : null}
-      {wiki ? <Wiki /> : <FishLogs token={token} isAdmin={isAdmin} />}
+      {wiki ?
+        (<Wiki
+          navigation={navigation}
+          filterQuery={route.params ? route.params.filterQuery : null}
+        />) :
+        (<FishLogs token={token} isAdmin={isAdmin} />)}
     </PageContainer>
   );
 };

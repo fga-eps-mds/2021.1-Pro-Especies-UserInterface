@@ -9,8 +9,6 @@ import {
   Container,
   ExportButton,
   ExportButtonText,
-  LeftContainer,
-  FilterContainer,
   DownloadIcon,
   FilterIcon,
   AddLogButton,
@@ -33,7 +31,9 @@ import {
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
-import { FishCard, IFishLog } from '../FishCard';
+import { FishLogCard, IFishLog } from '../FishLogCard';
+import { DraftButton } from '../DraftButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 interface Props {
@@ -47,6 +47,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
   const [exportList, setExportList] = useState<string[]>([]);
   const [isCheck, setIsCheck] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
+  const [hasDraft, setHasDraft] = useState(false);
   const navigation = useNavigation();
 
 
@@ -61,6 +62,11 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
     setIsLoading(false);
   };
 
+  const getDrafts = async () => {
+    const drafts = await AsyncStorage.getItem('drafts');
+    if (drafts)
+      setHasDraft(drafts != '[]');
+  }
   const handleNavigation = (id: string) => {
     navigation.navigate(
       'FishLog' as never,
@@ -145,6 +151,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
 
   useEffect(() => {
     getFishLogs();
+    getDrafts();
   }, []);
 
   return (
@@ -181,7 +188,6 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             }
           </OptionsView>
           <ExportAllView>
-
             {
               isExportMode ? <>
                 <CheckBox value={isCheck} onValueChange={selectAllFunction} />
@@ -190,10 +196,14 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
                 : null
             }
           </ExportAllView>
+          {hasDraft ?
+            <DraftButton /> :
+            null
+          }
           <FishCardList
             data={fishLog}
             renderItem={({ item }) => (
-              <FishCard
+              <FishLogCard
                 selectAll={isCheck}
                 fishLog={item}
                 isHidden={!isExportMode}
@@ -210,6 +220,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             )}
             keyExtractor={item => item._id}
           />
+
           {isExportMode ?
             <ExportSelectedView>
               <ExportSelectedButton onPress={() => {

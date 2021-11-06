@@ -18,7 +18,7 @@ import {
   HomeLogLink,
 } from './styles';
 import { useAuth } from '../../contexts/authContext';
-import { GreenButton } from '../../components/GreenButton';
+import { DefaultButton } from '../../components/Button';
 
 export default function Login({ navigation }: any) {
   const [userEmailPhone, setUserEmailPhone] = useState<string | undefined>();
@@ -83,7 +83,7 @@ export default function Login({ navigation }: any) {
           />
         </InputView>
         <LoginButtonView>
-          <GreenButton text="Entrar" buttonFunction={handleLogin} />
+          <DefaultButton text="Entrar" buttonFunction={handleLogin} />
         </LoginButtonView>
         <HomePhraseContainer>
           <HomeRegularText>Não possui uma conta ainda?</HomeRegularText>

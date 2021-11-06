@@ -12,11 +12,11 @@ import {
 } from "./styles";
 
 import { Property } from '../../components/Property';
-import { Title } from "../../components/Title";
-import { HalfToneText } from "../../components/HalfToneText";
-import { ProfileImage } from "../../components/ProfileImage";
-import { MapViewImage } from "../../components/MapViewImage";
-import { GreenButton } from "../../components/GreenButton";
+import { Title } from '../../components/Title';
+import { HalfToneText } from '../../components/HalfToneText';
+import { ProfileImage } from '../../components/ProfileImage';
+import { MapViewImage } from '../../components/MapViewImage';
+import { DefaultButton } from '../../components/Button';
 
 import { GetOneFishLog } from '../../services/fishLogService/getOneFishLog';
 import { DeleteFishLog } from "../../services/fishLogService/deleteFishLog";
@@ -173,14 +173,14 @@ export const FishLog = ({ navigation, route }: any) => {
                             {
                                 isAdmin ? (
                                     <>
-                                        <GreenButton text="Revisar" buttonFunction={() => {
+                                        <DefaultButton text="Revisar" buttonFunction={() => {
                                             navigation.navigate("NewFishLog" as never, {
                                                 isNewRegister: false,
                                                 log_id: logId,
                                                 name: "Revisar Registro",
                                             } as never);
                                         }} />
-                                        <GreenButton text="Exportar" buttonFunction={() => {
+                                        <DefaultButton text="Exportar" buttonFunction={() => {
                                             Alert.alert("Exportar Registro", "Você deseja exportar este registro?", [
                                                 {
                                                     text: "Cancelar",
@@ -194,7 +194,7 @@ export const FishLog = ({ navigation, route }: any) => {
                                         }} />
                                     </>
                                 ) : (
-                                    <GreenButton text="Editar" buttonFunction={() => {
+                                    <DefaultButton text="Editar" buttonFunction={() => {
                                         if (isReviewed) {
                                             Alert.alert("Registro", "Não é possível editar esse registro pois ele já foi revisado por um pesquisador.", [
                                                 {
@@ -212,7 +212,7 @@ export const FishLog = ({ navigation, route }: any) => {
                                 )
                             }
 
-                            <GreenButton text="Excluir" buttonFunction={() => {
+                            <DefaultButton text="Excluir" buttonFunction={() => {
                                 if (isReviewed) {
                                     Alert.alert("Excluir Registro", "Não é possível deletar esse registro pois ele já foi revisado por um pesquisador.", [
                                         {

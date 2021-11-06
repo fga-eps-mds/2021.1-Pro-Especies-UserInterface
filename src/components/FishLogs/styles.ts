@@ -2,29 +2,18 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { RFValue, RFPercentage } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import { FlatList } from 'react-native';
-import { IFishLog } from '../FishCard';
+import { IFishLog } from '../FishLogCard';
 
 export const Container = styled.View`
   flex: 1;
   width: 100%;
   justify-content: center;
+  padding-left: ${RFValue(16, 640)}px;
 `;
 
-export const LeftContainer = styled.View`
-  flex: 0.12;
-  width: 100%;
-  justify-content: flex-start;
-`;
-
-export const FilterContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-`;
 
 export const OptionsView = styled.View`
   flex-direction: row;
-  width: 100%;
   align-items: center;
   justify-content: space-between;
   margin-bottom: ${RFValue(12, 640)}px;
@@ -32,7 +21,6 @@ export const OptionsView = styled.View`
 
 export const TouchableTitle = styled.TouchableOpacity`
   text-align: center;
-  margin-left: ${RFValue(16, 640)}px;
   flex-direction: row;
 `;
 

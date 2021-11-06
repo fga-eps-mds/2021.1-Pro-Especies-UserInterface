@@ -21,7 +21,7 @@ type IFish = {
   fish_id: string;
 };
 
-export const WikiFish: FC<IFish> = ({ fish_id }) => {
+export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
   const [fishName, setFishName] = useState('');
   const [fishPhoto, setFishPhoto] = useState('');
   const [fishSpecies, setFishSpecies] = useState('');
@@ -37,6 +37,7 @@ export const WikiFish: FC<IFish> = ({ fish_id }) => {
   const [fishIsThreatened, setFishIsThreatened] = useState('');
   const [fishWasIntroduced, setFishWasIntroduced] = useState('');
   const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState('');
+  const { fish_id } = route.params;
 
   const getFishProperties = async () => {
     try {
@@ -55,6 +56,9 @@ export const WikiFish: FC<IFish> = ({ fish_id }) => {
       setFishIsEndemic(fish.isEndemic);
       setFishIsThreatened(fish.isThreatened);
       setFishHasSpawningSeason(fish.hasSpawingSeason);
+      if (fish.photo) {
+        setFishPhoto(fish.photo);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -66,9 +70,8 @@ export const WikiFish: FC<IFish> = ({ fish_id }) => {
 
   return (
     <FishContainer>
-      <TopBar title="Informações" />
       <ScrollView>
-        <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
+        <ProfileImage source={fishPhoto ? { uri: fishPhoto } : require('../../assets/fishIcon.png')} />
 
         <DescriptionContainer>
           <Title text={fishName} />
