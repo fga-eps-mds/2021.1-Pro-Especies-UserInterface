@@ -95,10 +95,10 @@ export const FishLogCard: FC<IFishCardProps> = ({
           </NoFishImage>
         }
         <TextView>
-          <CommonNameText>
+          <CommonNameText numberOfLines={1}>
             {fishLog.name}
           </CommonNameText>
-          <ScientificName>
+          <ScientificName numberOfLines={1}>
             {fishLog.species}
           </ScientificName>
         </TextView>
