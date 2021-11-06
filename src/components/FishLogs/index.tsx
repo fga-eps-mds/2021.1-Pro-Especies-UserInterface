@@ -201,7 +201,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             null
           }
           <FishCardList
-            data={fishLog}
+            data={fishLog.reverse()}
             renderItem={({ item }) => (
               <FishLogCard
                 selectAll={isCheck}
