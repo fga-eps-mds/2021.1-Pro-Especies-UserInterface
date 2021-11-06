@@ -136,7 +136,7 @@ export const FishLog = ({ navigation, route }: any) => {
         <FishContainer>
             {
                 isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : (
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{ alignItems: "center", justifyContent: "center" }}>
 
 
                         {fishPhoto ?
@@ -155,21 +155,21 @@ export const FishLog = ({ navigation, route }: any) => {
 
                         <PropertyRow>
                             <Property property="Grande Grupo" value={
-                                fishLargeGroup ? JSON.stringify(fishLargeGroup) : "Não informado"
+                                fishLargeGroup ? fishLargeGroup : "Não informado"
                             } />
 
                             <Property property="Grupo" value={
-                                fishGroup ? JSON.stringify(fishGroup) : "Não informado"
+                                fishGroup ? fishGroup : "Não informado"
                             } />
                         </PropertyRow>
 
                         <PropertyRow>
                             <Property property="Tamanho(cm)" value={
-                                fishLength ? JSON.stringify(fishLength) : "Não informado"
+                                fishLength ? fishLength.toString() : "Não informado"
                             } />
 
                             <Property property="Peso(kg)" value={
-                                fishWeight ? JSON.stringify(fishWeight) : "Não informado"
+                                fishWeight ? fishWeight.toString() : "Não informado"
                             } />
                         </PropertyRow>
 

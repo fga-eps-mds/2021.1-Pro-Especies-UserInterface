@@ -12,9 +12,12 @@ export const FishDescription = styled.View`
 
 export const PropertyContainer = styled.View`
   margin-bottom: ${RFValue(8, 640)}px;
+  padding: 0px ${RFValue(36, 640)}px;
 `;
 
-export const PropertyColumn = styled.View``;
+export const PropertyColumn = styled.View`
+  width: 50%;
+`;
 
 export const ColumnContainer = styled.View`
   flex-direction: row;

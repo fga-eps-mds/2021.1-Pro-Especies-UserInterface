@@ -17,7 +17,10 @@ export const FishProfile = styled.Image`
 
 export const PropertyRow = styled.View`
   flex-direction: row;
-  justify-content: space-evenly;
+  padding: 0px ${RFValue(16, 640)}px;
+  width: 100%;
+  justify-content: space-around;
+  /* align-items: ; */
   margin-top: ${RFValue(10, 640)}px;
 `;
 
