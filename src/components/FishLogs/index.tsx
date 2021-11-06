@@ -188,7 +188,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
               ) : <ButtonView>
                 <ExportButton onPress={handleAddLog}>
                 <DownloadIcon name="add" />
-                          <ExportButtonText>Criar Registro</ExportButtonText>
+                          <ExportButtonText>Criar Novo Registro</ExportButtonText>
                 </ExportButton>
               </ButtonView>
             }
