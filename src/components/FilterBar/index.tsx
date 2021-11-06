@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { ArrowButton, ArrowIcon, Box, HeaderIcon, HeaderText, IconContainer, IconText } from './styles';
+import { ArrowButton, ArrowIcon, Box, HeaderIcon, HeaderText, IconContainer, IconText, Spacer } from './styles';
 
 interface Props {
   title: string;
@@ -20,7 +20,7 @@ export function FilterBar({ navigation, title, icon, iconText, buttonFunction }:
       </ArrowButton>
 
       <HeaderText>{title}</HeaderText>
-
+      <Spacer />
       <TouchableOpacity onPress={buttonFunction}>
         <IconContainer>
           <HeaderIcon name={icon} />
