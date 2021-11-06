@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import {
   CityStateView,
   InputScroll,
@@ -40,6 +40,7 @@ export function Register() {
     string | undefined
   >();
   const [adminToken, setAdminToken] = useState<string | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (email: string) => {
     if (email) {
@@ -78,6 +79,7 @@ export function Register() {
   };
 
   const handleRegister = async () => {
+    setIsLoading(true);
     let alertMessage = '';
     if (
       userName &&
@@ -117,6 +119,7 @@ export function Register() {
         text: 'Ok',
       },
     ]);
+    setIsLoading(false);
   };
 
   const handleEmailInput = (email: string) => {
@@ -154,111 +157,113 @@ export function Register() {
           {admin ? <TitleHighlight /> : null}
         </TouchableTitle>
       </TitleContainer>
-      <InputScroll>
-        <InputContainer>
-          <InputView>
-            <MaterialInputIcon name="person-outline" />
-            <Input
-              placeholder="Nome"
-              value={userName}
-              onChangeText={setUserName}
-            />
-          </InputView>
-          <InputBox />
-          <InputView>
-            <MaterialInputIcon name="mail-outline" />
-            <Input
-              placeholder="Email"
-              value={userEmail}
-              onChangeText={handleEmailInput}
-            />
-          </InputView>
-          {isEmailValid ? (
-            <InputBox />
-          ) : (
-            <ErrorMessage>{isEmailValidMessage}</ErrorMessage>
-          )}
-          <InputView>
-            <ComunityInputIcon name="phone-outline" />
-            <InputMask
-              type="cel-phone"
-              options={{
-                maskType: 'BRL',
-                withDDD: true,
-                dddMask: '(99) ',
-              }}
-              value={userPhone}
-              onChangeText={handlePhone}
-              placeholder="Telefone"
-            />
-          </InputView>
-          {isPhoneValid ? (
-            <InputBox />
-          ) : (
-            <ErrorMessage>{isPhoneValidMessage}</ErrorMessage>
-          )}
-          <CityStateView>
-            <HalfInputView>
-              <ComunityInputIcon name="compass-outline" />
+      { isLoading ?
+        <ActivityIndicator size="large" color="#0000ff" />
+        :<InputScroll>
+          <InputContainer>
+            <InputView>
+              <MaterialInputIcon name="person-outline" />
               <Input
-                placeholder="Estado"
-                value={userState}
-                onChangeText={setUserState}
+                placeholder="Nome"
+                value={userName}
+                onChangeText={setUserName}
               />
-            </HalfInputView>
-            <HalfInputView>
-              <ComunityInputIcon name="city" />
-              <Input
-                placeholder="Cidade"
-                value={userCity}
-                onChangeText={setUserCity}
-              />
-            </HalfInputView>
-          </CityStateView>
-
-          <InputBox />
-          <InputView>
-            <MaterialInputIcon name="lock-outline" />
-            <Input
-              placeholder="Senha"
-              secureTextEntry
-              value={userPassword}
-              onChangeText={setUserPassword}
-            />
-          </InputView>
-          <InputBox />
-          <InputView>
-            <MaterialInputIcon name="lock-outline" />
-            <Input
-              placeholder="Confirmar Senha"
-              secureTextEntry
-              value={userConfirmPassword}
-              onChangeText={handlePassword}
-            />
-          </InputView>
-          {isPasswordValid ? (
+            </InputView>
             <InputBox />
-          ) : (
-            <ErrorMessage>{isPasswordValidMessage}</ErrorMessage>
-          )}
-          {admin ? (
-            <>
-              <InputView>
-                <ComunityInputIcon name="key-outline" />
-                <Input
-                  placeholder="Código de Pesquisador"
-                  value={adminToken}
-                  onChangeText={setAdminToken}
-                />
-              </InputView>
+            <InputView>
+              <MaterialInputIcon name="mail-outline" />
+              <Input
+                placeholder="Email"
+                value={userEmail}
+                onChangeText={handleEmailInput}
+              />
+            </InputView>
+            {isEmailValid ? (
               <InputBox />
-            </>
-          ) : null}
-          <RegisterButtonView>
-            <DefaultButton text="Cadastrar" buttonFunction={handleRegister} />
-          </RegisterButtonView>
-        </InputContainer>
-      </InputScroll>
+            ) : (
+              <ErrorMessage>{isEmailValidMessage}</ErrorMessage>
+            )}
+            <InputView>
+              <ComunityInputIcon name="phone-outline" />
+              <InputMask
+                type="cel-phone"
+                options={{
+                  maskType: 'BRL',
+                  withDDD: true,
+                  dddMask: '(99) ',
+                }}
+                value={userPhone}
+                onChangeText={handlePhone}
+                placeholder="Telefone"
+              />
+            </InputView>
+            {isPhoneValid ? (
+              <InputBox />
+            ) : (
+              <ErrorMessage>{isPhoneValidMessage}</ErrorMessage>
+            )}
+            <CityStateView>
+              <HalfInputView>
+                <ComunityInputIcon name="compass-outline" />
+                <Input
+                  placeholder="Estado"
+                  value={userState}
+                  onChangeText={setUserState}
+                />
+              </HalfInputView>
+              <HalfInputView>
+                <ComunityInputIcon name="city" />
+                <Input
+                  placeholder="Cidade"
+                  value={userCity}
+                  onChangeText={setUserCity}
+                />
+              </HalfInputView>
+            </CityStateView>
+
+            <InputBox />
+            <InputView>
+              <MaterialInputIcon name="lock-outline" />
+              <Input
+                placeholder="Senha"
+                secureTextEntry
+                value={userPassword}
+                onChangeText={setUserPassword}
+              />
+            </InputView>
+            <InputBox />
+            <InputView>
+              <MaterialInputIcon name="lock-outline" />
+              <Input
+                placeholder="Confirmar Senha"
+                secureTextEntry
+                value={userConfirmPassword}
+                onChangeText={handlePassword}
+              />
+            </InputView>
+            {isPasswordValid ? (
+              <InputBox />
+            ) : (
+              <ErrorMessage>{isPasswordValidMessage}</ErrorMessage>
+            )}
+            {admin ? (
+              <>
+                <InputView>
+                  <ComunityInputIcon name="key-outline" />
+                  <Input
+                    placeholder="Código de Pesquisador"
+                    value={adminToken}
+                    onChangeText={setAdminToken}
+                  />
+                </InputView>
+                <InputBox />
+              </>
+            ) : null}
+            <RegisterButtonView>
+              <DefaultButton text="Cadastrar" buttonFunction={handleRegister} />
+            </RegisterButtonView>
+          </InputContainer>
+        </InputScroll>}
     </Container>
   );
 }

@@ -52,6 +52,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
 
 
   const getFishLogs = async () => {
+
     try {
       const data = await GetAllFishLogs(token);
 
@@ -63,9 +64,11 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
   };
 
   const getDrafts = async () => {
+    setIsLoading(true);
     const drafts = await AsyncStorage.getItem('drafts');
     if (drafts)
       setHasDraft(drafts != '[]');
+    setIsLoading(false);
   }
   const handleNavigation = (id: string) => {
     navigation.navigate(
@@ -102,6 +105,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
 
 
   const saveFile = async (csvFile: string) => {
+    setIsLoading(true);
     try {
       const res = await MediaLibrary.requestPermissionsAsync()
 
@@ -129,6 +133,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
         }
       ])
     }
+    setIsLoading(false);
   };
 
   const handleExportSelected = async () => {
