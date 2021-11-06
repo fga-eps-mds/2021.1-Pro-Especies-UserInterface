@@ -35,17 +35,20 @@ import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
 import { FishCard, IFishLog } from '../FishCard';
 
+
 interface Props {
   token: string;
+  isAdmin: boolean;
 }
 
-export const FishLogs = ({ token }: Props) => {
+export const FishLogs = ({ token, isAdmin }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [exportList, setExportList] = useState<string[]>([]);
   const [isCheck, setIsCheck] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
   const navigation = useNavigation();
+
 
   const getFishLogs = async () => {
     try {
@@ -101,8 +104,7 @@ export const FishLogs = ({ token }: Props) => {
         let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours() + "-" + today.getMinutes();
 
         let fileUri = FileSystem.documentDirectory + `registros-${date}.csv`;
-        console.log(fileUri);
-        await FileSystem.writeAsStringAsync(fileUri, csvFile, { encoding: FileSystem.EncodingType.UTF8 });
+        await FileSystem.writeAsStringAsync(fileUri, csvFile);
         const asset = await MediaLibrary.createAssetAsync(fileUri);
         await MediaLibrary.createAlbumAsync("euPescador", asset, false);
 
@@ -151,23 +153,27 @@ export const FishLogs = ({ token }: Props) => {
               <TitleText>Filtros</TitleText>
               <FilterIcon name="filter-list" />
             </TouchableTitle>
-            <ButtonView>
-              <ExportButton onPress={handleExport}>
-                {
-                  isExportMode ? <>
-                    <DownloadIcon name="cancel" />
-                    <CancelButtonText >Cancelar</CancelButtonText>
-                  </>
+            {
+              isAdmin ? (
+                <ButtonView>
+                  <ExportButton onPress={handleExport}>
+                    {
+                      isExportMode ? <>
+                        <DownloadIcon name="cancel" />
+                        <CancelButtonText >Cancelar</CancelButtonText>
+                      </>
 
-                    :
-                    <>
-                      <DownloadIcon name="file-download" />
-                      <ExportButtonText>Exportar Registros</ExportButtonText>
-                    </>
+                        :
+                        <>
+                          <DownloadIcon name="file-download" />
+                          <ExportButtonText>Exportar Registros</ExportButtonText>
+                        </>
 
-                }
-              </ExportButton>
-            </ButtonView>
+                    }
+                  </ExportButton>
+                </ButtonView>
+              ) : null
+            }
           </OptionsView>
           <ExportAllView>
 

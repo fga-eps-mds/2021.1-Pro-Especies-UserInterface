@@ -18,9 +18,11 @@ export const WikiFishlogs = ({ navigation }: any) => {
   const [token, setToken] = useState('');
   const [wiki, setWiki] = useState(true);
   const [isLogged, setIsLogged] = useState<boolean>();
+  const [isAdmin, setIsAdmin] = useState<Boolean>();
   const { signOut } = useAuth();
 
   const getData = async () => {
+    const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
     const token = await AsyncStorage.getItem('@eupescador/token');
     console.log(token);
     if (token) {
@@ -29,13 +31,18 @@ export const WikiFishlogs = ({ navigation }: any) => {
     } else {
       setIsLogged(false);
     }
+    if (userAdmin === "true")
+      setIsAdmin(true);
+    else
+      setIsAdmin(false);
+
   };
 
   const handleSignOut = () => {
     Alert.alert('Sair da conta', 'Tem certeza que deseja sair da conta?', [
       {
         text: 'Não',
-        onPress: () => {},
+        onPress: () => { },
         style: 'cancel',
       },
       {
@@ -65,8 +72,8 @@ export const WikiFishlogs = ({ navigation }: any) => {
         buttonFunction={
           isLogged
             ? () => {
-                handleSignOut();
-              }
+              handleSignOut();
+            }
             : () => navigation.navigate('Login')
         }
       />
@@ -90,7 +97,7 @@ export const WikiFishlogs = ({ navigation }: any) => {
           </TouchableTitle>
         </TitleContainer>
       ) : null}
-      {wiki ? <Wiki /> : <FishLogs token={token} />}
+      {wiki ? <Wiki /> : <FishLogs token={token} isAdmin={isAdmin} />}
     </PageContainer>
   );
 };
