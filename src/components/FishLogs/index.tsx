@@ -34,6 +34,7 @@ import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
 import { FishLogCard, IFishLog } from '../FishLogCard';
 import { DraftButton } from '../DraftButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NewFishLog } from '../../screens/NewFishLog';
 
 
 interface Props {
@@ -190,7 +191,12 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
                     }
                   </ExportButton>
                 </ButtonView>
-              ) : null
+              ) : <ButtonView>
+                <ExportButton onPress={handleAddLog}>
+                <DownloadIcon name="add" />
+                          <ExportButtonText>Criar Novo Registro</ExportButtonText>
+                </ExportButton>
+              </ButtonView>
             }
           </OptionsView>
           <ExportAllView>
