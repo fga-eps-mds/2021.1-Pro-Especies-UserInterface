@@ -10,7 +10,6 @@ import {
   DescriptionContainer,
 } from './styles';
 import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
-import { TopBar } from '../../components/TopBar';
 import { ProfileImage } from '../../components/ProfileImage';
 import { Property } from '../../components/Property';
 import { Title } from '../../components/Title';

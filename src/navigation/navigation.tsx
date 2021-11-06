@@ -12,7 +12,6 @@ import { MyMap } from '../screens/Maps';
 import { WikiFish } from '../screens/WikiFish';
 import { Drafts } from '../screens/Drafts';
 import { WikiFilter } from '../screens/WikiFilter';
-import { TopBar } from '../components/FilterBar';
 
 const AuthenticateStack = createNativeStackNavigator();
 

@@ -8,18 +8,22 @@ export const Box = styled.View`
   background-color: ${({ theme }) => theme.colors.primary_light};
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  padding: 0px ${RFValue(16, 640)}px;
+  justify-content: flex-start;
   padding-top: ${RFValue(30)}px;
 `;
+
+export const Spacer = styled.View`
+  flex: 1;
+`;
+
 export const IconContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-right: ${RFValue(16)}px;
 `;
 
 export const HeaderIcon = styled(MaterialIcons)`
   font-size: ${RFValue(30)}px;
-  margin-right: ${RFValue(8)}px;
 `;
 export const IconText = styled.Text`
   font-size: ${RFValue(12)}px;
@@ -27,7 +31,7 @@ export const IconText = styled.Text`
 `;
 
 export const HeaderText = styled.Text`
-  margin-right: ${RFValue(64)}px;
-  font-family: ${({ theme }) => theme.fonts.medium};
+  text-align: center;
   font-size: ${RFValue(18)}px;
+  font-family: ${({ theme }) => theme.fonts.medium};
 `;
