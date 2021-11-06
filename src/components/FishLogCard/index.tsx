@@ -30,6 +30,7 @@ export interface IFish {
 
 export interface IFishLog {
   _id: string;
+  family?: string;
   userId: number;
   name: string;
   largeGroup: string;
@@ -91,7 +92,7 @@ export const FishLogCard: FC<IFishCardProps> = ({
     <FishCardContainer>
       {
         isHidden ? null
-        : <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
+          : <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
       }
       <TouchableOpacity onPress={cardFunction}>
         <FishImage

@@ -77,6 +77,7 @@ export function NewFishLog({ navigation, route }: any) {
   const [isConnected, setIsConnected] = useState(true);
   const [isDraft, setIsDraft] = useState(false);
   const [draftId, setDraftId] = useState<string | null>(null);
+  const [fishFamily, setFishFamily] = useState<string | undefined>();
 
   const getFishOptions = async () => {
     let newFishes: IFish[] = [];
@@ -96,6 +97,7 @@ export function NewFishLog({ navigation, route }: any) {
   const setFishProps = async (fish: IFish) => {
     setFishName(fish.commonName);
     setFishSpecies(fish.scientificName);
+    setFishFamily(fish.family);
     setFishLargeGroup(fish.largeGroup);
     setFishGroup(fish.group);
   }
@@ -127,6 +129,7 @@ export function NewFishLog({ navigation, route }: any) {
       setFishGroup(log?.group || undefined);
       setFishWeight(log?.weight?.toString() || undefined);
       setFishLength(log?.length?.toString() || undefined);
+      setFishFamily(log?.family || undefined);
       setFishLongitude(log?.coordenates?.longitude?.toString() || undefined);
       setFishLatitude(log?.coordenates?.latitude?.toString() || undefined);
     } catch (error) {
@@ -394,6 +397,7 @@ export function NewFishLog({ navigation, route }: any) {
       setFishSpecies(data?.species)
       setFishWeight(data?.weight);
       setFishLength(data?.length);
+      setFishFamily(data?.family);
       setFishLatitude(data?.latitude?.toString());
       setFishLongitude(data?.longitude?.toString());
       if (data.photo) {
@@ -439,6 +443,16 @@ export function NewFishLog({ navigation, route }: any) {
       );
     });
   };
+
+
+  const handleFishSpeciesInput = (species: string,) => {
+    setFishSpecies(species);
+    const fish = fishes.find(element => element.scientificName === species);
+    if (fish) {
+      setFishFamily(fish.family);
+    }
+  }
+
   useEffect(() => {
     loadData();
   }, [route.params]);
@@ -547,7 +561,7 @@ export function NewFishLog({ navigation, route }: any) {
               <Input
                 placeholder="Espécie"
                 value={fishSpecies}
-                onChangeText={setFishSpecies}
+                onChangeText={handleFishSpeciesInput}
               />
               <InputBox />
             </InputView>

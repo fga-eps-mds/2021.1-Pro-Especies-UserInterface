@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CommonActions } from '@react-navigation/native';
-import Checkbox from 'expo-checkbox';
+import { CheckBox } from 'react-native-elements';
 import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
 import { FilterBar } from "../../components/FilterBar";
@@ -15,6 +15,8 @@ import {
 
 } from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
+import { GetAllFishLogs } from "../../services/fishLogService/getAllLogs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 interface IGroup {
@@ -168,10 +170,48 @@ const initialState: IGroup = {
 
 }
 
+interface CheckboxItem {
+    name: string,
+    checked: boolean
+}
 
 export const LogFilter = ({ navigation }: any) => {
     const [isChecked, setIsChecked] = useState(initialState);
+    const [familiesChecked, setFamiliesChecked] = useState<CheckboxItem[]>([]);
 
+    const setFamilies = async () => {
+        const token = await AsyncStorage.getItem('@eupescador/token');
+        if (token) {
+            const data = await GetAllFishLogs(token);
+            const familiesList = data.map(element => element.family || "Outros");
+            const familiesSet = [...new Set(familiesList)];
+            const familiesCheckBox = familiesSet.map(element => {
+                return { name: element, checked: false };
+            });
+            setFamiliesChecked(familiesCheckBox);
+        }
+
+    }
+
+    const renderFamilyCheckBox = () => {
+        return familiesChecked.map((item, index) => {
+            return (
+                <CheckBoxRow key={item.name}>
+                    <CheckBox
+                        checked={item.checked}
+                        onPress={() => {
+                            const newState = [...familiesChecked];
+                            newState[index].checked = !newState[index].checked;
+                            setFamiliesChecked(newState);
+                        }}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
+                    />
+                    <RegularText text={item.name} />
+                </CheckBoxRow>
+            );
+        });
+    }
     const createURLQuery = () => {
         // ?largeGroup=escama&group=Silva&group=famosos&commonName=salmao%20%20albino
         let new_url: string = "";
@@ -213,19 +253,20 @@ export const LogFilter = ({ navigation }: any) => {
         setIsChecked(newState);
 
     }
-    
+
     const subGroupList = (group: IGroup, g_index: number) => {
         return group.groups[g_index].subGroups.map((item, index) => {
             return (
                 <CheckBoxRow key={`subg${index}`}>
-                    <Checkbox
-                        value={item.activate}
-                        onValueChange={() => {
+                    <CheckBox
+                        checked={item.activate}
+                        onPress={() => {
                             const newState = { ...isChecked };
                             newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#00BBD4' : "black"}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
@@ -237,20 +278,25 @@ export const LogFilter = ({ navigation }: any) => {
         return isChecked.groups.map((item, index) => {
             return (
                 <CheckBoxRow key={`g${index}`}>
-                    <Checkbox
-                        value={item.activate}
-                        onValueChange={() => {
+                    <CheckBox
+                        checked={item.activate}
+                        onPress={() => {
                             const newState = { ...isChecked };
                             newState.groups[index].activate = !newState.groups[index].activate;
                             setIsChecked(newState);
                         }}
-                        color={item.activate ? '#00BBD4' : "black"}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
             );
         });
     }
+
+    useEffect(() => {
+        setFamilies();
+    }, []);
 
     return (
         <PageContainer>
@@ -290,6 +336,14 @@ export const LogFilter = ({ navigation }: any) => {
                                 }
                                 {
                                     (isChecked.groups[4].activate) ? subGroupList(isChecked, 4) : null
+                                }
+                            </GroupOptionsContainer>
+                        </GroupContainer>
+                        <GroupContainer>
+                            <BoldText>Famílias</BoldText>
+                            <GroupOptionsContainer>
+                                {
+                                    renderFamilyCheckBox()
                                 }
                             </GroupOptionsContainer>
                         </GroupContainer>
