@@ -79,7 +79,7 @@ export const FishLog = ({ navigation, route }: any) => {
             const asset = await MediaLibrary.createAssetAsync(fileUri);
             await MediaLibrary.createAlbumAsync("euPescador", asset, false);
     
-            Alert.alert("Exportar Registro", "Registro exportado com sucesso", [
+            Alert.alert("Exportar Registro", "Registro exportado com sucesso. Você pode encontrar o arquivo em /Pictures/euPescador", [
               {
                 text: "Ok",
               }
@@ -87,6 +87,11 @@ export const FishLog = ({ navigation, route }: any) => {
           }
         } catch (error: any) {
           console.log(error);
+          Alert.alert("Exportar Registro", "Falha ao exportar registro", [
+            {
+              text: "Ok",
+            }
+          ])
         }
       };
     

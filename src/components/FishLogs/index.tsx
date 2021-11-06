@@ -109,7 +109,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
         await MediaLibrary.createAlbumAsync("euPescador", asset, false);
 
         handleExport();
-        Alert.alert("Exportar Registros", "Registros exportados com sucesso", [
+        Alert.alert("Exportar Registros", "Registros exportados com sucesso. Você pode encontrar o arquivo em /Pictures/euPescador", [
           {
             text: "Ok",
           }
@@ -117,6 +117,11 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
       }
     } catch (error: any) {
       console.log(error);
+      Alert.alert("Exportar Registros", "Falha ao exportar registros", [
+        {
+          text: "Ok",
+        }
+      ])
     }
   };
 
