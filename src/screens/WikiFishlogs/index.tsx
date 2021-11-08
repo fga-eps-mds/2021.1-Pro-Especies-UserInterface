@@ -124,11 +124,12 @@ export const WikiFishlogs = ({ navigation, route }: any) => {
         {wiki ?
           (<Wiki
             navigation={navigation}
-            filterQuery={route.params ? route.params.filterQuery : null}
+            filterQuery={(route.params && route.params.wikiFilterQuery) ? route.params.wikiFilterQuery : null}
           />) :
           (<FishLogs token={token} 
             navigation={navigation}
-            filterQuery={route.params ? route.params.filterQuery : null}
+            isAdmin={isAdmin ? isAdmin : false}
+            filterQuery={(route.params && route.params.logFilterQuery) ? route.params.logFilterQuery : null}
           />)
         }
       </PageContainer>

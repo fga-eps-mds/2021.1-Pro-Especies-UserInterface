@@ -196,7 +196,7 @@ export const WikiFilter = ({ navigation }: any) => {
             routes: [{
                 name: 'WikiFishlogs',
                 params: {
-                    filterQuery: new_url,
+                    wikiFilterQuery: new_url,
                 },
             }],
         });

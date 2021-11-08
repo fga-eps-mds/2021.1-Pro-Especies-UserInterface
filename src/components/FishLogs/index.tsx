@@ -58,7 +58,7 @@ export const FishLogs = (
 
   const getFishLogs = async () => {
     try {
-      const data = await GetAllFishLogs(token);
+      const data = await GetAllFishLogs(token, filterQuery);
 
       setFishLog(data.reverse());
     } catch (error: any) {
