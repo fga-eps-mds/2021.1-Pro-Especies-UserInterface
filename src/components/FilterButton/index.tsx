@@ -17,6 +17,7 @@ export function FilterButton({ url,navigation }: Props) {
   return (
 
     <TouchableFilter
+      testID='button-filter'
       onPress={() => navigation.navigate('WikiFilter')}
       hasFilter={url ? true : false}
     >

@@ -13,7 +13,7 @@ interface Props {
 export function FilterBar({ navigation, title, icon, iconText, buttonFunction }: Props) {
   return (
     <Box>
-      <ArrowButton onPress={() => navigation.goBack()}>
+      <ArrowButton testID='button-back' onPress={() => navigation.goBack()}>
         <IconContainer>
           <ArrowIcon source={require('../../assets/arrow_back.png')} />
         </IconContainer>

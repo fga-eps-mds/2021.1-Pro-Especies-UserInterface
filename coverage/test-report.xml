@@ -1,8 +1,20 @@
 <testExecutions version="1">
 <file path="src/__tests__/components/defaultButton.spec.tsx">
-<testCase name="Default Button Should Render Default Button if props are correct" duration="22" />
+<testCase name="Default Button Should Render Default Button if props are correct" duration="36" />
 </file>
 <file path="src/__tests__/components/filterBar.spec.tsx">
-<testCase name="Default Button Should Render Default Button if props are correct" duration="32" />
+<testCase name="Filter Bar Should Render Filter Bar if props are correct" duration="67" />
+</file>
+<file path="src/__tests__/components/fishCard.spec.tsx">
+<testCase name="FishCard Should Render FishCard if props are correct" duration="28" />
+</file>
+<file path="src/__tests__/components/draftButton.spec.tsx">
+<testCase name="Draft Button Should Render Draft Button" duration="95" />
+</file>
+<file path="src/__tests__/components/filterButton.spec.tsx">
+<testCase name="Filter Button Should Render Filter Button with url prop" duration="63" />
+</file>
+<file path="src/__tests__/components/fishList.spec.tsx">
+<testCase name="Default Button Should Render Default Button if props are correct" duration="30" />
 </file>
 </testExecutions>

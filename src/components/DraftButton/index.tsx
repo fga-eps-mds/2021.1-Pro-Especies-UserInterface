@@ -25,7 +25,7 @@ export const DraftButton = () => {
         getDrafts();
     }, [])
     return (
-        <DraftButtonTouchable onPress={handleDraft}>
+        <DraftButtonTouchable testID="button-draft" onPress={handleDraft}>
             <DraftButtonLabel>Rascunhos</DraftButtonLabel>
             <DraftButtonCountCircle>
                 <DraftButtonCountText>{drafts.length}</DraftButtonCountText>

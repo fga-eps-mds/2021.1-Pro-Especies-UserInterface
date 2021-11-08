@@ -1,7 +1,8 @@
 import React from "react";
 import { render, fireEvent } from '@testing-library/react-native';
 
-import { FilterBar } from "../../components/FilterBar";
+
+import { FilterButton } from "../../components/FilterButton";
 import { ThemeProvider } from 'styled-components/native';
 import theme from '../../global/styles/theme';
 
@@ -13,30 +14,26 @@ const Providers: React.FC = ({ children }) => (
 
 const createTestProps = (props: Object) => ({
     navigation: {
-      goBack: jest.fn()
+      navigate: jest.fn()
     },
     ...props
 });
 
-describe('Filter Bar', () => {
+describe('Filter Button', () => {
     let props: any;
     beforeEach(() => {
         props = createTestProps({});
     });
-    it('Should Render Filter Bar if props are correct', () => {
-        const result = render(
-            <FilterBar
+    it('Should Render Filter Button with url prop', () => {
+        const result = render(<FilterButton 
+            url="test"
             navigation={props.navigation}
-            title="Filter Bar" 
-            icon="filter" 
-            iconText="icon" 
-            buttonFunction={()=>{}} 
-            />, {
+        />, {
             wrapper: Providers
         });
         const { getByTestId } = result;
-        const backButton = getByTestId('button-back');
-        fireEvent.press(backButton);
+        const button = getByTestId('button-filter');
+        fireEvent.press(button);
         expect(result).toBeTruthy();
     });
 });
