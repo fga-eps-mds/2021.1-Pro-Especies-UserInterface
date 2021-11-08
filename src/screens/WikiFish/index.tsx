@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 
-import { ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import {
   FishContainer,
   FishDescription,
@@ -38,10 +38,12 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
   const [fishWasIntroduced, setFishWasIntroduced] = useState('');
   const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState('');
   const { fish_id } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
 
   const getFishProperties = async () => {
     try {
       const fish = await GetOneWikiFish(fish_id);
+      setIsLoading(true);
       setFishName(fish.commonName);
       setFishSpecies(fish.scientificName);
       setFishFuNFact(fish.funFact);
@@ -59,6 +61,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
       if (fish.photo) {
         setFishPhoto(fish.photo);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +73,8 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
 
   return (
     <FishContainer>
-      <ScrollView>
+      { isLoading ? <ActivityIndicator size="large" color="#0000ff" />
+        :  <ScrollView>
         {
           fishPhoto ?
             <ProfileImage source={{ uri: fishPhoto }} /> :
@@ -143,7 +147,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             </PropertyContainer>
           </PropertyColumn>
         </ColumnContainer>
-      </ScrollView>
+      </ScrollView>}
     </FishContainer>
   );
 };

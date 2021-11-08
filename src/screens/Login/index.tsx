@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CommonActions } from '@react-navigation/native';
-import { Alert, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, TouchableOpacity } from 'react-native';
 import {
   Container,
   ErrorMessage,
@@ -28,13 +28,15 @@ export default function Login({ navigation }: any) {
   );
   const [userPassword, setUserPassword] = useState<string | undefined>();
   const { signIn, authenticated } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
+    setIsLoading(true);
     let alertMessage = '';
     if (userEmailPhone && userPassword) {
       setIsEmailPhoneValid(true);
       const res = await signIn(userEmailPhone, userPassword);
-
+      
       if (res.status === 200) {
         navigation.navigate('WikiFishlogs');
         alertMessage = 'Conta acessada com sucesso!';
@@ -50,6 +52,7 @@ export default function Login({ navigation }: any) {
         },
       ]);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -60,38 +63,40 @@ export default function Login({ navigation }: any) {
           Eu<HomeAppTitleBlue>Pescador</HomeAppTitleBlue>
         </HomeAppTitle>
       </HomeLogoContainer>
-      <InputContainer>
-        <InputView>
-          <Input
-            placeholder="E-mail / Telefone"
-            value={userEmailPhone}
-            onChangeText={setUserEmailPhone}
-          />
-        </InputView>
-        {isEmailPhoneValid ? (
-          <InputBox />
-        ) : (
-          <ErrorMessage>{isEmailPhoneValidMessage}</ErrorMessage>
-        )}
+      {isLoading ? 
+        <ActivityIndicator size="large" color="#0000ff" />     
+      : <InputContainer>
+          <InputView>
+            <Input
+              placeholder="E-mail / Telefone"
+              value={userEmailPhone}
+              onChangeText={setUserEmailPhone}
+            />
+          </InputView>
+          {isEmailPhoneValid ? (
+            <InputBox />
+          ) : (
+            <ErrorMessage>{isEmailPhoneValidMessage}</ErrorMessage>
+          )}
 
-        <InputView>
-          <Input
-            placeholder="Senha"
-            secureTextEntry
-            value={userPassword}
-            onChangeText={setUserPassword}
-          />
-        </InputView>
-        <LoginButtonView>
-          <DefaultButton text="Entrar" buttonFunction={handleLogin} />
-        </LoginButtonView>
-        <HomePhraseContainer>
-          <HomeRegularText>Não possui uma conta ainda?</HomeRegularText>
-          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <HomeLogLink> Cadastre-se</HomeLogLink>
-          </TouchableOpacity>
-        </HomePhraseContainer>
-      </InputContainer>
+          <InputView>
+            <Input
+              placeholder="Senha"
+              secureTextEntry
+              value={userPassword}
+              onChangeText={setUserPassword}
+            />
+          </InputView>
+          <LoginButtonView>
+            <DefaultButton text="Entrar" buttonFunction={handleLogin} />
+          </LoginButtonView>
+          <HomePhraseContainer>
+            <HomeRegularText>Não possui uma conta ainda?</HomeRegularText>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+              <HomeLogLink> Cadastre-se</HomeLogLink>
+            </TouchableOpacity>
+          </HomePhraseContainer>
+        </InputContainer>}
     </Container>
   );
 }

@@ -378,6 +378,7 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   const loadData = async () => {
+    setIsLoading(true);
     const connection = await NetInfo.fetch();
     const hasConnection = !!connection.isConnected;
     setIsConnected(hasConnection);
@@ -412,6 +413,7 @@ export function NewFishLog({ navigation, route }: any) {
     }
     if (!hasConnection)
       Alert.alert("Sem conexão", "Você está conexão, logo algumas ações dentro de criação e edição serão limitadas.")
+      setIsLoading(false);
   }
 
   const nameList = () => {

@@ -67,6 +67,7 @@ export const FishLog = ({ navigation, route }: any) => {
 
 
     const saveFile = async (csvFile: string) => {
+        setIsLoading(true);
         try {
           const res = await MediaLibrary.requestPermissionsAsync()
     
@@ -94,18 +95,22 @@ export const FishLog = ({ navigation, route }: any) => {
             }
           ])
         }
+        setIsLoading(false);
       };
     
       const handleExportFishlog = async () => {
+        setIsLoading(true);
         try {
           const file = await ExportFishLogs(userToken, [logId]);
           saveFile(file);
         } catch (error: any) {
           console.log(error);
         }
+        setIsLoading(false);
       };
 
     const getFishLogProperties = async (token: string) => {
+        setIsLoading(true);
         try {
             const { log_id } = route.params;
             setLogId(log_id);
