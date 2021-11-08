@@ -1,5 +1,5 @@
 import React from "react";
-import { FishCard, IFish, IFishLog } from "../FishCard";
+import { WikiFishCard, IFish, IFishLog } from "../WikiFishCard";
 import { FishCardList } from "./styles";
 
 interface FishListProps {
@@ -8,7 +8,7 @@ interface FishListProps {
     handleNavigation: (id: string) => void;
 }
 
-export const FishList = ({ fishData, type, handleNavigation }: FishListProps) => {
+export const WikiFishList = ({ fishData, type, handleNavigation }: FishListProps) => {
 
     return (
         <FishCardList
@@ -16,11 +16,11 @@ export const FishList = ({ fishData, type, handleNavigation }: FishListProps) =>
             renderItem={({ item, index }) => (
                 <>
                     {type === "fishLog" ?
-                        (<FishCard
+                        (<WikiFishCard
                             fishLog={item as IFishLog}
                             cardFunction={() => { item._id ? handleNavigation(item._id) : handleNavigation(index.toString()) }}
                         />) :
-                        (<FishCard
+                        (<WikiFishCard
                             fishWiki={item as IFish}
                             cardFunction={() => { handleNavigation(item._id) }}
                         />)

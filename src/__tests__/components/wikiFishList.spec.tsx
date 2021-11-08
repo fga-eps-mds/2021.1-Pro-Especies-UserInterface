@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from '@testing-library/react-native';
 
-import { FishList } from "../../components/FishList";
-import { IFish } from "../../components/FishCard";
+import { WikiFishList } from "../../components/WikiFishList";
+import { IFish } from "../../components/WikiFishCard";
 import { ThemeProvider } from 'styled-components/native';
 import theme from '../../global/styles/theme';
 
@@ -33,9 +33,9 @@ const fishMock: IFish[] = [
     }
 ];
 
-describe('Default Button', () => {
-    it('Should Render Default Button if props are correct', () => {
-        const result = render(<FishList type="fishWiki" fishData={fishMock} handleNavigation={()=>{}} />, {
+describe('Wiki Fish List', () => {
+    it('Should Render Wiki Fish List if props are correct', () => {
+        const result = render(<WikiFishList type="fishWiki" fishData={fishMock} handleNavigation={()=>{}} />, {
             wrapper: Providers
         });
         expect(result).toBeTruthy();

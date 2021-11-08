@@ -15,3 +15,5 @@ coverage/
 **/coverage/**
 # macOS
 .DS_Store
+coverage/**
+coverage/

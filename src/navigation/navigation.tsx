@@ -12,7 +12,6 @@ import { MyMap } from '../screens/Maps';
 import { WikiFish } from '../screens/WikiFish';
 import { Drafts } from '../screens/Drafts';
 import { WikiFilter } from '../screens/WikiFilter';
-import { TopBar } from '../components/FilterBar';
 
 const AuthenticateStack = createNativeStackNavigator();
 
@@ -54,7 +53,8 @@ const AuthRoutes = () => {
       />
       <AuthenticateStack.Screen
         name="WikiFish"
-        component={WikiFish} />
+        component={WikiFish}
+        options={{ title: 'Informações', headerShown: true }} />
       <AuthenticateStack.Screen
         name="Drafts" component={Drafts}
         options={{ title: 'Rascunhos', headerShown: true }}
@@ -85,7 +85,11 @@ const AppRoutes = () => {
         options={{ title: 'Cadastro', headerShown: true }}
       />
       <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
-      <Stack.Screen name="WikiFish" component={WikiFish} />
+      <Stack.Screen
+        name="WikiFish"
+        component={WikiFish}
+        options={{ title: 'Informações', headerShown: true }}
+      />
       <Stack.Screen name="WikiFilter" component={WikiFilter} />
     </Stack.Navigator>
   );

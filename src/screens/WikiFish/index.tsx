@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from 'react';
 
-import { ScrollView } from 'react-native';
+import { ActivityIndicator, ScrollView } from 'react-native';
 import {
   FishContainer,
   FishDescription,
@@ -10,12 +10,12 @@ import {
   DescriptionContainer,
 } from './styles';
 import { GetOneWikiFish } from '../../services/wikiServices/getOneWikiFish';
-import { TopBar } from '../../components/TopBar';
 import { ProfileImage } from '../../components/ProfileImage';
 import { Property } from '../../components/Property';
 import { Title } from '../../components/Title';
 import { HalfToneText } from '../../components/HalfToneText';
 import { RegularText } from '../../components/RegularText';
+import { NoFishImagePhoto } from '../../components/NoFishImagePhoto';
 
 type IFish = {
   fish_id: string;
@@ -38,10 +38,12 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
   const [fishWasIntroduced, setFishWasIntroduced] = useState('');
   const [fishHasSpawningSeason, setFishHasSpawningSeason] = useState('');
   const { fish_id } = route.params;
+  const [isLoading, setIsLoading] = useState(true);
 
   const getFishProperties = async () => {
     try {
       const fish = await GetOneWikiFish(fish_id);
+      setIsLoading(true);
       setFishName(fish.commonName);
       setFishSpecies(fish.scientificName);
       setFishFuNFact(fish.funFact);
@@ -52,10 +54,14 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
       setFishHabitat(fish.habitat);
       setFishMaxSize(fish.sizeMax);
       setFishMaxWeight(fish.maxWeight);
-      setFishWasIntroduced(fish.wasIntroduced);
-      setFishIsEndemic(fish.isEndemic);
-      setFishIsThreatened(fish.isThreatened);
-      setFishHasSpawningSeason(fish.hasSpawingSeason);
+      setFishWasIntroduced(fish.wasIntroducedInfo);
+      setFishIsEndemic(fish.isEndemicInfo);
+      setFishIsThreatened(fish.isThreatenedInfo);
+      setFishHasSpawningSeason(fish.hasSpawingSeasonInfo);
+      if (fish.photo) {
+        setFishPhoto(fish.photo);
+      }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -67,15 +73,19 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
 
   return (
     <FishContainer>
-      <TopBar title="Informações" />
-      <ScrollView>
-        <ProfileImage source={require('../../assets/Acestrorhynchus.png')} />
+      { isLoading ? <ActivityIndicator size="large" color="#0000ff" />
+        :  <ScrollView>
+        {
+          fishPhoto ?
+            <ProfileImage source={{ uri: fishPhoto }} /> :
+            <NoFishImagePhoto />
+        }
 
         <DescriptionContainer>
           <Title text={fishName} />
           <HalfToneText text={fishSpecies} />
           <FishDescription>
-            <RegularText text={`"${fishFunFact}"`} />
+            <RegularText text={fishFunFact ? `"${fishFunFact}"` : ""} />
           </FishDescription>
         </DescriptionContainer>
 
@@ -92,7 +102,7 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             <PropertyContainer>
               <Property
                 property="Tamanho Máx(cm)"
-                value={JSON.stringify(fishMaxSize)}
+                value={fishMaxSize?.toString() || "-"}
               />
             </PropertyContainer>
 
@@ -101,11 +111,11 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Ameaçado?" value={fishIsThreatened} />
+              <Property property="Ameaçado?" value={fishIsThreatened || "-"} />
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Foi indroduzido?" value={fishWasIntroduced} />
+              <Property property="Foi indroduzido?" value={fishWasIntroduced || "-"} />
             </PropertyContainer>
           </PropertyColumn>
 
@@ -121,23 +131,23 @@ export const WikiFish: FC<IFish> = ({ navigation, route }: any) => {
             <PropertyContainer>
               <Property
                 property="Peso Máx(kg)"
-                value={JSON.stringify(fishMaxWeight)}
+                value={fishMaxWeight?.toString() || "-"}
               />
             </PropertyContainer>
 
             <PropertyContainer>
-              <Property property="Endemíco?" value={fishIsEndemic} />
+              <Property property="Endêmico?" value={fishIsEndemic || "-"} />
             </PropertyContainer>
 
             <PropertyContainer>
               <Property
                 property="Faz piracema?"
-                value={fishHasSpawningSeason}
+                value={fishHasSpawningSeason || "-"}
               />
             </PropertyContainer>
           </PropertyColumn>
         </ColumnContainer>
-      </ScrollView>
+      </ScrollView>}
     </FishContainer>
   );
 };

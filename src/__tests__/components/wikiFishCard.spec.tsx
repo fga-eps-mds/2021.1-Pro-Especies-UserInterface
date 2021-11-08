@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from '@testing-library/react-native';
 
-import { FishCard } from "../../components/FishCard";
+import { WikiFishCard } from "../../components/WikiFishCard";
 import { ThemeProvider } from 'styled-components/native';
 import theme from '../../global/styles/theme';
 
@@ -13,7 +13,7 @@ const Providers: React.FC = ({ children }) => (
 
 describe('FishCard', () => {
     it('Should Render FishCard if props are correct', () => {
-        const result = render(<FishCard cardFunction={()=>{}} />, {
+        const result = render(<WikiFishCard cardFunction={()=>{}} />, {
             wrapper: Providers
         });
         expect(result).toBeTruthy();

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Buffer } from "buffer";
 import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as Network from 'expo-network';
 import * as Location from 'expo-location';
+import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CommonActions } from '@react-navigation/native';
 import { GetWikiFishes } from '../../services/wikiServices/getWikiFishes';
@@ -282,9 +282,9 @@ export function NewFishLog({ navigation, route }: any) {
       );
       return;
     }
-    const connection = await Network.getNetworkStateAsync();
-    setIsConnected(!!connection.isConnected && !!connection.isInternetReachable);
-    if ((connection.isConnected && connection.isInternetReachable)) {
+    const connection = await NetInfo.fetch();
+    setIsConnected(!!connection.isConnected);
+    if ((!!connection.isConnected)) {
       setIsLoading(true);
       let loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
       setIsLoading(false);
@@ -378,8 +378,9 @@ export function NewFishLog({ navigation, route }: any) {
   }
 
   const loadData = async () => {
-    const connection = await Network.getNetworkStateAsync();
-    const hasConnection = !!connection.isConnected && !!connection.isInternetReachable;
+    setIsLoading(true);
+    const connection = await NetInfo.fetch();
+    const hasConnection = !!connection.isConnected;
     setIsConnected(hasConnection);
     if (hasConnection) {
       getFishOptions();
@@ -412,11 +413,14 @@ export function NewFishLog({ navigation, route }: any) {
     }
     if (!hasConnection)
       Alert.alert("Sem conexão", "Você está conexão, logo algumas ações dentro de criação e edição serão limitadas.")
+      setIsLoading(false);
   }
 
   const nameList = () => {
     return fishes.filter((item) => {
-      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+      if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+        && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
+      ) {
         if (fishGroup) {
           if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
             return item;
@@ -519,7 +523,9 @@ export function NewFishLog({ navigation, route }: any) {
             </InputView>
             {
               (fishName && fishes.filter((item) => {
-                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())) {
+                if (item.commonName.toLowerCase().includes(fishName.toLowerCase().trim())
+                  && item.commonName.toLowerCase() != fishName.toLowerCase().trim()
+                ) {
                   if (fishGroup) {
                     if (item.group.toLowerCase().includes(fishGroup.toLowerCase())) {
                       return item;

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as FileSystem from 'expo-file-system';
+import * as MediaLibrary from 'expo-media-library';
+import {CheckBox} from 'react-native-elements';
 import {
   ButtonView,
   Container,
@@ -15,27 +18,46 @@ import {
   TouchableTitle,
   TitleText,
   OptionsView,
+  NotLoggedText,
+  FishCardList,
+  ExportAllView,
+  ExportAllText,
+  CancelButtonText,
+  ExportSelectedView,
+  ExportSelectedButton,
+  ExportSelectedButtonView,
+  DownloadIconBottom,
+  ExportSelectedText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
-import { IFishLog } from '../FishCard';
+import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
+import { FishLogCard, IFishLog } from '../FishLogCard';
 import { DraftButton } from '../DraftButton';
-import { FishList } from '../FishList';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NewFishLog } from '../../screens/NewFishLog';
+
 
 interface Props {
   token: string;
+  isAdmin: boolean;
 }
 
-export const FishLogs = ({ token }: Props) => {
+export const FishLogs = ({ token, isAdmin }: Props) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [exportList, setExportList] = useState<string[]>([]);
+  const [isCheck, setIsCheck] = useState(false);
+  const [isExportMode, setIsExportMode] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
   const navigation = useNavigation();
 
+
   const getFishLogs = async () => {
+
     try {
       const data = await GetAllFishLogs(token);
-      setFishLog(data);
+
+      setFishLog(data.reverse());
     } catch (error: any) {
       console.log(error);
     }
@@ -43,9 +65,11 @@ export const FishLogs = ({ token }: Props) => {
   };
 
   const getDrafts = async () => {
+    setIsLoading(true);
     const drafts = await AsyncStorage.getItem('drafts');
     if (drafts)
       setHasDraft(drafts != '[]');
+    setIsLoading(false);
   }
   const handleNavigation = (id: string) => {
     navigation.navigate(
@@ -56,14 +80,86 @@ export const FishLogs = ({ token }: Props) => {
     );
   };
 
-  const handleExport = async () => { };
+  const selectAllFunction = (value: boolean) => {
+    setIsCheck(value);
+    if (value) {
+      fishLog.forEach((item) => {
+        if (!exportList.includes(item._id)) {
+          setExportList(arr => [...arr, item._id]);
+        }
+      });
+    } else {
+      setExportList([]);
+    }
+  };
+
+  const handleExport = async () => {
+    setIsExportMode(!isExportMode);
+  };
 
   const handleAddLog = async () => {
     navigation.navigate("NewFishLog" as never, {
       isNewRegister: true,
       name: "Novo Registro",
     } as never);
-  }
+  };
+
+
+  const saveFile = async (csvFile: string) => {
+    setIsLoading(true);
+    try {
+      const res = await MediaLibrary.requestPermissionsAsync()
+
+      if (res.granted) {
+        let today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + '-' + today.getHours() + "-" + today.getMinutes();
+
+        let fileUri = FileSystem.documentDirectory + `registros-${date}.csv`;
+        await FileSystem.writeAsStringAsync(fileUri, csvFile);
+        const asset = await MediaLibrary.createAssetAsync(fileUri);
+        await MediaLibrary.createAlbumAsync("euPescador", asset, false);
+
+        handleExport();
+        Alert.alert("Exportar Registros", "Registros exportados com sucesso. Você pode encontrar o arquivo em /Pictures/euPescador", [
+          {
+            text: "Ok",
+          }
+        ])
+      }
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Exportar Registros", "Falha ao exportar registros", [
+        {
+          text: "Ok",
+        }
+      ])
+    }
+    setIsLoading(false);
+  };
+
+  const handleExportSelected = async () => {
+    try {
+      console.log(exportList);
+      const file = await ExportFishLogs(token, exportList);
+      saveFile(file);
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert("Exportar Registros", "Falha ao exportar registros", [
+        {
+          text: "Ok",
+        }
+      ])
+    }
+  };
+
+
+  const addExportList = (logId: string) => {
+    setExportList(arr => [...arr, logId]);
+  };
+
+  const removeExportList = (logId: string) => {
+    setExportList(exportList.filter(item => item !== logId));
+  };
 
   useEffect(() => {
     getFishLogs();
@@ -81,31 +177,105 @@ export const FishLogs = ({ token }: Props) => {
               <TitleText>Filtros</TitleText>
               <FilterIcon name="filter-list" />
             </TouchableTitle>
-            <ButtonView>
-              <ExportButton onPress={handleExport}>
-                <DownloadIcon name="file-download" />
-                <ExportButtonText>Exportar Registros</ExportButtonText>
-              </ExportButton>
-            </ButtonView>
+            {
+              isAdmin ? (
+                <ButtonView>
+                  <ExportButton onPress={handleExport}>
+                    {
+                      isExportMode ? <>
+                        <DownloadIcon name="cancel" />
+                        <CancelButtonText >Cancelar</CancelButtonText>
+                      </>
+
+                        :
+                        <>
+                          <DownloadIcon name="file-download" />
+                          <ExportButtonText>Exportar Registros</ExportButtonText>
+                        </>
+
+                    }
+                  </ExportButton>
+                </ButtonView>
+              ) : <ButtonView>
+                <ExportButton onPress={handleAddLog}>
+                <DownloadIcon name="add" />
+                          <ExportButtonText>Criar Novo Registro</ExportButtonText>
+                </ExportButton>
+              </ButtonView>
+            }
           </OptionsView>
+          <ExportAllView>
+            {
+              isExportMode ? <>
+                {/* <CheckBox value={isCheck} onValueChange={selectAllFunction} /> */}
+                <CheckBox
+                  checked={isCheck}
+                  onPress={() => selectAllFunction(!isCheck)}
+                  checkedColor={'#00BBD4'}
+                  uncheckedColor={"black"}
+                />
+                <ExportAllText>Selecionar todos os registros</ExportAllText>
+              </>
+                : null
+            }
+          </ExportAllView>
           {hasDraft ?
             <DraftButton /> :
             null
           }
-          <FishList
-            fishData={fishLog}
-            type="fishLog"
-            handleNavigation={handleNavigation}
+          <FishCardList
+            data={fishLog}
+            renderItem={({ item }) => (
+              <FishLogCard
+                selectAll={isCheck}
+                fishLog={item}
+                isHidden={!isExportMode}
+                cardFunction={() => {
+                  handleNavigation(item._id);
+                }}
+                selectFunction={() => {
+                  addExportList(item._id);
+                }}
+                deselectFunction={() => {
+                  removeExportList(item._id);
+                }}
+              />
+            )}
+            keyExtractor={item => item._id}
           />
-          <AddButtonView>
-            <AddLogButton onPress={handleAddLog}>
-              <AddLogView>
-                <AddIcon name="add" />
-              </AddLogView>
-            </AddLogButton>
-          </AddButtonView>
+
+          {isExportMode ?
+            <ExportSelectedView>
+              <ExportSelectedButton disabled={!exportList.length} onPress={() => {
+                Alert.alert("Exportar Registros", "Você deseja exportar esses registros?", [
+                  {
+                    text: "Cancelar",
+                    style: "cancel"
+                  },
+                  {
+                    text: "Ok",
+                    onPress: () => handleExportSelected()
+                  }
+                ])
+              }
+              }>
+                <ExportSelectedButtonView>
+                  <ExportSelectedText>Exportar Selecionados</ExportSelectedText>
+                  <DownloadIconBottom name="file-download" />
+                </ExportSelectedButtonView>
+              </ExportSelectedButton>
+            </ExportSelectedView>
+            : <AddButtonView>
+              <AddLogButton onPress={handleAddLog}>
+                <AddLogView>
+                  <AddIcon name="add" />
+                </AddLogView>
+              </AddLogButton>
+            </AddButtonView>
+          }
         </>
       )}
     </Container>
   );
 };
+

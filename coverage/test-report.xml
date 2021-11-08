@@ -1,20 +1,26 @@
 <testExecutions version="1">
 <file path="src/__tests__/components/defaultButton.spec.tsx">
-<testCase name="Default Button Should Render Default Button if props are correct" duration="36" />
-</file>
-<file path="src/__tests__/components/filterBar.spec.tsx">
-<testCase name="Filter Bar Should Render Filter Bar if props are correct" duration="67" />
-</file>
-<file path="src/__tests__/components/fishCard.spec.tsx">
-<testCase name="FishCard Should Render FishCard if props are correct" duration="28" />
+<testCase name="Default Button Should Render Default Button if props are correct" duration="38" />
 </file>
 <file path="src/__tests__/components/draftButton.spec.tsx">
-<testCase name="Draft Button Should Render Draft Button" duration="95" />
+<testCase name="Draft Button Should Render Draft Button" duration="94" />
 </file>
 <file path="src/__tests__/components/filterButton.spec.tsx">
-<testCase name="Filter Button Should Render Filter Button with url prop" duration="63" />
+<testCase name="Filter Button Should Render Filter Button with url prop" duration="96" />
 </file>
-<file path="src/__tests__/components/fishList.spec.tsx">
-<testCase name="Default Button Should Render Default Button if props are correct" duration="30" />
+<file path="src/__tests__/components/filterBar.spec.tsx">
+<testCase name="Filter Bar Should Render Filter Bar if props are correct" duration="100" />
+</file>
+<file path="src/__tests__/components/wikiFishCard.spec.tsx">
+<testCase name="FishCard Should Render FishCard if props are correct" duration="33" />
+</file>
+<file path="src/__tests__/components/wikiFishList.spec.tsx">
+<testCase name="Wiki Fish List Should Render Wiki Fish List if props are correct" duration="60" />
+</file>
+<file path="src/__tests__/components/fishLogCard.spec.tsx">
+<testCase name="FishLogCard Should Render FishCard if props are correct" duration="71" />
+</file>
+<file path="src/__tests__/components/disableIconButton.spec.tsx">
+<testCase name="Disable Icon Button Should Render Disable Icon Button" duration="52" />
 </file>
 </testExecutions>

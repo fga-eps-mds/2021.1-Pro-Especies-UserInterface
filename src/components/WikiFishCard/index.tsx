@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import React, { FC, useState, useEffect } from 'react';
+import { Buffer } from "buffer";
 import { TouchableOpacity } from 'react-native';
 import {
   FishCardContainer,
@@ -6,6 +7,8 @@ import {
   CommonNameText,
   ScientificName,
   TextView,
+  NoFishImage,
+  NoFishImageIcon,
 } from './styles';
 
 export interface IFish {
@@ -50,28 +53,55 @@ export interface IFishLog {
 interface IFishCardProps {
   fishWiki?: IFish;
   fishLog?: IFishLog;
-  cardFunction: (VoidFunction);
+  cardFunction: VoidFunction;
 }
 
-export const FishCard: FC<IFishCardProps> = ({
+export const WikiFishCard: FC<IFishCardProps> = ({
   fishWiki,
   fishLog,
   cardFunction,
 }) => {
+  const [image, setImage] = useState<string | null>(null);
+  const getPhoto = () => {
+    if (fishLog?.photo) {
+      const log64 = Buffer.from(fishLog.photo).toString('base64');
+      const base64Img = `data:image/png;base64,${log64}`;
+      return base64Img;
+    }
+    if (fishWiki?.photo) {
+      return fishWiki.photo;
+    }
+  }
+  useEffect(() => {
+    if (fishLog?.photo) {
+      const log64 = Buffer.from(fishLog.photo).toString('base64');
+      const base64Img = `data:image/png;base64,${log64}`;
+      setImage(base64Img);
+    }
+    if (fishWiki?.photo) {
+      setImage(fishWiki.photo);
+    }
+  }, []);
   return (
     <FishCardContainer onPress={() => { }}>
       <TouchableOpacity onPress={cardFunction}>
-        <FishImage
-          source={{
-            uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo
-              }`,
-          }}
-        />
+        {image ?
+          <FishImage
+            source={{
+              uri: image,
+            }}
+
+          /> :
+          <NoFishImage>
+            <NoFishImageIcon name="no-photography" />
+          </NoFishImage>
+
+        }
         <TextView>
-          <CommonNameText>
+          <CommonNameText numberOfLines={1}>
             {fishLog ? fishLog.name : fishWiki?.commonName}
-          </CommonNameText>
-          <ScientificName>
+          </CommonNameText >
+          <ScientificName numberOfLines={1}>
             {fishLog ? fishLog.species : fishWiki?.scientificName}
           </ScientificName>
         </TextView>

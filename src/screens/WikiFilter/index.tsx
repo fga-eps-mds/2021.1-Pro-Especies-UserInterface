@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { CommonActions } from '@react-navigation/native';
-import Checkbox from 'expo-checkbox';
+import Checkbox from '@react-native-community/checkbox';
 import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
 import { FilterBar } from "../../components/FilterBar";
@@ -15,6 +15,8 @@ import {
 
 } from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
+import { CheckBox } from 'react-native-elements';
+
 
 
 interface IGroup {
@@ -213,12 +215,12 @@ export const WikiFilter = ({ navigation }: any) => {
         setIsChecked(newState);
 
     }
-    
+
     const subGroupList = (group: IGroup, g_index: number) => {
         return group.groups[g_index].subGroups.map((item, index) => {
             return (
                 <CheckBoxRow key={`subg${index}`}>
-                    <Checkbox
+                    {/* <Checkbox
                         value={item.activate}
                         onValueChange={() => {
                             const newState = { ...isChecked };
@@ -226,6 +228,16 @@ export const WikiFilter = ({ navigation }: any) => {
                             setIsChecked(newState);
                         }}
                         color={item.activate ? '#00BBD4' : "black"}
+                    /> */}
+                    <CheckBox
+                        checked={item.activate}
+                        onPress={() => {
+                            const newState = { ...isChecked };
+                            newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
+                            setIsChecked(newState);
+                        }}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>
@@ -237,7 +249,7 @@ export const WikiFilter = ({ navigation }: any) => {
         return isChecked.groups.map((item, index) => {
             return (
                 <CheckBoxRow key={`g${index}`}>
-                    <Checkbox
+                    {/* <Checkbox
                         value={item.activate}
                         onValueChange={() => {
                             const newState = { ...isChecked };
@@ -245,6 +257,16 @@ export const WikiFilter = ({ navigation }: any) => {
                             setIsChecked(newState);
                         }}
                         color={item.activate ? '#00BBD4' : "black"}
+                    /> */}
+                    <CheckBox
+                        checked={item.activate}
+                        onPress={() => {
+                            const newState = { ...isChecked };
+                            newState.groups[index].activate = !newState.groups[index].activate;
+                            setIsChecked(newState);
+                        }}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
                     />
                     <RegularText text={item.name} />
                 </CheckBoxRow>

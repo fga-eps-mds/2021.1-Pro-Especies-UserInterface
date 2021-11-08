@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { Box, HeaderIcon, HeaderText, IconContainer, IconText } from './styles';
+import { Box, HeaderIcon, HeaderText, IconContainer, IconText, Spacer } from './styles';
 
 interface Props {
   title: string;
@@ -13,6 +13,7 @@ export function TopBar({ title, icon, iconText, buttonFunction }: Props) {
   return (
     <Box>
       <HeaderText>{title}</HeaderText>
+      <Spacer />
       <TouchableOpacity onPress={buttonFunction}>
         <IconContainer>
           <HeaderIcon name={icon} />
