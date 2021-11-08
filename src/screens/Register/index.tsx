@@ -22,7 +22,7 @@ import {
 import { CreateUser } from '../../services/userServices/createUser';
 import { DefaultButton } from '../../components/Button';
 
-export function Register() {
+export function Register({ navigation }: any) {
   const [admin, setAdmin] = useState(false);
   const [userName, setUserName] = useState<string | undefined>();
   const [userEmail, setUserEmail] = useState<string | undefined>();
@@ -81,6 +81,7 @@ export function Register() {
   const handleRegister = async () => {
     setIsLoading(true);
     let alertMessage = '';
+    let result = false;
     if (
       userName &&
       userEmail &&
@@ -103,6 +104,7 @@ export function Register() {
             adminToken,
           );
           alertMessage = 'Conta criada com sucesso!';
+          result = true;
         } catch (error: any) {
           console.log(error);
           alertMessage = error.response.data.message;
@@ -117,6 +119,11 @@ export function Register() {
     Alert.alert('Cadastro', alertMessage, [
       {
         text: 'Ok',
+        onPress: () => {
+          if(result) {
+            navigation.navigate('Home');
+          }
+        }
       },
     ]);
     setIsLoading(false);
