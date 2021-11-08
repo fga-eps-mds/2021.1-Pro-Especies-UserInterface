@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import {
   FishCardContainer,
   FishImage,
@@ -7,26 +8,9 @@ import {
   ScientificName,
   TextView,
   CheckBoxView,
+  NoFishImage,
+  NoFishImageIcon,
 } from './styles';
-
-export interface IFish {
-  _id: string;
-  largeGroup: string;
-  group: string;
-  commonName: string;
-  scientificName: string;
-  family: string;
-  food: string;
-  habitat: string;
-  maxSize: number;
-  maxWeight: number;
-  isEndemic: string;
-  isThreatened: string;
-  hasSpawningSeason: string;
-  wasIntroduced: string;
-  funFact: string;
-  photo: string;
-}
 
 export interface IFishLog {
   _id: string;
@@ -49,8 +33,7 @@ export interface IFishLog {
 }
 
 interface IFishCardProps {
-  fishWiki?: IFish;
-  fishLog?: IFishLog;
+  fishLog: IFishLog;
   isHidden: boolean;
   selectAll: boolean;
   cardFunction: VoidFunction;
@@ -59,7 +42,6 @@ interface IFishCardProps {
 }
 
 export const FishLogCard: FC<IFishCardProps> = ({
-  fishWiki,
   fishLog,
   selectAll,
   isHidden,
@@ -91,21 +73,33 @@ export const FishLogCard: FC<IFishCardProps> = ({
     <FishCardContainer>
       {
         isHidden ? null
-        : <CheckBoxView value={isCheck} onValueChange={checkBoxFunction} />
+          : (<CheckBoxView>
+            <CheckBox
+              checked={isCheck}
+              onPress={() => checkBoxFunction(!isCheck)}
+              checkedColor={'#00BBD4'}
+              uncheckedColor={"black"}
+            />
+          </CheckBoxView>)
       }
       <TouchableOpacity onPress={cardFunction}>
-        <FishImage
-          source={{
-            uri: `data:image/png;base64,${fishLog ? fishLog.photo : fishWiki?.photo
-              }`,
-          }}
-        />
+        {fishLog.photo ?
+          <FishImage
+            source={{
+              uri: `data:image/png;base64,${fishLog.photo}`,
+            }}
+
+          /> :
+          <NoFishImage>
+            <NoFishImageIcon name="no-photography" />
+          </NoFishImage>
+        }
         <TextView>
-          <CommonNameText>
-            {fishLog ? fishLog.name : fishWiki?.commonName}
+          <CommonNameText numberOfLines={1}>
+            {fishLog.name}
           </CommonNameText>
-          <ScientificName>
-            {fishLog ? fishLog.species : fishWiki?.scientificName}
+          <ScientificName numberOfLines={1}>
+            {fishLog.species}
           </ScientificName>
         </TextView>
       </TouchableOpacity>

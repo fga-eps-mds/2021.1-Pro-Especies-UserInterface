@@ -3,7 +3,7 @@ import { ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
-import CheckBox from '@react-native-community/checkbox';
+import {CheckBox} from 'react-native-elements';
 import {
   ButtonView,
   Container,
@@ -34,6 +34,7 @@ import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
 import { FishLogCard, IFishLog } from '../FishLogCard';
 import { DraftButton } from '../DraftButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NewFishLog } from '../../screens/NewFishLog';
 
 
 interface Props {
@@ -88,7 +89,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
         }
       });
     } else {
-      setExportList([""]);
+      setExportList([]);
     }
   };
 
@@ -138,10 +139,16 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
 
   const handleExportSelected = async () => {
     try {
+      console.log(exportList);
       const file = await ExportFishLogs(token, exportList);
       saveFile(file);
     } catch (error: any) {
       console.log(error);
+      Alert.alert("Exportar Registros", "Falha ao exportar registros", [
+        {
+          text: "Ok",
+        }
+      ])
     }
   };
 
@@ -189,13 +196,24 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
                     }
                   </ExportButton>
                 </ButtonView>
-              ) : null
+              ) : <ButtonView>
+                <ExportButton onPress={handleAddLog}>
+                <DownloadIcon name="add" />
+                          <ExportButtonText>Criar Novo Registro</ExportButtonText>
+                </ExportButton>
+              </ButtonView>
             }
           </OptionsView>
           <ExportAllView>
             {
               isExportMode ? <>
-                <CheckBox value={isCheck} onValueChange={selectAllFunction} />
+                {/* <CheckBox value={isCheck} onValueChange={selectAllFunction} /> */}
+                <CheckBox
+                  checked={isCheck}
+                  onPress={() => selectAllFunction(!isCheck)}
+                  checkedColor={'#00BBD4'}
+                  uncheckedColor={"black"}
+                />
                 <ExportAllText>Selecionar todos os registros</ExportAllText>
               </>
                 : null
@@ -228,7 +246,7 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
 
           {isExportMode ?
             <ExportSelectedView>
-              <ExportSelectedButton onPress={() => {
+              <ExportSelectedButton disabled={!exportList.length} onPress={() => {
                 Alert.alert("Exportar Registros", "Você deseja exportar esses registros?", [
                   {
                     text: "Cancelar",
