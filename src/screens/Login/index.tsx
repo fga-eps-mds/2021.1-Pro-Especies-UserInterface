@@ -36,8 +36,6 @@ export default function Login({ navigation }: any) {
       const res = await signIn(userEmailPhone, userPassword);
 
       if (res.status === 200) {
-        navigation.navigate('WikiFishlogs');
-        alertMessage = 'Conta acessada com sucesso!';
       } else if (res.response.status === 404) setIsEmailPhoneValid(false);
       else alertMessage = res.response.data.message;
     } else {
@@ -46,7 +44,7 @@ export default function Login({ navigation }: any) {
     if (alertMessage) {
       Alert.alert('Login', alertMessage, [
         {
-          text: 'Ok',
+          text: 'Ok'
         },
       ]);
     }
