@@ -57,10 +57,10 @@ export const FishLogs = (
   const [isCheck, setIsCheck] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
-  // const navigation = useNavigation();
 
 
   const getFishLogs = async () => {
+    setIsLoading(true);
 
     try {
       const data = await GetAllFishLogs(token, filterQuery);
@@ -77,8 +77,8 @@ export const FishLogs = (
     const drafts = await AsyncStorage.getItem('drafts');
     if (drafts)
       setHasDraft(drafts != '[]');
-    setIsLoading(false);
   }
+
   const handleNavigation = (id: string) => {
     navigation.navigate(
       'FishLog' as never,

@@ -221,15 +221,6 @@ export const WikiFilter = ({ navigation }: any) => {
         return group.groups[g_index].subGroups.map((item, index) => {
             return (
                 <CheckBoxRow key={`subg${index}`}>
-                    {/* <Checkbox
-                        value={item.activate}
-                        onValueChange={() => {
-                            const newState = { ...isChecked };
-                            newState.groups[g_index].subGroups[index].activate = !newState.groups[g_index].subGroups[index].activate;
-                            setIsChecked(newState);
-                        }}
-                        color={item.activate ? '#00BBD4' : "black"}
-                    /> */}
                     <CheckBox
                         checked={item.activate}
                         onPress={() => {
@@ -250,15 +241,6 @@ export const WikiFilter = ({ navigation }: any) => {
         return isChecked.groups.map((item, index) => {
             return (
                 <CheckBoxRow key={`g${index}`}>
-                    {/* <Checkbox
-                        value={item.activate}
-                        onValueChange={() => {
-                            const newState = { ...isChecked };
-                            newState.groups[index].activate = !newState.groups[index].activate;
-                            setIsChecked(newState);
-                        }}
-                        color={item.activate ? '#00BBD4' : "black"}
-                    /> */}
                     <CheckBox
                         checked={item.activate}
                         onPress={() => {
