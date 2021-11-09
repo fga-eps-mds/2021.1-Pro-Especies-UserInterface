@@ -24,6 +24,10 @@ import {
   ExportSelectedButtonView,
   DownloadIconBottom,
   ExportSelectedText,
+  NoResultContainer,
+  SearchImage,
+  BoldText,
+  RegularText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
@@ -166,11 +170,11 @@ export const FishLogs = (
       ) : (
         <>
           <OptionsView>
-              <FilterButton
-                url={filterQuery}
-                navigation={navigation}
-                screen='LogFilter'
-              />
+            <FilterButton
+              url={filterQuery}
+              navigation={navigation}
+              screen='LogFilter'
+            />
 
             {
               isAdmin ? (
@@ -207,26 +211,44 @@ export const FishLogs = (
             <DraftButton /> :
             null
           }
-          <FishCardList
-            data={fishLog}
-            renderItem={({ item }) => (
-              <FishLogCard
-                selectAll={isCheck}
-                fishLog={item}
-                isHidden={!isExportMode}
-                cardFunction={() => {
-                  handleNavigation(item._id);
-                }}
-                selectFunction={() => {
-                  addExportList(item._id);
-                }}
-                deselectFunction={() => {
-                  removeExportList(item._id);
-                }}
+          
+          {
+            fishLog.length ? (
+              <FishCardList
+                data={fishLog}
+                renderItem={({ item }) => (
+                  <FishLogCard
+                    selectAll={isCheck}
+                    fishLog={item}
+                    isHidden={!isExportMode}
+                    cardFunction={() => {
+                      handleNavigation(item._id);
+                    }}
+                    selectFunction={() => {
+                      addExportList(item._id);
+                    }}
+                    deselectFunction={() => {
+                      removeExportList(item._id);
+                    }}
+                  />
+                )}
+                keyExtractor={item => item._id}
               />
-            )}
-            keyExtractor={item => item._id}
-          />
+            ) : (
+              filterQuery ? (
+
+                <NoResultContainer>
+                  <SearchImage source={require('../../assets/search.png')} />
+                  <BoldText>Não encontramos nada com os filtros utilizados</BoldText>
+                  <RegularText>
+                    Por favor, verifique sua pesquisa e tente novamente para obter
+                    resultados.
+                  </RegularText>
+                </NoResultContainer>
+
+              ) : null
+            )
+          }
 
           {isExportMode ?
             <ExportSelectedView>
@@ -258,8 +280,9 @@ export const FishLogs = (
             </AddButtonView>
           }
         </>
-      )}
-    </Container>
+      )
+      }
+    </Container >
   );
 };
 
