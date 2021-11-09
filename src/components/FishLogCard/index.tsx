@@ -14,6 +14,7 @@ import {
 
 export interface IFishLog {
   _id: string;
+  family?: string;
   userId: number;
   name: string;
   largeGroup: string;

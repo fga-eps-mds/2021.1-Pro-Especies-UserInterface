@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CommonActions } from '@react-navigation/native';
-import Checkbox from '@react-native-community/checkbox';
+import { CheckBox } from 'react-native-elements';
 import { DefaultButton } from "../../components/Button";
 import { RegularText } from "../../components/RegularText";
 import { FilterBar } from "../../components/FilterBar";
@@ -15,8 +15,9 @@ import {
 
 } from "./styles";
 import { ScrollView } from "react-native-gesture-handler";
-import { CheckBox } from 'react-native-elements';
-
+import { GetAllFishLogs } from "../../services/fishLogService/getAllLogs";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator } from "react-native";
 
 
 interface IGroup {
@@ -29,7 +30,6 @@ interface IGroup {
         }[],
     }[],
 }
-
 
 const initialState: IGroup = {
     groups: [
@@ -171,9 +171,43 @@ const initialState: IGroup = {
 
 }
 
+interface CheckboxItem {
+    name: string,
+    checked: boolean
+}
 
-export const WikiFilter = ({ navigation }: any) => {
+export const LogFilter = ({ navigation }: any) => {
     const [isChecked, setIsChecked] = useState(initialState);
+    const [familiesChecked, setFamiliesChecked] = useState<CheckboxItem[]>([]);
+    const [isAdmin, setIsAdmin] = useState<Boolean>();
+    const [isLoading, setIsLoading] = useState(true);
+
+
+    const setFamilies = async (token: string) => {
+        if (token) {
+            const data = await GetAllFishLogs(token, "");
+            const familiesList = data.map(element => element.family || "Outros");
+            const familiesSet = [...new Set(familiesList)];
+            const familiesCheckBox = familiesSet.map(element => {
+                return { name: element, checked: false };
+            });
+            setFamiliesChecked(familiesCheckBox);
+        }
+
+        setIsLoading(false);
+    }
+
+    const getData = async () => {
+        const userAdmin = await AsyncStorage.getItem("@eupescador/userAdmin");
+        const token = await AsyncStorage.getItem("@eupescador/token");
+        if (token) {
+            setFamilies(token);
+        }
+        if (userAdmin === "true")
+            setIsAdmin(true);
+        else
+            setIsAdmin(false);
+    }
 
     const createURLQuery = () => {
         // ?largeGroup=escama&group=Silva&group=famosos&commonName=salmao%20%20albino
@@ -190,6 +224,15 @@ export const WikiFilter = ({ navigation }: any) => {
                 }
             }
         }
+
+        for (let i = 0; i < familiesChecked.length; i++) {
+            if (familiesChecked[i].checked) {
+                if (new_url)
+                    new_url += "&"
+                new_url += "family=" + familiesChecked[i].name;
+            }
+        }
+
         if (new_url)
             new_url = '?' + new_url;
 
@@ -198,7 +241,7 @@ export const WikiFilter = ({ navigation }: any) => {
             routes: [{
                 name: 'WikiFishlogs',
                 params: {
-                    wikiFilterQuery: new_url,
+                    logFilterQuery: new_url,
                 },
             }],
         });
@@ -215,6 +258,32 @@ export const WikiFilter = ({ navigation }: any) => {
         }
         setIsChecked(newState);
 
+        const newFamiliesState = familiesChecked;
+        for (let i = 0; i < newFamiliesState.length; i++) {
+            newFamiliesState[i].checked = false;
+        }
+        setFamiliesChecked(newFamiliesState);
+
+    }
+
+    const renderFamilyCheckBox = () => {
+        return familiesChecked.map((item, index) => {
+            return (
+                <CheckBoxRow key={item.name}>
+                    <CheckBox
+                        checked={item.checked}
+                        onPress={() => {
+                            const newState = [...familiesChecked];
+                            newState[index].checked = !newState[index].checked;
+                            setFamiliesChecked(newState);
+                        }}
+                        checkedColor={'#00BBD4'}
+                        uncheckedColor={"black"}
+                    />
+                    <RegularText text={item.name} />
+                </CheckBoxRow>
+            );
+        });
     }
 
     const subGroupList = (group: IGroup, g_index: number) => {
@@ -257,6 +326,10 @@ export const WikiFilter = ({ navigation }: any) => {
         });
     }
 
+    useEffect(() => {
+        getData();
+    }, []);
+
     return (
         <PageContainer>
             <FilterBar
@@ -266,45 +339,48 @@ export const WikiFilter = ({ navigation }: any) => {
                 buttonFunction={clearFilter}
                 navigation={navigation}
             />
-            <ScrollView>
-                <FishBodyContainer>
-                    <FilterContainer>
-                        <GroupContainer>
-                            <BoldText>Grande Grupo</BoldText>
-                            <GroupOptionsContainer>
-                                {
-                                    groupList()
-                                }
-                            </GroupOptionsContainer>
-                        </GroupContainer>
-
-                        <GroupContainer>
-                            <BoldText>Grupo</BoldText>
-                            <GroupOptionsContainer>
-                                {
-                                    (isChecked.groups[0].activate) ? subGroupList(isChecked, 0) : null
-                                }
-                                {
-                                    (isChecked.groups[1].activate) ? subGroupList(isChecked, 1) : null
-                                }
-                                {
-                                    (isChecked.groups[2].activate) ? subGroupList(isChecked, 2) : null
-                                }
-                                {
-                                    (isChecked.groups[3].activate) ? subGroupList(isChecked, 3) : null
-                                }
-                                {
-                                    (isChecked.groups[4].activate) ? subGroupList(isChecked, 4) : null
-                                }
-                            </GroupOptionsContainer>
-                        </GroupContainer>
-                    </FilterContainer>
-                    <DefaultButton
-                        text="Filtrar"
-                        buttonFunction={createURLQuery}
-                    />
-                </FishBodyContainer>
-            </ScrollView>
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+                <>
+                    <ScrollView>
+                        <FishBodyContainer>
+                            <FilterContainer>
+                                {isAdmin ? (
+                                    <GroupContainer>
+                                        <BoldText>Famílias</BoldText>
+                                        <GroupOptionsContainer>
+                                            {renderFamilyCheckBox()}
+                                        </GroupOptionsContainer>
+                                    </GroupContainer>
+                                ) : (
+                                    <>
+                                        <GroupContainer>
+                                            <BoldText>Grande Grupo</BoldText>
+                                            <GroupOptionsContainer>
+                                                {groupList()}
+                                            </GroupOptionsContainer>
+                                        </GroupContainer><GroupContainer>
+                                            <BoldText>Grupo</BoldText>
+                                            <GroupOptionsContainer>
+                                                {(isChecked.groups[0].activate) ? subGroupList(isChecked, 0) : null}
+                                                {(isChecked.groups[1].activate) ? subGroupList(isChecked, 1) : null}
+                                                {(isChecked.groups[2].activate) ? subGroupList(isChecked, 2) : null}
+                                                {(isChecked.groups[3].activate) ? subGroupList(isChecked, 3) : null}
+                                                {(isChecked.groups[4].activate) ? subGroupList(isChecked, 4) : null}
+                                            </GroupOptionsContainer>
+                                        </GroupContainer>
+                                    </>
+                                )}
+                            </FilterContainer>
+                            <DefaultButton
+                                text="Filtrar"
+                                buttonFunction={createURLQuery} />
+                        </FishBodyContainer>
+                    </ScrollView>
+                </>
+            )
+            }
         </PageContainer >
     )
 }

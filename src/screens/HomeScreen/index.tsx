@@ -21,7 +21,7 @@ export default function Home({ navigation }: any) {
   useEffect(() => {
     if (authenticated) {
       navigation.navigate('WikiFishlogs', {
-        filterQuery: null,
+        wikiFilterQuery: null,
       });
     }
   }, [authenticated]);
@@ -39,7 +39,7 @@ export default function Home({ navigation }: any) {
       </HomeWelcomeText>
 
       <HomeWikiButton onPress={() => navigation.navigate('WikiFishlogs', {
-        filterQuery: null,
+        wikiFilterQuery: null,
       })}>
         <HomeWikiText>Visualizar Biblioteca de Peixes</HomeWikiText>
       </HomeWikiButton>

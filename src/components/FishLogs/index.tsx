@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import * as MediaLibrary from 'expo-media-library';
 import {CheckBox} from 'react-native-elements';
@@ -10,15 +9,12 @@ import {
   ExportButton,
   ExportButtonText,
   DownloadIcon,
-  FilterIcon,
   AddLogButton,
   AddIcon,
   AddLogView,
   AddButtonView,
   TouchableTitle,
-  TitleText,
   OptionsView,
-  NotLoggedText,
   FishCardList,
   ExportAllView,
   ExportAllText,
@@ -28,34 +24,46 @@ import {
   ExportSelectedButtonView,
   DownloadIconBottom,
   ExportSelectedText,
+  NoResultContainer,
+  SearchImage,
+  BoldText,
+  RegularText,
 } from './styles';
 import { GetAllFishLogs } from '../../services/fishLogService/getAllLogs';
 import { ExportFishLogs } from '../../services/fishLogService/exportFishLogs';
 import { FishLogCard, IFishLog } from '../FishLogCard';
 import { DraftButton } from '../DraftButton';
+import { FilterButton } from '../FilterButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NewFishLog } from '../../screens/NewFishLog';
 
 
 interface Props {
   token: string;
   isAdmin: boolean;
+  navigation: any;
+  filterQuery: any;
 }
 
-export const FishLogs = ({ token, isAdmin }: Props) => {
+export const FishLogs = (
+  { token,
+    navigation,
+    filterQuery,
+    isAdmin,
+  }: Props
+) => {
   const [fishLog, setFishLog] = useState<IFishLog[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [exportList, setExportList] = useState<string[]>([]);
   const [isCheck, setIsCheck] = useState(false);
   const [isExportMode, setIsExportMode] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
-  const navigation = useNavigation();
 
 
   const getFishLogs = async () => {
+    setIsLoading(true);
 
     try {
-      const data = await GetAllFishLogs(token);
+      const data = await GetAllFishLogs(token, filterQuery);
 
       setFishLog(data.reverse());
     } catch (error: any) {
@@ -69,8 +77,8 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
     const drafts = await AsyncStorage.getItem('drafts');
     if (drafts)
       setHasDraft(drafts != '[]');
-    setIsLoading(false);
   }
+
   const handleNavigation = (id: string) => {
     navigation.navigate(
       'FishLog' as never,
@@ -173,10 +181,12 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
       ) : (
         <>
           <OptionsView>
-            <TouchableTitle onPress={() => { }}>
-              <TitleText>Filtros</TitleText>
-              <FilterIcon name="filter-list" />
-            </TouchableTitle>
+            <FilterButton
+              url={filterQuery}
+              navigation={navigation}
+              screen='LogFilter'
+            />
+
             {
               isAdmin ? (
                 <ButtonView>
@@ -223,26 +233,44 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             <DraftButton /> :
             null
           }
-          <FishCardList
-            data={fishLog}
-            renderItem={({ item }) => (
-              <FishLogCard
-                selectAll={isCheck}
-                fishLog={item}
-                isHidden={!isExportMode}
-                cardFunction={() => {
-                  handleNavigation(item._id);
-                }}
-                selectFunction={() => {
-                  addExportList(item._id);
-                }}
-                deselectFunction={() => {
-                  removeExportList(item._id);
-                }}
+          
+          {
+            fishLog.length ? (
+              <FishCardList
+                data={fishLog}
+                renderItem={({ item }) => (
+                  <FishLogCard
+                    selectAll={isCheck}
+                    fishLog={item}
+                    isHidden={!isExportMode}
+                    cardFunction={() => {
+                      handleNavigation(item._id);
+                    }}
+                    selectFunction={() => {
+                      addExportList(item._id);
+                    }}
+                    deselectFunction={() => {
+                      removeExportList(item._id);
+                    }}
+                  />
+                )}
+                keyExtractor={item => item._id}
               />
-            )}
-            keyExtractor={item => item._id}
-          />
+            ) : (
+              filterQuery ? (
+
+                <NoResultContainer>
+                  <SearchImage source={require('../../assets/search.png')} />
+                  <BoldText>Não encontramos nada com os filtros utilizados</BoldText>
+                  <RegularText>
+                    Por favor, verifique sua pesquisa e tente novamente para obter
+                    resultados.
+                  </RegularText>
+                </NoResultContainer>
+
+              ) : null
+            )
+          }
 
           {isExportMode ?
             <ExportSelectedView>
@@ -274,8 +302,9 @@ export const FishLogs = ({ token, isAdmin }: Props) => {
             </AddButtonView>
           }
         </>
-      )}
-    </Container>
+      )
+      }
+    </Container >
   );
 };
 

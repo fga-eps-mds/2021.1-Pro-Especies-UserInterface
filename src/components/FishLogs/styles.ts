@@ -7,7 +7,6 @@ import { IFishLog } from '../FishLogCard';
 export const Container = styled.View`
   flex: 1;
   width: 100%;
-  justify-content: center;
   padding-left: ${RFValue(8, 640)}px;
 `;
 
@@ -160,3 +159,33 @@ export const FishCardList = styled(
       paddingBottom: RFValue(156),
   },
 })``;
+
+export const NoResultContainer = styled.View`
+    align-self: center;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+`;
+
+export const BoldText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.bold};
+  font-size: ${RFValue(16, 640)}px;
+  text-align: center;
+  margin-bottom: ${RFValue(16, 640)}px;
+  padding: 0 ${RFValue(34, 640)}px;
+`;
+
+export const RegularText = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  font-size: ${RFValue(12, 640)}px;
+  text-align: center;
+  margin-bottom: ${RFValue(16, 640)}px;
+  padding: 0 ${RFValue(24, 640)}px;
+`;
+
+export const SearchImage = styled.Image`
+  height: ${RFValue(80, 640)}px;
+  width: ${RFValue(80, 640)}px;
+  margin-bottom: ${RFValue(16, 640)}px;
+  margin-top: ${RFValue(55, 640)}px;
+`;

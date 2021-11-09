@@ -12,6 +12,7 @@ import { MyMap } from '../screens/Maps';
 import { WikiFish } from '../screens/WikiFish';
 import { Drafts } from '../screens/Drafts';
 import { WikiFilter } from '../screens/WikiFilter';
+import { LogFilter } from '../screens/RegisterFilter';
 
 const AuthenticateStack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ const AuthRoutes = () => {
     >
       <AuthenticateStack.Screen name="WikiFishlogs" component={WikiFishlogs} />
       <AuthenticateStack.Screen name="WikiFilter" component={WikiFilter} />
+      <AuthenticateStack.Screen name="LogFilter" component={LogFilter} />
       <AuthenticateStack.Screen
         name="FishLog"
         component={FishLog}
@@ -91,6 +93,7 @@ const AppRoutes = () => {
         options={{ title: 'Informações', headerShown: true }}
       />
       <Stack.Screen name="WikiFilter" component={WikiFilter} />
+      <Stack.Screen name="LogFilter" component={LogFilter} />
     </Stack.Navigator>
   );
 };
