@@ -507,7 +507,7 @@ export function NewFishLog({ navigation, route }: any) {
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) :
-        (<ScrollView>
+        (<ScrollView nestedScrollEnabled={true}>
           <ImageContainer>
             {fishPhoto ? (
               <FishLogImage
@@ -554,7 +554,7 @@ export function NewFishLog({ navigation, route }: any) {
                 }
               }).length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{nameList()}</OptionList>
+                  <OptionList nestedScrollEnabled={true} showsVerticalScrollIndicator>{nameList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
@@ -584,7 +584,7 @@ export function NewFishLog({ navigation, route }: any) {
             {
               (dropLargeGroup && fishes.length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{largeGroupList()}</OptionList>
+                  <OptionList nestedScrollEnabled={true} showsVerticalScrollIndicator>{largeGroupList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
@@ -613,7 +613,7 @@ export function NewFishLog({ navigation, route }: any) {
                 }
               }).length) ? (
                 <OptionsContainer>
-                  <OptionList showsVerticalScrollIndicator>{groupList()}</OptionList>
+                  <OptionList nestedScrollEnabled={true} showsVerticalScrollIndicator>{groupList()}</OptionList>
                 </OptionsContainer>
               ) : (null)
             }
