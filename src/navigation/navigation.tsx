@@ -87,7 +87,11 @@ const AppRoutes = () => {
         options={{ title: 'Cadastro', headerShown: true }}
       />
       <Stack.Screen name="WikiFishlogs" component={WikiFishlogs} />
-      <Stack.Screen name="WikiFish" component={WikiFish} />
+      <Stack.Screen
+        name="WikiFish"
+        component={WikiFish}
+        options={{ title: 'Informações', headerShown: true }}
+      />
       <Stack.Screen name="WikiFilter" component={WikiFilter} />
       <Stack.Screen name="LogFilter" component={LogFilter} />
     </Stack.Navigator>

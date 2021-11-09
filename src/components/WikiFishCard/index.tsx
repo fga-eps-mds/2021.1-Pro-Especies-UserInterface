@@ -98,10 +98,10 @@ export const WikiFishCard: FC<IFishCardProps> = ({
 
         }
         <TextView>
-          <CommonNameText>
+          <CommonNameText numberOfLines={1}>
             {fishLog ? fishLog.name : fishWiki?.commonName}
-          </CommonNameText>
-          <ScientificName>
+          </CommonNameText >
+          <ScientificName numberOfLines={1}>
             {fishLog ? fishLog.species : fishWiki?.scientificName}
           </ScientificName>
         </TextView>

@@ -3,13 +3,18 @@ import React, { useEffect, useState } from "react";
 import { IFishLog } from "../../components/FishLogCard";
 import { WikiFishList } from "../../components/WikiFishList";
 import { DraftsContainer } from "./styles";
+import { ActivityIndicator, Alert } from 'react-native';
+
 export const Drafts = ({ navigation, route }: any) => {
     const [draftList, setDraftList] = useState<IFishLog[]>([]);
     const getDrafts = async () => {
         const draftsData = await AsyncStorage.getItem('drafts');
         if (draftsData && draftsData != '[]')
             setDraftList(JSON.parse(draftsData) as IFishLog[]);
-    }
+        setIsLoading(false);
+    };
+    const [isLoading, setIsLoading] = useState(true);
+
 
     const handleNavigation = (id: string) => {
         navigation.navigate("NewFishLog", {
@@ -26,11 +31,16 @@ export const Drafts = ({ navigation, route }: any) => {
     }, []);
     return (
         <DraftsContainer>
-            <WikiFishList
-                fishData={draftList}
-                type="fishLog"
-                handleNavigation={handleNavigation}
-            />
+            
+            { isLoading ? ( 
+                <ActivityIndicator size="large" color="#0000ff" />
+            ) :
+                <WikiFishList
+                    fishData={draftList}
+                    type="fishLog"
+                    handleNavigation={handleNavigation}
+                />
+            }
         </DraftsContainer>
     )
 
